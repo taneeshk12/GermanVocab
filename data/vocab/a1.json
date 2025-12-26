@@ -1,0 +1,62 @@
+[
+  {
+    "id": "apple",
+    "word": "Apfel",
+    "article": "der",
+    "plural": "Äpfel",
+    "meaning_en": "Apple",
+    "example_de": "Der Apfel schmeckt süß.",
+    "example_en": "The apple tastes sweet.",
+    "topic": "food",
+    "level": "A1",
+    "slug": "apfel"
+  },
+  {
+    "id": "bread",
+    "word": "Brot",
+    "article": "das",
+    "plural": "Brote",
+    "meaning_en": "Bread",
+    "example_de": "Ich esse Brot zum Frühstück.",
+    "example_en": "I eat bread for breakfast.",
+    "topic": "food",
+    "level": "A1",
+    "slug": "brot"
+  },
+  {
+    "id": "cat",
+    "word": "Katze",
+    "article": "die",
+    "plural": "Katzen",
+    "meaning_en": "Cat",
+    "example_de": "Die Katze schläft auf dem Sofa.",
+    "example_en": "The cat is sleeping on the sofa.",
+    "topic": "animals",
+    "level": "A1",
+    "slug": "katze"
+  },
+  {
+    "id": "dog",
+    "word": "Hund",
+    "article": "der",
+    "plural": "Hunde",
+    "meaning_en": "Dog",
+    "example_de": "Der Hund bellt laut.",
+    "example_en": "The dog barks loudly.",
+    "topic": "animals",
+    "level": "A1",
+    "slug": "hund"
+  },
+  {
+    "id": "house",
+    "word": "Haus",
+    "article": "das",
+    "plural": "Häuser",
+    "meaning_en": "House",
+    "example_de": "Unser Haus ist groß.",
+    "example_en": "Our house is big.",
+    "topic": "family",
+    "level": "A1",
+    "slug": "haus"
+  }
+]

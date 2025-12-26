@@ -1,0 +1,23 @@
+export type Level = "A1" | "A2" | "B1" | "B2";
+
+export interface VocabItem {
+    id: string;
+    word: string;
+    article?: "der" | "die" | "das";
+    plural?: string;
+    meaning_en: string;
+    example_de: string;
+    example_en: string;
+    topic: string;
+    level: Level;
+    slug: string;
+}
+
+export interface QuizQuestion {
+    id: string;
+    type: "mcq" | "fill-blank" | "article";
+    question: string;
+    options?: string[];
+    correctAnswer: string;
+    explanation?: string;
+}
