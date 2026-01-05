@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { getTopics, getAllVocab, vocabDatabase } from "@/lib/vocab"; // Fixed import 
+import { getAllVocab } from "@/lib/vocab";
 import { Level } from "@/lib/types";
 import { notFound } from "next/navigation";
+import { Brain } from "lucide-react";
 
 // Generate static params for all levels
 export function generateStaticParams() {
@@ -24,7 +25,6 @@ export default async function LevelPage({ params }: Props) {
         notFound();
     }
 
-    const topics = getTopics(uppercaseLevel);
     const totalWords = getAllVocab(uppercaseLevel).length;
 
     return (
@@ -35,31 +35,22 @@ export default async function LevelPage({ params }: Props) {
                         &larr; Back to Home
                     </Link>
                     <h1 className="text-4xl font-bold mb-2">Level {uppercaseLevel}</h1>
-                    <p className="text-gray-600 dark:text-gray-400">
-                        {totalWords} words available across {topics.length} topics.
+                    <p className="text-gray-600 dark:text-gray-400 mb-6">
+                        {totalWords} words available for practice.
                     </p>
-                </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    {topics.map((topic) => (
+
+                    {/* Practice Button */}
+                    <div className="flex justify-center mt-12">
                         <Link
-                            key={topic}
-                            href={`/${level}/${topic.toLowerCase()}`}
-                            className="block p-6 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-all font-semibold capitalize bg-white dark:bg-zinc-900"
+                            href={`/${level}/practice`}
+                            className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold text-lg hover:from-indigo-700 hover:to-purple-700 transition-all shadow-xl hover:shadow-2xl hover:scale-105"
                         >
-                            {topic}
-                            <span className="block text-xs font-normal text-gray-400 mt-2">
-                                Practice ➔
-                            </span>
+                            <Brain size={24} />
+                            Start Practice Mode
                         </Link>
-                    ))}
-                </div>
-
-                {topics.length === 0 && (
-                    <div className="p-12 text-center border-2 border-dashed border-gray-200 rounded-xl">
-                        <p className="text-gray-500">No topics found for this level yet.</p>
                     </div>
-                )}
+                </div>
             </div>
         </div>
     );

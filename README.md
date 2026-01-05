@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# German A1 Vocabulary Learning Website
 
-## Getting Started
+A comprehensive, interactive web application for learning German A1 level vocabulary with **965+ words**.
 
-First, run the development server:
+## ✨ Features
+
+### 📚 Complete A1 Vocabulary
+- 965 German words organized into 15 practical topics
+- Each word includes article (der/die/das), plural form, translation, and example sentences
+- Topics: Numbers, Time, Food, Family, Transport, Work, and more!
+
+### 🎯 Multiple Practice Modes
+
+1. **Flashcards** - Select 10, 20, 30, 50, or all words for randomized practice
+2. **Translation Practice** - Test German ↔ English translation skills  
+3. **Sentence Formation** - Build German sentences with vocabulary words
+
+### 🎨 Modern Features
+- Clean, intuitive interface
+- Mobile-responsive design
+- Dark mode support
+- Progress tracking
+- Keyboard shortcuts
+- Randomized word order for effective learning
+
+## 🚀 Getting Started
 
 ```bash
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Open http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📂 Navigation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Homepage** → Click "Start Learning A1"
+2. **Browse Topics** → Explore vocabulary by category
+3. **Practice Mode** → Choose your practice type
+   - Flashcards: Select card count, flip to reveal translation
+   - Translation: Type answers, get instant feedback
+   - Sentences: Create sentences, compare with examples
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🗂️ Project Structure
 
-## Learn More
+```
+app/
+├── page.tsx              # Homepage (A1 focused)
+├── a1/                   # A1 level routes
+│   ├── practice/         # Practice modes
+│   ├── [topic]/          # Topic pages
+│   └── [topic]/[slug]/   # Word details
+components/
+├── FlashcardPractice.tsx
+├── TranslationPractice.tsx
+└── SentencePractice.tsx
+data/vocab/
+└── a1_complete.json      # 965 A1 words
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 📝 Topics Covered
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Numbers (140) | Time (90) | Basics (368)
+- Transport (61) | Verbs (55) | Family (59)
+- Food (43) | Calendar (30) | Housing (28)
+- Work (26) | Colors (16) | Countries (16)
+- Body (14) | Measurements (14) | Directions (5)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🎯 Learning Tips
 
-## Deploy on Vercel
+1. Start with flashcards for vocabulary familiarization
+2. Practice translation for accuracy
+3. Build sentences to apply grammar
+4. Review daily for best results!
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🌟 Why This App?
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Free & Open Source** - No ads, no subscriptions
+- **Comprehensive** - Complete A1 curriculum
+- **Interactive** - Multiple learning modes
+- **Effective** - Based on spaced repetition principles
+
+---
+
+Built with Next.js 16 + TypeScript + Tailwind CSS
+
+**Start learning German today! 🇩🇪**

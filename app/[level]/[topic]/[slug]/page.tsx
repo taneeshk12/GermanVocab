@@ -3,6 +3,7 @@ import { getVocabBySlug, getTopics, getVocabByTopic, getAllVocab } from "@/lib/v
 import { Level } from "@/lib/types";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+import { ArrowLeft, Book, Volume2 } from "lucide-react";
 
 type Props = {
     params: Promise<{ level: string; topic: string; slug: string }>;
@@ -15,9 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const item = getVocabBySlug(uppercaseLevel, slug);
 
     if (!item) {
-        return {
-            title: "Word Not Found",
-        };
+        return { title: "Word Not Found" };
     }
 
     return {
@@ -57,82 +56,75 @@ export default async function WordPage({ params }: Props) {
         notFound();
     }
 
-    // Schema.org Structured Data
-    const jsonLd = {
-        "@context": "https://schema.org",
-        "@type": "DefinedTerm",
-        "name": item.word,
-        "description": item.meaning_en,
-        "inDefinedTermSet": {
-            "@type": "DefinedTermSet",
-            "name": `German Vocabulary Level ${item.level}`,
-        },
-        "termCode": item.slug
-    };
-
     return (
-        <div className="min-h-screen p-8 sm:p-20 font-[family-name:var(--font-geist-sans)] flex flex-col items-center justify-center">
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-            />
+        <div className="container mx-auto px-6 py-12 flex flex-col items-center justify-center min-h-[80vh]">
 
-            <div className="w-full max-w-2xl">
-                <div className="flex gap-2 text-sm text-gray-500 mb-8">
-                    <Link href="/" className="hover:underline">Home</Link>
-                    <span>/</span>
-                    <Link href={`/${level}`} className="hover:underline">Level {uppercaseLevel}</Link>
-                    <span>/</span>
-                    <Link href={`/${level}/${topic}`} className="hover:underline capitalize">{topic}</Link>
-                </div>
+            <div className="w-full max-w-3xl">
+                <Link href={`/${level}/${topic}`} className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-8 transition-colors">
+                    <ArrowLeft size={16} className="mr-2" /> Back to {topic}
+                </Link>
 
-                <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-gray-800 rounded-3xl p-8 sm:p-12 shadow-xl">
-                    <div className="flex justify-between items-start mb-6">
-                        <span className="text-sm font-bold tracking-wider uppercase text-gray-400">
-                            German Word
+                <div className="bg-card border shadow-2xl rounded-[2rem] p-8 sm:p-16 relative overflow-hidden">
+                    {/* Background decoration */}
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
+
+                    <div className="flex justify-between items-start mb-8 relative z-10">
+                        <span className="text-sm font-bold tracking-widest uppercase text-muted-foreground">
+                            Deep Dive
                         </span>
-                        <span className="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs font-bold">
-                            {item.level}
+                        <span className="px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-bold border border-primary/20">
+                            Level {item.level}
                         </span>
                     </div>
 
-                    <h1 className="text-5xl sm:text-7xl font-bold mb-4 text-gray-900 dark:text-white mt-2">
-                        <span className="text-3xl sm:text-5xl text-gray-400 font-normal mr-2">{item.article}</span>
-                        {item.word}
-                    </h1>
+                    <div className="text-center py-8 relative z-10">
+                        <div className="inline-block mb-2">
+                            <span className="text-2xl sm:text-4xl text-muted-foreground font-serif italic mr-3">{item.article}</span>
+                            <h1 className="inline text-6xl sm:text-8xl font-black text-foreground tracking-tight">
+                                {item.word}
+                            </h1>
+                        </div>
+                        {item.plural && (
+                            <p className="text-xl text-muted-foreground italic mt-2">
+                                (Plural: <span className="font-semibold">{item.plural}</span>)
+                            </p>
+                        )}
+                    </div>
 
-                    {item.plural && (
-                        <p className="text-xl text-gray-500 mb-8 italic">
-                            Plural: {item.plural}
-                        </p>
-                    )}
-
-                    <hr className="my-8 border-gray-100 dark:border-gray-800" />
-
-                    <div className="grid gap-8">
-                        <div>
-                            <h2 className="text-sm font-bold uppercase text-gray-400 mb-2">English Meaning</h2>
-                            <p className="text-3xl font-medium">{item.meaning_en}</p>
+                    <div className="grid gap-8 mt-8 relative z-10">
+                        <div className="text-center">
+                            <p className="text-3xl sm:text-4xl font-medium text-primary">
+                                {item.meaning_en}
+                            </p>
                         </div>
 
-                        <div className="bg-gray-50 dark:bg-zinc-800/50 p-6 rounded-2xl">
-                            <h2 className="text-sm font-bold uppercase text-gray-400 mb-3">Example Usage</h2>
-                            <p className="text-xl text-gray-800 dark:text-gray-200 mb-2 font-serif italic">
+                        <div className="bg-secondary/50 p-8 rounded-3xl border border-border/50 backdrop-blur-sm mt-4">
+                            <div className="flex items-center gap-2 mb-4 text-muted-foreground">
+                                <Book size={18} />
+                                <span className="text-sm font-bold uppercase tracking-wide">Example Usage</span>
+                            </div>
+                            <p className="text-2xl font-serif italic text-foreground mb-3 leading-relaxed">
                                 "{item.example_de}"
                             </p>
-                            <p className="text-gray-500 dark:text-gray-400">
+                            <p className="text-lg text-muted-foreground">
                                 {item.example_en}
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <div className="mt-8 flex justify-between">
+                <div className="mt-12 flex justify-center gap-6">
                     <Link
                         href={`/${level}/${topic}`}
-                        className="text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
+                        className="px-8 py-3 rounded-full border bg-background hover:bg-secondary transition-colors font-medium"
                     >
-                        ← Back to Topic
+                        Continue Browsing
+                    </Link>
+                    <Link
+                        href="/quiz/daily"
+                        className="px-8 py-3 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-bold shadow-lg shadow-primary/25"
+                    >
+                        Quiz Me on This
                     </Link>
                 </div>
             </div>

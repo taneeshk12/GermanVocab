@@ -20,4 +20,5 @@ export interface QuizQuestion {
     options?: string[];
     correctAnswer: string;
     explanation?: string;
+    audioText?: string;
 }

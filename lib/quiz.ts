@@ -23,7 +23,8 @@ function generateQuestion(item: VocabItem, allVocab: VocabItem[], type: "mcq" | 
             question: `What is the article for "${item.word}"?`,
             options: ["der", "die", "das"],
             correctAnswer: item.article,
-            explanation: `The correct article for ${item.word} is ${item.article}.`
+            explanation: `The correct article for ${item.word} is ${item.article}.`,
+            audioText: item.word
         };
     }
 
@@ -43,6 +44,7 @@ function generateQuestion(item: VocabItem, allVocab: VocabItem[], type: "mcq" | 
         question: `What is the meaning of "${item.word}"?`,
         options: options,
         correctAnswer: item.meaning_en,
-        explanation: `${item.word} means "${item.meaning_en}". Example: ${item.example_de}`
+        explanation: `${item.word} means "${item.meaning_en}". Example: ${item.example_de}`,
+        audioText: item.example_de
     };
 }
