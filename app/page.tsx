@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Book, Medal, Sparkles, Trophy, Star, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
-
+//c
 export default function Home() {
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
