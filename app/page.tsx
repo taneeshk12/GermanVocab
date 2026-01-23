@@ -1,10 +1,51 @@
 import Link from "next/link";
 import { ArrowRight, Book, Medal, Sparkles, Trophy, Star, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Metadata } from "next";
+import { generateSEO, generateFAQSchema } from "@/lib/seo";
+
+export const metadata: Metadata = generateSEO({
+  title: "LinguFlow - Master German Vocabulary | Free A1-B2 Learning Platform",
+  description: "Learn German vocabulary with 965+ words, interactive flashcards, daily quizzes, and practice exercises. Free, open-source platform for A1-B2 CEFR levels. Start learning today!",
+  keywords: [
+    "free German learning",
+    "German vocabulary app",
+    "CEFR German",
+    "German beginner",
+    "German intermediate",
+    "vocabulary builder",
+    "spaced repetition",
+    "German exercises",
+    "learn German online free",
+    "German language learning",
+  ],
+});
+
 //c
 export default function Home() {
+  const faqSchema = generateFAQSchema([
+    {
+      question: "Is LinguFlow really free?",
+      answer: "Yes! LinguFlow is completely free and open-source. We believe language learning should be accessible to everyone.",
+    },
+    {
+      question: "What levels does LinguFlow cover?",
+      answer: "LinguFlow currently covers A1, A2, B1, and B2 levels according to the CEFR (Common European Framework of Reference for Languages).",
+    },
+    {
+      question: "How many words can I learn?",
+      answer: "We currently have 965+ German words at the A1 level, with more levels and words being added regularly.",
+    },
+  ]);
+  
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      
       {/* Hero Section */}
       <section className="relative py-24 sm:py-32 overflow-hidden bg-background">
         {/* Decorative Background Elements (Gradient Bubbles) */}

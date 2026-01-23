@@ -1,6 +1,7 @@
 import QuizInterface from "@/components/QuizInterface";
 import { generateDailyQuiz } from "@/lib/quiz";
 import Link from "next/link";
+import { Analytics } from "@vercel/analytics/next"
 // We don't need 'use client' here because the page itself processes data on server (or build),
 // then passes it to the client component. BUT `generateDailyQuiz` handles randomness.
 // If we want a new quiz on every refresh for "Daily", we should use dynamic rendering or client-side generation.

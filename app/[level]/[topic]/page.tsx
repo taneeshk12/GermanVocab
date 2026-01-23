@@ -3,7 +3,10 @@ import { getVocabByTopic, getTopics } from "@/lib/vocab";
 import { Level } from "@/lib/types";
 import { notFound } from "next/navigation";
 import { VocabCard } from "@/components/VocabCard";
+import { Analytics } from "@vercel/analytics/next"
 import { ArrowLeft, BookOpen } from "lucide-react";
+import { Metadata } from "next";
+import { generateTopicSEO, generateBreadcrumbSchema } from "@/lib/seo";
 
 export function generateStaticParams() {
     const levels: Level[] = ["A1", "A2", "B1", "B2"];
@@ -22,6 +25,19 @@ type Props = {
     params: Promise<{ level: string; topic: string }>;
 };
 
+// Generate metadata for each topic
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const { level, topic } = await params;
+    const uppercaseLevel = level.toUpperCase() as Level;
+
+    if (!["A1", "A2", "B1", "B2"].includes(uppercaseLevel)) {
+        return {};
+    }
+
+    const words = getVocabByTopic(uppercaseLevel, topic);
+    return generateTopicSEO(level, topic, words.length);
+}
+
 export default async function TopicPage({ params }: Props) {
     const { level, topic } = await params;
     const uppercaseLevel = level.toUpperCase() as Level;
@@ -32,8 +48,21 @@ export default async function TopicPage({ params }: Props) {
 
     const words = getVocabByTopic(uppercaseLevel, topic);
 
+    // Structured data
+    const breadcrumbSchema = generateBreadcrumbSchema([
+        { name: "Home", url: "/" },
+        { name: `Level ${uppercaseLevel}`, url: `/${level}` },
+        { name: topic.charAt(0).toUpperCase() + topic.slice(1), url: `/${level}/${topic}` },
+    ]);
+
     return (
         <div className="container mx-auto px-6 py-12">
+            {/* JSON-LD Structured Data */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+            />
+            
             <div className="mb-12">
                 <Link href={`/${level}`} className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground mb-6 transition-colors">
                     <ArrowLeft size={16} className="mr-1" /> Back to Level {uppercaseLevel}

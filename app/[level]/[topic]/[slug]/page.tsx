@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getVocabBySlug, getTopics, getVocabByTopic, getAllVocab } from "@/lib/vocab";
 import { Level } from "@/lib/types";
 import { notFound } from "next/navigation";
+import { Analytics } from "@vercel/analytics/next"
 import { Metadata } from "next";
 import { ArrowLeft, Book, Volume2 } from "lucide-react";
 

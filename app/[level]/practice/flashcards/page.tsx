@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getAllVocab } from "@/lib/vocab";
 import { Level } from "@/lib/types";
 import { notFound } from "next/navigation";
+import { Analytics } from "@vercel/analytics/next"
 import { ArrowLeft } from "lucide-react";
 import { FlashcardPractice } from "@/components/FlashcardPractice";
 

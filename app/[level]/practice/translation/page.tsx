@@ -3,6 +3,7 @@ import { getAllVocab } from "@/lib/vocab";
 import { Level } from "@/lib/types";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
+import { Analytics } from "@vercel/analytics/next"
 import { TranslationPractice } from "@/components/TranslationPractice";
 
 export function generateStaticParams() {

@@ -2,7 +2,10 @@ import Link from "next/link";
 import { getAllVocab } from "@/lib/vocab";
 import { Level } from "@/lib/types";
 import { notFound } from "next/navigation";
+import { Analytics } from "@vercel/analytics/next"
 import { Brain } from "lucide-react";
+import { generateLevelSEO, generateEducationalSchema, generateBreadcrumbSchema } from "@/lib/seo";
+import { Metadata } from "next";
 
 // Generate static params for all levels
 export function generateStaticParams() {
@@ -16,6 +19,19 @@ type Props = {
     params: Promise<{ level: string }>;
 };
 
+// Generate metadata for each level
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const { level } = await params;
+    const uppercaseLevel = level.toUpperCase() as Level;
+    
+    if (!["A1", "A2", "B1", "B2"].includes(uppercaseLevel)) {
+        return {};
+    }
+    
+    const totalWords = getAllVocab(uppercaseLevel).length;
+    return generateLevelSEO(level, totalWords);
+}
+
 export default async function LevelPage({ params }: Props) {
     const { level } = await params;
     const uppercaseLevel = level.toUpperCase() as Level;
@@ -27,8 +43,25 @@ export default async function LevelPage({ params }: Props) {
 
     const totalWords = getAllVocab(uppercaseLevel).length;
 
+    // Structured data
+    const educationalSchema = generateEducationalSchema(level, totalWords);
+    const breadcrumbSchema = generateBreadcrumbSchema([
+        { name: "Home", url: "/" },
+        { name: `Level ${uppercaseLevel}`, url: `/${level}` },
+    ]);
+
     return (
         <div className="min-h-screen p-8 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+            {/* JSON-LD Structured Data */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(educationalSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+            />
+            
             <div className="max-w-4xl mx-auto">
                 <div className="mb-8">
                     <Link href="/" className="text-sm text-gray-500 hover:underline mb-4 block">
