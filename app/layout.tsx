@@ -11,7 +11,7 @@ const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space
 
 export const metadata: Metadata = generateSEO({
   title: "LangFlow - Master German Vocabulary | Free A1-B2 Learning Platform",
-  description: "Learn German vocabulary with 965+ words, interactive flashcards, daily quizzes, and practice exercises. Free, open-source platform for A1-B2 CEFR levels. Start learning today!",
+  description: "Master German vocabulary completely free. 2000+ words across A1-B2 levels, featuring spaced repetition flashcards, interactive quizzes, and sentence building exercises. The best open-source alternative to paid language apps.",
   keywords: [
     "free German learning",
     "German vocabulary app",
