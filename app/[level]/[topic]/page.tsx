@@ -7,6 +7,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { ArrowLeft, BookOpen } from "lucide-react";
 import { Metadata } from "next";
 import { generateTopicSEO, generateBreadcrumbSchema } from "@/lib/seo";
+import { PageHeader } from "@/components/PageHeader";
 
 export function generateStaticParams() {
     const levels: Level[] = ["A1", "A2", "B1", "B2"];
@@ -56,43 +57,42 @@ export default async function TopicPage({ params }: Props) {
     ]);
 
     return (
-        <div className="container mx-auto px-6 py-12">
-            {/* JSON-LD Structured Data */}
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-            />
-            
-            <div className="mb-12">
-                <Link href={`/${level}`} className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground mb-6 transition-colors">
-                    <ArrowLeft size={16} className="mr-1" /> Back to Level {uppercaseLevel}
-                </Link>
-
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                    <div>
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold mb-4 border border-primary/20">
-                            <BookOpen size={14} />
-                            <span>{words.length} Words</span>
-                        </div>
-                        <h1 className="text-4xl sm:text-5xl font-extrabold capitalize tracking-tight">{topic}</h1>
-                        <p className="text-lg text-muted-foreground mt-2 max-w-2xl">
-                            Master essential German vocabulary related to {topic}.
-                        </p>
+        <div className="min-h-screen">
+            <PageHeader
+                title={topic}
+                description={`Master essential German vocabulary related to ${topic}.`}
+                imageSrc="/level-illustration.png"
+            >
+                <div className="flex flex-col sm:flex-row items-center gap-4">
+                    <Link href={`/${level}`} className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors px-4 py-2 rounded-full border border-border bg-background/50 hover:bg-background">
+                        <ArrowLeft size={16} className="mr-1" /> Back to Level {uppercaseLevel}
+                    </Link>
+                    <div className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-primary/10 text-primary text-sm font-bold border border-primary/20">
+                        <BookOpen size={16} />
+                        <span>{words.length} Words</span>
                     </div>
                 </div>
-            </div>
+            </PageHeader>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {words.map((item) => (
-                    <VocabCard key={item.id} item={item} />
-                ))}
-            </div>
+            <div className="container mx-auto px-6 py-12 -mt-10 relative z-20">
+                {/* JSON-LD Structured Data */}
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+                />
 
-            {words.length === 0 && (
-                <div className="text-center py-20 border-2 border-dashed rounded-3xl bg-secondary/20">
-                    <p className="text-muted-foreground">No words found for this topic.</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {words.map((item) => (
+                        <VocabCard key={item.id} item={item} />
+                    ))}
                 </div>
-            )}
+
+                {words.length === 0 && (
+                    <div className="text-center py-20 border-2 border-dashed rounded-3xl bg-secondary/20">
+                        <p className="text-muted-foreground">No words found for this topic.</p>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

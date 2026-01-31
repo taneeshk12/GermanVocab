@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Analytics } from "@vercel/analytics/next";
 import { generateSEO, generateOrganizationSchema, generateWebsiteSchema } from "@/lib/seo";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-grotesk" });
 
 export const metadata: Metadata = generateSEO({
   title: "LinguFlow - Master German Vocabulary | Free A1-B2 Learning Platform",
@@ -21,6 +22,7 @@ export const metadata: Metadata = generateSEO({
     "spaced repetition",
     "German exercises",
     "learn German online free",
+    "German language learning",
   ],
 });
 
@@ -44,9 +46,9 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
       </head>
-      <body className={`${inter.className} antialiased min-h-screen flex flex-col`}>
+      <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased min-h-screen flex flex-col`}>
         <Navbar />
-        <main className="flex-1 pt-16">
+        <main className="flex-1">
           {children}
         </main>
         <Footer />

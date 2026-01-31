@@ -32,114 +32,118 @@
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-heading: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+
+  --animate-aurora: aurora 60s linear infinite;
+
+  @keyframes aurora {
+    from {
+      background-position: 50% 50%, 50% 50%;
+    }
+
+    to {
+      background-position: 350% 50%, 350% 50%;
+    }
+  }
 }
 
+/* 
+  Global Utilities 
+*/
+/* Glass Panel - Strengthened for visibility */
+@utility glass-panel {
+  @apply bg-white/70 backdrop-blur-2xl border border-white/50 transition-all duration-300;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+}
+
+@utility glass-button {
+  @apply bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] font-medium tracking-wide;
+}
+
+
 :root {
-  /* Premium Light Mode */
+  /* Premium Light Mode - Adjusted for contrast */
   --background: 210 40% 98%;
-  /* very light blue-ish gray */
-  --foreground: 222 47% 11%;
-  /* deep rich navy */
+  --foreground: 222 47% 10%;
+  /* Darker Navy for text */
 
   --card: 0 0% 100%;
-  /* pure white */
-  --card-foreground: 222 47% 11%;
+  --card-foreground: 222 47% 10%;
 
   --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 11%;
+  --popover-foreground: 222 47% 10%;
 
-  --primary: 250 80% 54%;
-  /* Vibrant Indigo/Violet */
+  --primary: 265 89% 55%;
+  /* Slightly Darker Vibrant Lavender/Purple for text readability */
   --primary-foreground: 210 40% 98%;
 
-  --secondary: 210 40% 96%;
-  --secondary-foreground: 222 47% 11%;
+  --secondary: 210 40% 90%;
+  /* Darker secondary for better border contrast */
+  --secondary-foreground: 222 47% 10%;
 
-  --muted: 210 40% 96%;
-  --muted-foreground: 215 16% 47%;
+  --muted: 210 40% 90%;
+  --muted-foreground: 215 25% 40%;
+  /* Darker muted text */
 
-  --accent: 250 80% 96%;
-  /* Light indigo tint */
-  --accent-foreground: 222 47% 11%;
+  --accent: 265 89% 96%;
+  --accent-foreground: 222 47% 10%;
 
   --destructive: 0 84% 60%;
   --destructive-foreground: 210 40% 98%;
 
-  --border: 214 32% 91%;
-  --input: 214 32% 91%;
-  --ring: 250 80% 54%;
+  --border: 214 20% 85%;
+  /* Darker border */
+  --input: 214 20% 85%;
+  --ring: 265 89% 55%;
 
   --radius: 1rem;
-  /* More rounded, modern feel */
 }
 
 .dark {
   /* Premium Dark Mode */
-  --background: 230 25% 6%;
-  /* Deep dark blue-black, not pitch black */
-  --foreground: 210 40% 98%;
+  --background: 240 10% 3.9%;
+  /* Very dark grey-purple */
+  --foreground: 0 0% 98%;
 
-  --card: 230 25% 10%;
-  /* Slightly lighter than bg */
-  --card-foreground: 210 40% 98%;
+  --card: 240 10% 6%;
+  /* Slightly lighter */
+  --card-foreground: 0 0% 98%;
 
-  --popover: 230 25% 10%;
-  --popover-foreground: 210 40% 98%;
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
 
-  --primary: 250 80% 65%;
-  /* Brighter Violet for dark mode */
+  --primary: 265 89% 66%;
   --primary-foreground: 210 40% 98%;
 
-  --secondary: 230 25% 14%;
-  /* Subtle depth */
-  --secondary-foreground: 210 40% 98%;
+  --secondary: 240 4% 16%;
+  --secondary-foreground: 0 0% 98%;
 
-  --muted: 230 25% 14%;
-  --muted-foreground: 215 20% 65%;
+  --muted: 240 4% 16%;
+  --muted-foreground: 240 5% 65%;
 
-  --accent: 250 50% 14%;
-  /* Dark indigo accent */
-  --accent-foreground: 210 40% 98%;
+  --accent: 265 50% 15%;
+  --accent-foreground: 0 0% 98%;
 
   --destructive: 0 62% 30%;
-  --destructive-foreground: 210 40% 98%;
+  --destructive-foreground: 0 0% 98%;
 
-  --border: 230 25% 14%;
-  --input: 230 25% 14%;
-  --ring: 250 80% 65%;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Auto-apply dark mode colors if system prefers dark */
-    --background: 230 25% 6%;
-    --foreground: 210 40% 98%;
-    --card: 230 25% 10%;
-    --card-foreground: 210 40% 98%;
-    --popover: 230 25% 10%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 250 80% 65%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 230 25% 14%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 230 25% 14%;
-    --muted-foreground: 215 20% 65%;
-    --accent: 250 50% 14%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62% 30%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 230 25% 14%;
-    --input: 230 25% 14%;
-    --ring: 250 80% 65%;
-  }
+  --border: 240 4% 16%;
+  --input: 240 4% 16%;
+  --ring: 265 89% 66%;
 }
 
 body {
   @apply bg-background text-foreground;
-  /* Ensure border color is applied globally if needed, though * selector is risky in v4 sometimes, simply applying to body is safer */
-  border-color: hsl(var(--border));
+  font-feature-settings: "rlig" 1, "calt" 1;
 }
 
-* {
-  border-color: hsl(var(--border));
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
 }

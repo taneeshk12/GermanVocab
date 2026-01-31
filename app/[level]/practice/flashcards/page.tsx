@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { Analytics } from "@vercel/analytics/next"
 import { ArrowLeft } from "lucide-react";
 import { FlashcardPractice } from "@/components/FlashcardPractice";
+import { PageHeader } from "@/components/PageHeader";
 
 export function generateStaticParams() {
     return ["a1", "a2", "b1", "b2"].map((level) => ({
@@ -27,26 +28,23 @@ export default async function FlashcardsPage({ params }: Props) {
     const words = getAllVocab(uppercaseLevel);
 
     return (
-        <div className="container mx-auto px-6 py-12">
-            <div className="mb-12">
+        <div className="min-h-screen">
+            <PageHeader
+                title="Flashcard Practice"
+                description={`Review ${words.length} words from Level ${uppercaseLevel}. Click the card or press Space to flip!`}
+                imageSrc="/practice-illustration.png"
+            >
                 <Link
                     href={`/${level}/practice`}
-                    className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground mb-6 transition-colors"
+                    className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors px-4 py-2 rounded-full border border-border bg-background/50 hover:bg-background"
                 >
                     <ArrowLeft size={16} className="mr-1" /> Back to Practice
                 </Link>
+            </PageHeader>
 
-                <div className="max-w-2xl">
-                    <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4">
-                        Flashcard Practice
-                    </h1>
-                    <p className="text-lg text-muted-foreground">
-                        Review {words.length} words from Level {uppercaseLevel}. Click the card or press Space to flip!
-                    </p>
-                </div>
+            <div className="container mx-auto px-6 py-12 -mt-10 relative z-20">
+                <FlashcardPractice words={words} />
             </div>
-
-            <FlashcardPractice words={words} />
         </div>
     );
 }
