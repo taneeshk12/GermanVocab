@@ -2,8 +2,8 @@ import { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'LinguFlow - Master German Vocabulary',
-    short_name: 'LinguFlow',
+    name: 'LangFlow - Master German Vocabulary',
+    short_name: 'LangFlow',
     description: 'Learn German vocabulary with daily quizzes and interactive practice for A1-B2 levels. Free and open source.',
     start_url: '/',
     display: 'standalone',

@@ -8,6 +8,8 @@ import { generateLevelSEO, generateEducationalSchema, generateBreadcrumbSchema }
 import { Metadata } from "next";
 import { PageHeader } from "@/components/PageHeader";
 import { TopicsGrid } from "@/components/TopicsGrid";
+import { PracticePromo } from "@/components/PracticePromo";
+import { slugify } from "@/lib/utils";
 
 // Generate static params for all levels
 export function generateStaticParams() {
@@ -50,12 +52,13 @@ export default async function LevelPage({ params }: Props) {
 
     // Get word counts per topic
     const vocabulary = getAllVocab(uppercaseLevel);
+
     const topicsWithData = topics.map(topic => {
         const count = vocabulary.filter(v => v.topic === topic).length;
         return {
             name: topic,
             count,
-            slug: topic.toLowerCase() // Assuming simplest slug derivation for now as per original code href construction
+            slug: slugify(topic)
         };
     });
 
@@ -107,6 +110,8 @@ export default async function LevelPage({ params }: Props) {
 
                 <TopicsGrid topics={topicsWithData} level={level} />
             </div>
+
+            <PracticePromo />
         </div>
     );
 }

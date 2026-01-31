@@ -14,7 +14,7 @@ export interface UserProgress {
     lastActiveDate: string | null;
 }
 
-const STORAGE_KEY = "linguflow_progress";
+const STORAGE_KEY = "langflow_progress";
 
 const defaultProgress: UserProgress = {
     masteredWordIds: [],

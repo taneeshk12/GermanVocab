@@ -5,9 +5,14 @@ import Link from "next/link";
 import { BookOpen, Trophy, Flame } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getProgress, UserProgress } from "@/lib/progress";
+import { usePathname } from "next/navigation";
 
 export function Navbar() {
     const [progress, setProgress] = useState<UserProgress | null>(null);
+    const pathname = usePathname();
+
+    // Determine current level from pathname (default to a1)
+    const currentLevel = pathname?.split('/')[1]?.match(/^(a1|a2|b1|b2)$/i) ? pathname.split('/')[1] : 'a1';
 
     useEffect(() => {
         // Initial load
@@ -39,6 +44,7 @@ export function Navbar() {
                     <div className="hidden md:flex items-center gap-1 bg-secondary/50 rounded-full p-1 border border-white/20 mr-2">
                         <NavLink href="/a1">Level A1</NavLink>
                         <NavLink href="/a2">Level A2</NavLink>
+                        <NavLink href={`/${currentLevel}/practice`}>Practice</NavLink>
                         <NavLink href="/quiz/daily">Daily Quiz</NavLink>
                     </div>
 

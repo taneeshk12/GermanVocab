@@ -1,8 +1,8 @@
 import { VocabItem, Level } from "./types";
-import a1DataComplete from "../data/vocab/a1_complete.json";
+import a1DataAll from "../data/vocab/A1_all.json";
 
-// Use only the complete A1 word list (965 words from CSV)
-const a1Data = a1DataComplete as VocabItem[];
+// Use only the complete A1 word list
+const a1Data = a1DataAll as VocabItem[];
 
 // In a real app with many files, we might load these dynamically or map them.
 // For now, importing directly is safe for SSG.
@@ -25,17 +25,30 @@ export function getVocabByTopic(level: Level, topic: string): VocabItem[] {
 export function getTopics(level: Level): string[] {
     const items = getAllVocab(level);
     const topicCounts = new Map<string, number>();
-    
+
     // Count words in each topic
     items.forEach(item => {
         const count = topicCounts.get(item.topic) || 0;
         topicCounts.set(item.topic, count + 1);
     });
-    
-    // Only return topics that have at least one word
-    const topics = Array.from(topicCounts.keys()).filter(topic => topicCounts.get(topic)! > 0);
+
+    // Only return topics that have at least one word and are not empty, and exclude the awkward 'honoured' topic
+    const topics = Array.from(topicCounts.keys())
+        .filter(topic =>
+            topicCounts.get(topic)! > 0 &&
+            topic.trim() !== "" &&
+            !topic.includes("honoured")
+        );
     return topics.sort();
 }
+
+export function getTopicBySlug(level: Level, slug: string): string | undefined {
+    const topics = getTopics(level);
+    return topics.find(t => slugify(t) === slug);
+}
+
+// Helper to handle slug matching
+import { slugify } from "./utils";
 
 export function getVocabBySlug(level: Level, slug: string): VocabItem | undefined {
     const items = getAllVocab(level);
@@ -45,7 +58,7 @@ export function getVocabBySlug(level: Level, slug: string): VocabItem | undefine
 export function getVocabStats(level: Level) {
     const items = getAllVocab(level);
     const topics = getTopics(level);
-    
+
     return {
         totalWords: items.length,
         totalTopics: topics.length,

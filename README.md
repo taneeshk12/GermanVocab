@@ -58,7 +58,7 @@ components/
 ├── TranslationPractice.tsx
 └── SentencePractice.tsx
 data/vocab/
-└── a1_complete.json      # 965 A1 words
+└── A1_all.json           # Complete A1 word list
 ```
 
 ## 📝 Topics Covered

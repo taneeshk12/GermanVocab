@@ -5,6 +5,7 @@ import { ArrowRight, Book, Medal, Sparkles, Trophy, Star, BookOpen, GraduationCa
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { BentoGrid, BentoGridItem } from "@/components/ui/BentoGrid";
+import { PracticePromo } from "@/components/PracticePromo";
 // SEO imports removed for client component - strictly speaking they should be in layout or a separate server component wrapper, 
 // but for now we keep the page as client for animations. 
 // Ideally we'd separate this into a server Page and client Hero/Features components.
@@ -178,6 +179,9 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+
+      {/* Practice Promo Section */}
+      <PracticePromo />
 
       {/* Features Grid */}
       <section className="py-24 bg-muted/30 border-t border-border relative">

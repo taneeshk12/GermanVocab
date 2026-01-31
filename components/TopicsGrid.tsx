@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { GlassCard } from "@/components/GlassCard";
-import { ChevronRight, Book, Star, Trophy, Sparkles, Hash, Clock, MessageCircle, Users, Apple, Home as HomeIcon, Briefcase, Cat, Heart, Shirt, CloudSun, Car, CalendarDays, Palette, Globe, Map as MapIcon, Ruler, Zap } from "lucide-react";
+import { ChevronRight, Book, Star, Trophy, Sparkles, Hash, Clock, MessageCircle, Users, Apple, Home as HomeIcon, Briefcase, Cat, Heart, Shirt, CloudSun, Car, CalendarDays, Palette, Globe, Map as MapIcon, Ruler, Zap, Activity, ShoppingBag, Mail } from "lucide-react";
 
 type TopicData = {
     name: string;
@@ -27,6 +27,9 @@ function getTopicVisual(topic: string) {
     if (t.includes('house') || t.includes('home') || t.includes('apartment')) return { icon: <HomeIcon size={32} className="text-cyan-600" />, color: "from-cyan-500 to-blue-600", shadow: "shadow-cyan-500/20" }; // Changed from purple
     if (t.includes('measure') || t.includes('size')) return { icon: <Ruler size={32} className="text-lime-600" />, color: "from-lime-500 to-green-600", shadow: "shadow-lime-500/20" };
     if (t.includes('verb') || t.includes('action')) return { icon: <Zap size={32} className="text-yellow-500" />, color: "from-yellow-400 to-orange-500", shadow: "shadow-yellow-500/20" };
+    if (t.includes('health') || t.includes('fitness')) return { icon: <Activity size={32} className="text-red-500" />, color: "from-red-400 to-rose-500", shadow: "shadow-red-500/20" };
+    if (t.includes('shop') || t.includes('market') || t.includes('store')) return { icon: <ShoppingBag size={32} className="text-violet-500" />, color: "from-violet-400 to-fuchsia-500", shadow: "shadow-violet-500/20" };
+    if (t.includes('honoured') || t.includes('dear') || t.includes('letter')) return { icon: <Mail size={32} className="text-slate-600" />, color: "from-slate-400 to-gray-500", shadow: "shadow-slate-500/20" };
 
     // Existing Mappings (Adjusted if needed)
     if (t.includes('number')) return { icon: <Hash size={32} className="text-blue-500" />, color: "from-blue-500 to-cyan-500", shadow: "shadow-blue-500/20" };

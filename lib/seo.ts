@@ -9,8 +9,8 @@ interface SEOProps {
   noindex?: boolean
 }
 
-const baseUrl = 'https://linguflow.vercel.app' // Update with your actual domain
-const siteName = 'LinguFlow'
+const baseUrl = 'https://langflow.vercel.app' // Update with your actual domain
+const siteName = 'LangFlow'
 
 export function generateSEO({
   title,
@@ -40,9 +40,9 @@ export function generateSEO({
       'German practice',
       ...keywords,
     ],
-    authors: [{ name: 'LinguFlow Team' }],
-    creator: 'LinguFlow',
-    publisher: 'LinguFlow',
+    authors: [{ name: 'LangFlow Team' }],
+    creator: 'LangFlow',
+    publisher: 'LangFlow',
     formatDetection: {
       email: false,
       address: false,
@@ -73,7 +73,7 @@ export function generateSEO({
       title: fullTitle,
       description,
       images: [ogImage],
-      creator: '@linguflow', // Update with your Twitter handle
+      creator: '@langflow', // Update with your Twitter handle
     },
     robots: {
       index: !noindex,
@@ -113,7 +113,7 @@ export function generateLevelSEO(level: string, wordCount: number): Metadata {
 
 export function generateTopicSEO(level: string, topic: string, wordCount: number): Metadata {
   const topicTitle = topic.charAt(0).toUpperCase() + topic.slice(1)
-  
+
   return generateSEO({
     title: `${topicTitle} - German ${level.toUpperCase()} Vocabulary`,
     description: `Learn ${wordCount} German words related to ${topicTitle}. Master essential ${level.toUpperCase()}-level vocabulary with examples, pronunciation, and interactive exercises.`,
@@ -148,9 +148,9 @@ export function generatePracticeSEO(level: string, practiceType: string): Metada
     sentences: 'Sentence Building',
     translation: 'Translation',
   }
-  
+
   const typeName = types[practiceType as keyof typeof types] || practiceType
-  
+
   return generateSEO({
     title: `${typeName} Practice - German ${level.toUpperCase()}`,
     description: `Practice German ${level.toUpperCase()} vocabulary with interactive ${typeName.toLowerCase()} exercises. Improve your vocabulary retention with spaced repetition and immediate feedback.`,
@@ -170,7 +170,7 @@ export function generateOrganizationSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'LinguFlow',
+    name: 'LangFlow',
     url: baseUrl,
     logo: `${baseUrl}/logo.png`,
     description: 'Free open-source platform for learning German vocabulary',
@@ -185,7 +185,7 @@ export function generateWebsiteSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'LinguFlow',
+    name: 'LangFlow',
     url: baseUrl,
     description: 'Master German vocabulary with interactive practice and daily quizzes',
     potentialAction: {
@@ -207,7 +207,7 @@ export function generateEducationalSchema(level: string, wordCount: number) {
     description: `Comprehensive German ${level.toUpperCase()} vocabulary course with ${wordCount} words`,
     provider: {
       '@type': 'Organization',
-      name: 'LinguFlow',
+      name: 'LangFlow',
       url: baseUrl,
     },
     educationalLevel: level.toUpperCase(),

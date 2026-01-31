@@ -1,13 +1,14 @@
 import Link from "next/link";
-import { getVocabByTopic, getTopics } from "@/lib/vocab";
+import { getVocabByTopic, getTopics, getTopicBySlug } from "@/lib/vocab";
 import { Level } from "@/lib/types";
 import { notFound } from "next/navigation";
-import { VocabCard } from "@/components/VocabCard";
 import { Analytics } from "@vercel/analytics/next"
 import { ArrowLeft, BookOpen } from "lucide-react";
 import { Metadata } from "next";
 import { generateTopicSEO, generateBreadcrumbSchema } from "@/lib/seo";
 import { PageHeader } from "@/components/PageHeader";
+import { TopicVocabGrid } from "@/components/TopicVocabGrid";
+import { slugify } from "@/lib/utils";
 
 export function generateStaticParams() {
     const levels: Level[] = ["A1", "A2", "B1", "B2"];
@@ -16,11 +17,13 @@ export function generateStaticParams() {
     for (const level of levels) {
         const topics = getTopics(level);
         for (const topic of topics) {
-            params.push({ level: level.toLowerCase(), topic: topic.toLowerCase() });
+            params.push({ level: level.toLowerCase(), topic: slugify(topic) });
         }
     }
     return params;
 }
+
+// ...
 
 type Props = {
     params: Promise<{ level: string; topic: string }>;
@@ -28,39 +31,47 @@ type Props = {
 
 // Generate metadata for each topic
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const { level, topic } = await params;
+    const { level, topic: topicSlug } = await params;
     const uppercaseLevel = level.toUpperCase() as Level;
 
     if (!["A1", "A2", "B1", "B2"].includes(uppercaseLevel)) {
         return {};
     }
 
-    const words = getVocabByTopic(uppercaseLevel, topic);
-    return generateTopicSEO(level, topic, words.length);
+    const topicName = getTopicBySlug(uppercaseLevel, topicSlug);
+    if (!topicName) return {};
+
+    const words = getVocabByTopic(uppercaseLevel, topicName);
+    return generateTopicSEO(level, topicName, words.length);
 }
 
 export default async function TopicPage({ params }: Props) {
-    const { level, topic } = await params;
+    const { level, topic: topicSlug } = await params;
     const uppercaseLevel = level.toUpperCase() as Level;
 
     if (!["A1", "A2", "B1", "B2"].includes(uppercaseLevel)) {
         notFound();
     }
 
-    const words = getVocabByTopic(uppercaseLevel, topic);
+    const topicName = getTopicBySlug(uppercaseLevel, topicSlug);
+    if (!topicName) {
+        notFound();
+    }
+
+    const words = getVocabByTopic(uppercaseLevel, topicName);
 
     // Structured data
     const breadcrumbSchema = generateBreadcrumbSchema([
         { name: "Home", url: "/" },
         { name: `Level ${uppercaseLevel}`, url: `/${level}` },
-        { name: topic.charAt(0).toUpperCase() + topic.slice(1), url: `/${level}/${topic}` },
+        { name: topicName.charAt(0).toUpperCase() + topicName.slice(1), url: `/${level}/${topicSlug}` },
     ]);
 
     return (
         <div className="min-h-screen">
             <PageHeader
-                title={topic}
-                description={`Master essential German vocabulary related to ${topic}.`}
+                title={topicName}
+                description={`Master essential German vocabulary related to ${topicName}.`}
                 imageSrc="/level-illustration.png"
             >
                 <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -81,11 +92,7 @@ export default async function TopicPage({ params }: Props) {
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
                 />
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {words.map((item) => (
-                        <VocabCard key={item.id} item={item} />
-                    ))}
-                </div>
+                <TopicVocabGrid words={words} />
 
                 {words.length === 0 && (
                     <div className="text-center py-20 border-2 border-dashed rounded-3xl bg-secondary/20">

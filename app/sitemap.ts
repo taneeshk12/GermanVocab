@@ -3,9 +3,9 @@ import { getAllVocab, getTopics } from '@/lib/vocab'
 import { Level } from '@/lib/types'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://linguflow.vercel.app' // Update with your actual domain
+  const baseUrl = 'https://langflow.vercel.app' // Update with your actual domain
   const levels: Level[] = ['A1', 'A2', 'B1', 'B2']
-  
+
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
     {
