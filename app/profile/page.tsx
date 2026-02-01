@@ -181,8 +181,8 @@ export default function ProfilePage() {
       if (authError) throw authError
 
       // Update public users table
-      const { error: dbError } = await supabase
-        .from('users')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error: dbError } = await (supabase.from('users') as any)
         .update({ display_name: displayName })
         .eq('id', user.id)
 

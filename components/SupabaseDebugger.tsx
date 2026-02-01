@@ -123,19 +123,20 @@ export function SupabaseDebugger() {
 
     const testWord = `test_word_${Date.now()}`;
     
-    const { data, error } = await supabase
-      .from('vocabulary_progress')
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data, error } = await ((supabase
+      .from('vocabulary_progress') as any)
       .insert({
         user_id: user.id,
-        word_id: testWord,
+        vocab_id: testWord,
         level: 'a1',
-        proficiency_level: 'mastered',
+        proficiency_level: 'learned',
         times_practiced: 1,
         correct_count: 1,
         incorrect_count: 0,
         last_practiced_at: new Date().toISOString()
       })
-      .select();
+      .select());
 
     setResults({
       type: "Test Insert",

@@ -254,7 +254,7 @@ export async function markWordLearned(wordId: string, level: string, topic: stri
       } else if (progressData) {
         // Count all words marked as learned (single unified status)
         const totalLearned = progressData.filter(
-          p => p.proficiency_level === 'learned'
+          (p: any) => p.proficiency_level === 'learned'
         ).length
 
         console.log(`📊 Updated stats: ${totalLearned} words learned`)
@@ -331,7 +331,7 @@ export async function unmarkWordLearned(wordId: string) {
       } else if (progressData) {
         // Count all words marked as learned (single unified status)
         const totalLearned = progressData.filter(
-          p => p.proficiency_level === 'learned'
+          (p: any) => p.proficiency_level === 'learned'
         ).length
 
         console.log(`📊 Updated stats after unmark: ${totalLearned} words learned`)

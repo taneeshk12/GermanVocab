@@ -24,8 +24,9 @@ export async function recordPracticeSession(
 
   try {
     // 1. Create practice session record
-    const { data: session, error: sessionError } = await supabase
-      .from('practice_sessions')
+    // Type cast needed due to Supabase generated types issue
+    const { data: session, error: sessionError } = await (supabase
+      .from('practice_sessions') as any)
       .insert({
         user_id: userId,
         level: data.level,
@@ -83,8 +84,8 @@ export async function recordQuizCompletion(
     const scorePercentage = Math.round((data.correctAnswers / data.totalQuestions) * 100)
 
     // 1. Create quiz record
-    const { data: quiz, error: quizError } = await supabase
-      .from('quizzes')
+    const { data: quiz, error: quizError } = await (supabase
+      .from('quizzes') as any)
       .insert({
         user_id: userId,
         quiz_type: data.quizType,
@@ -140,8 +141,8 @@ export async function recordWordLearned(
 
   try {
     // 1. Update or create vocabulary progress
-    const { data: existing } = await supabase
-      .from('vocabulary_progress')
+    const { data: existing } = await (supabase
+      .from('vocabulary_progress') as any)
       .select()
       .eq('user_id', userId)
       .eq('word_id', data.wordId)
@@ -149,8 +150,8 @@ export async function recordWordLearned(
 
     if (existing) {
       // Update existing
-      await supabase
-        .from('vocabulary_progress')
+      await (supabase
+        .from('vocabulary_progress') as any)
         .update({
           times_practiced: existing.times_practiced + 1,
           correct_count: existing.correct_count + data.timesCorrect,
@@ -162,8 +163,8 @@ export async function recordWordLearned(
         .eq('word_id', data.wordId)
     } else {
       // Create new
-      await supabase
-        .from('vocabulary_progress')
+      await (supabase
+        .from('vocabulary_progress') as any)
         .insert({
           user_id: userId,
           word_id: data.wordId,

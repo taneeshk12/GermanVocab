@@ -27,7 +27,7 @@ export function LearnedWordsQuiz() {
         const allVocab = getAllVocab("A1");
         
         // Filter to only learned words (global - from any practice mode)
-        const learnedWordIds = new Set(learnedData.map(m => m.word_id));
+        const learnedWordIds = new Set(learnedData.map(m => m.vocab_id));
         const filteredWords = allVocab.filter((word: VocabItem) => learnedWordIds.has(word.id));
         
         setLearnedWords(filteredWords);

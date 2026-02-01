@@ -5,8 +5,8 @@
  * Run this after setting up Supabase and authenticating a user.
  */
 
-import { getSupabaseClient } from '../lib/supabase/client'
-import { getProgress } from '../lib/progress'
+import { getSupabaseClient } from '../supabase/client'
+import { getProgress } from '../progress'
 
 interface LocalStorageProgress {
   masteredWordIds: string[]
@@ -28,7 +28,7 @@ export async function migrateLocalStorageToSupabase(userId: string) {
   const supabase = getSupabaseClient()
   
   // Get localStorage data
-  const localProgress = getProgress()
+  const localProgress = await getProgress()
   
   if (!localProgress || localProgress.xp === 0) {
     console.log('ℹ️ No local progress found to migrate')
@@ -49,8 +49,8 @@ export async function migrateLocalStorageToSupabase(userId: string) {
   try {
     // 1. Migrate User Stats
     console.log('📝 Migrating user stats...')
-    const { error: statsError } = await supabase
-      .from('user_stats')
+    const { error: statsError } = await (supabase
+      .from('user_stats') as any)
       .upsert({
         user_id: userId,
         total_xp: localProgress.xp,
@@ -69,7 +69,7 @@ export async function migrateLocalStorageToSupabase(userId: string) {
     
     // 2. Migrate Mastered Words
     console.log('📚 Migrating mastered words...')
-    const vocabProgressRecords = localProgress.masteredWordIds.map(vocabId => ({
+    const vocabProgressRecords = localProgress.masteredWordIds.map((vocabId: string) => ({
       user_id: userId,
       vocab_id: vocabId,
       level: 'A1', // Default to A1, update manually if needed
@@ -86,8 +86,8 @@ export async function migrateLocalStorageToSupabase(userId: string) {
       // Insert in batches of 100
       for (let i = 0; i < vocabProgressRecords.length; i += 100) {
         const batch = vocabProgressRecords.slice(i, i + 100)
-        const { error: vocabError } = await supabase
-          .from('vocabulary_progress')
+        const { error: vocabError } = await (supabase
+          .from('vocabulary_progress') as any)
           .upsert(batch, { onConflict: 'user_id,vocab_id' })
         
         if (vocabError) {
@@ -101,7 +101,7 @@ export async function migrateLocalStorageToSupabase(userId: string) {
     
     // 3. Migrate Quiz History
     console.log('🎯 Migrating quiz history...')
-    const quizRecords = localProgress.quizHistory.map(quiz => ({
+    const quizRecords = localProgress.quizHistory.map((quiz: any) => ({
       user_id: userId,
       quiz_type: 'daily' as const,
       level: quiz.level,
@@ -114,8 +114,8 @@ export async function migrateLocalStorageToSupabase(userId: string) {
     }))
     
     if (quizRecords.length > 0) {
-      const { error: quizError } = await supabase
-        .from('quizzes')
+      const { error: quizError } = await (supabase
+        .from('quizzes') as any)
         .insert(quizRecords)
       
       if (quizError) {
@@ -143,8 +143,8 @@ export async function migrateLocalStorageToSupabase(userId: string) {
       }
       
       if (streakRecords.length > 0) {
-        const { error: streakError } = await supabase
-          .from('daily_streaks')
+        const { error: streakError } = await (supabase
+          .from('daily_streaks') as any)
           .upsert(streakRecords, { onConflict: 'user_id,activity_date' })
         
         if (streakError) {

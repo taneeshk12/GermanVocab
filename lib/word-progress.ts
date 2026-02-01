@@ -52,8 +52,8 @@ export async function getWordsMasteredStatus(wordIds: string[]): Promise<Map<str
 
   console.log(`Found ${data?.length || 0} word progress records`);
 
-  data?.forEach(item => {
-    statusMap.set(item.word_id, item.proficiency_level === 'learned');
+  data?.forEach((item: any) => {
+    statusMap.set(item.vocab_id, item.proficiency_level === 'learned');
   });
 
   return statusMap;
@@ -62,7 +62,13 @@ export async function getWordsMasteredStatus(wordIds: string[]): Promise<Map<str
 /**
  * Get all learned words for a user (global - from any practice mode)
  */
-export async function getMasteredWords() {
+export async function getMasteredWords(): Promise<Array<{
+  vocab_id: string;
+  level: string;
+  times_practiced: number;
+  correct_count: number;
+  last_practiced_at: string | null;
+}>> {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   
@@ -72,7 +78,7 @@ export async function getMasteredWords() {
 
   const { data, error } = await supabase
     .from('vocabulary_progress')
-    .select('word_id, level, times_practiced, correct_count, last_practiced_at')
+    .select('vocab_id, level, times_practiced, correct_count, last_practiced_at')
     .eq('user_id', user.id)
     .eq('proficiency_level', 'learned')
     .order('last_practiced_at', { ascending: false });
