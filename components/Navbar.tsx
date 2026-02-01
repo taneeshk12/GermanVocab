@@ -117,7 +117,7 @@ export function Navbar() {
                 <>
                     {/* Backdrop */}
                     <div 
-                        className="lg:hidden fixed inset-0 bg-black/20 backdrop-blur-sm -z-10"
+                        className="lg:hidden fixed inset-0 bg-white backdrop-blur-sm -z-10"
                         onClick={() => setIsMenuOpen(false)}
                     />
                     

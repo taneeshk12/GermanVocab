@@ -33,11 +33,13 @@ export async function getWordsMasteredStatus(wordIds: string[]): Promise<Map<str
 
   console.log(`Fetching word progress for user ${user.id}, ${wordIds.length} words`);
 
+  // Instead of querying with all word IDs (which might be too large),
+  // just get ALL learned words for this user and filter client-side
   const { data, error } = await supabase
     .from('vocabulary_progress')
     .select('word_id, proficiency_level')
     .eq('user_id', user.id)
-    .in('word_id', wordIds);
+    .eq('proficiency_level', 'learned');
 
   if (error) {
     console.error('Error fetching word progress:', {
@@ -50,12 +52,24 @@ export async function getWordsMasteredStatus(wordIds: string[]): Promise<Map<str
     return statusMap;
   }
 
-  console.log(`Found ${data?.length || 0} word progress records`);
+  console.log(`Found ${data?.length || 0} learned word progress records`);
+
+  if (data && data.length > 0) {
+    console.log(`Sample database records:`, data.slice(0, 5));
+  }
 
   data?.forEach((item: any) => {
-    statusMap.set(item.vocab_id, item.proficiency_level === 'learned');
+    console.log(`Word progress: ${item.word_id} -> ${item.proficiency_level}`);
+    // Only add to map if the word is in our requested wordIds
+    if (wordIds.includes(item.word_id)) {
+      statusMap.set(item.word_id, true);
+    }
   });
 
+  const learnedWords = Array.from(statusMap.entries()).filter(([, isLearned]) => isLearned);
+  console.log(`Returning status map with ${statusMap.size} entries, ${learnedWords.length} learned`);
+  console.log(`Learned word IDs:`, learnedWords.map(([id]) => id));
+  
   return statusMap;
 }
 
@@ -63,7 +77,7 @@ export async function getWordsMasteredStatus(wordIds: string[]): Promise<Map<str
  * Get all learned words for a user (global - from any practice mode)
  */
 export async function getMasteredWords(): Promise<Array<{
-  vocab_id: string;
+  word_id: string;
   level: string;
   times_practiced: number;
   correct_count: number;
@@ -78,7 +92,7 @@ export async function getMasteredWords(): Promise<Array<{
 
   const { data, error } = await supabase
     .from('vocabulary_progress')
-    .select('vocab_id, level, times_practiced, correct_count, last_practiced_at')
+    .select('word_id, level, times_practiced, correct_count, last_practiced_at')
     .eq('user_id', user.id)
     .eq('proficiency_level', 'learned')
     .order('last_practiced_at', { ascending: false });

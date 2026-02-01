@@ -59,16 +59,30 @@ export function TopicsGrid({ topics, level }: TopicsGridProps) {
         async function fetchAllProgress() {
             const vocabulary = getAllVocab(level.toUpperCase() as Level);
             const wordIds = vocabulary.map(v => v.id);
+            console.log(`TopicsGrid: Fetching progress for ${wordIds.length} words in level ${level}`);
+            console.log(`TopicsGrid: First 10 word IDs:`, wordIds.slice(0, 10));
+            
             const statusMap = await getWordsMasteredStatus(wordIds);
+            console.log(`TopicsGrid: Received status for ${statusMap.size} words`);
+            console.log(`TopicsGrid: Status map entries:`, Array.from(statusMap.entries()).slice(0, 10));
             
             const newProgressMap = new Map<string, number>();
             
             topics.forEach(topic => {
                 const topicWords = vocabulary.filter(v => v.topic === topic.name);
-                const masteredCount = topicWords.filter(v => statusMap.get(v.id)).length;
+                const topicWordIds = topicWords.map(w => w.id);
+                const masteredCount = topicWords.filter(v => {
+                    const isLearned = statusMap.get(v.id);
+                    if (isLearned) {
+                        console.log(`TopicsGrid: Found learned word in ${topic.name}: ${v.id} (${v.word})`);
+                    }
+                    return isLearned;
+                }).length;
                 const percentage = topicWords.length > 0 
                   ? Math.round((masteredCount / topicWords.length) * 100) 
                   : 0;
+                console.log(`TopicsGrid: ${topic.name} - ${masteredCount}/${topicWords.length} learned (${percentage}%)`);
+                console.log(`TopicsGrid: ${topic.name} word IDs sample:`, topicWordIds.slice(0, 5));
                 newProgressMap.set(topic.name, percentage);
             });
             
