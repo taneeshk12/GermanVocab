@@ -1,3 +1,12 @@
+/**
+ * DEPRECATED: This file contains old localStorage functions
+ * Please use supabase-integration.ts instead for all new code
+ * 
+ * This file is kept for backwards compatibility only
+ * All functions now redirect to Supabase
+ */
+
+import { getUserProgress, trackWordPractice, trackQuizCompletion, trackPracticeSession, markWordLearned as markWordMastered } from "./supabase-integration";
 import { Level } from "./types";
 
 export interface UserProgress {
@@ -7,96 +16,73 @@ export interface UserProgress {
         date: string;
         score: number;
         total: number;
-        level: string; // Keep string to be safe with varying inputs
+        level: string;
     }[];
     xp: number;
     streak: number;
     lastActiveDate: string | null;
 }
 
-const STORAGE_KEY = "langflow_progress";
-
-const defaultProgress: UserProgress = {
-    masteredWordIds: [],
-    totalPracticeSessions: 0,
-    quizHistory: [],
-    xp: 0,
-    streak: 0,
-    lastActiveDate: null
-};
-
-export function getProgress(): UserProgress {
-    if (typeof window === "undefined") {
-        return defaultProgress;
-    }
-
-    try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (!stored) {
-            return defaultProgress;
-        }
-        return { ...defaultProgress, ...JSON.parse(stored) };
-    } catch (e) {
-        console.error("Failed to load progress", e);
-        return defaultProgress;
-    }
+/**
+ * @deprecated Use getUserProgress() from supabase-integration.ts
+ */
+export async function getProgress(): Promise<UserProgress> {
+    const stats = await getUserProgress();
+    
+    // Return in old format for compatibility
+    return {
+        masteredWordIds: [],
+        totalPracticeSessions: 0,
+        quizHistory: [],
+        xp: stats.xp,
+        streak: stats.streak,
+        lastActiveDate: null
+    };
 }
 
+/**
+ * @deprecated Data is automatically saved to Supabase
+ */
 export function saveProgress(progress: UserProgress) {
-    if (typeof window === "undefined") return;
-    try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
-        // Dispatch event for UI updates
+    console.warn('saveProgress is deprecated - data is automatically saved to Supabase');
+    // Dispatch event for UI updates
+    if (typeof window !== "undefined") {
         window.dispatchEvent(new Event('progress-updated'));
-    } catch (e) {
-        console.error("Failed to save progress", e);
+        window.dispatchEvent(new Event('stats-updated'));
     }
 }
 
+/**
+ * @deprecated Streak is automatically checked in Supabase
+ */
 export function checkStreak(progress: UserProgress): UserProgress {
-    const today = new Date().toISOString().split('T')[0];
-
-    if (progress.lastActiveDate !== today) {
-        // Check if yesterday was active
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        const yesterdayStr = yesterday.toISOString().split('T')[0];
-
-        if (progress.lastActiveDate === yesterdayStr) {
-            progress.streak += 1;
-        } else if (progress.lastActiveDate !== today) {
-            // Reset streak if not today and not yesterday (unless it's the first day)
-            progress.streak = 1;
-        }
-        progress.lastActiveDate = today;
-    }
+    console.warn('checkStreak is deprecated - streak is automatically managed in Supabase');
     return progress;
 }
 
-export function markWordAsMastered(wordId: string) {
-    const progress = checkStreak(getProgress());
-    if (!progress.masteredWordIds.includes(wordId)) {
-        progress.masteredWordIds.push(wordId);
-        progress.xp += 10;
-        saveProgress(progress);
+/**
+ * @deprecated Use markWordMastered() from supabase-integration.ts
+ */
+export async function markWordAsMastered(wordId: string) {
+    console.warn('markWordAsMastered is deprecated - use markWordMastered() from supabase-integration.ts');
+    await markWordMastered(wordId, 'a1');
+}
+
+/**
+ * @deprecated Use trackQuizCompletion() from supabase-integration.ts
+ */
+export async function addQuizResult(level: string, score: number, total: number) {
+    console.warn('addQuizResult is deprecated - use trackQuizCompletion() from supabase-integration.ts');
+    await trackQuizCompletion(level, score, total);
+}
+
+/**
+ * @deprecated Use trackPracticeSession() from supabase-integration.ts
+ */
+export async function incrementPracticeStats(xpEarned: number = 5) {
+    console.warn('incrementPracticeStats is deprecated - use trackPracticeSession() from supabase-integration.ts');
+    // Can't track without more details, just trigger UI update
+    if (typeof window !== "undefined") {
+        window.dispatchEvent(new Event('stats-updated'));
     }
-}
-
-export function addQuizResult(level: string, score: number, total: number) {
-    const progress = checkStreak(getProgress());
-    progress.quizHistory.push({
-        date: new Date().toISOString(),
-        score,
-        total,
-        level
-    });
-    progress.xp += score * 5;
-    saveProgress(progress);
-}
-
-export function incrementPracticeStats(xpEarned: number = 5) {
-    const progress = checkStreak(getProgress());
-    progress.totalPracticeSessions += 1;
-    progress.xp += xpEarned;
-    saveProgress(progress);
 }

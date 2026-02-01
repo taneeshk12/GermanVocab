@@ -5,11 +5,16 @@ import { VocabItem } from "@/lib/types";
 import { ArrowLeft, ArrowRight, Check, X, Volume2, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
-import { markWordAsMastered } from "@/lib/progress";
+import { trackWordPractice, trackPracticeSession, markWordLearned } from "@/lib/supabase-integration";
 
 interface FlashcardProps {
     words: VocabItem[];
     onComplete?: () => void;
+}
+
+interface QuizOption {
+    text: string;
+    isCorrect: boolean;
 }
 
 export function FlashcardPractice({ words: allWords, onComplete }: FlashcardProps) {
@@ -20,16 +25,77 @@ export function FlashcardPractice({ words: allWords, onComplete }: FlashcardProp
     const [mastered, setMastered] = useState<Set<number>>(new Set());
     const [needsReview, setNeedsReview] = useState<Set<number>>(new Set());
     const [isComplete, setIsComplete] = useState(false);
+    const [startTime, setStartTime] = useState<number>(0);
+    const [quizOptions, setQuizOptions] = useState<QuizOption[]>([]);
+    const [selectedOption, setSelectedOption] = useState<number | null>(null);
+    const [showResult, setShowResult] = useState(false);
     const { speak } = useTextToSpeech();
 
     const currentWord = words[currentIndex];
 
     const progress = words.length > 0 ? ((currentIndex + 1) / words.length) * 100 : 0;
 
+    // Generate quiz options when word changes
+    useEffect(() => {
+        if (currentWord && allWords.length > 0) {
+            generateQuizOptions();
+        }
+    }, [currentIndex, currentWord]);
+
+    const generateQuizOptions = () => {
+        if (!currentWord) return;
+
+        // Get 3 random wrong answers from other words
+        const wrongWords = allWords
+            .filter(w => w.id !== currentWord.id)
+            .sort(() => Math.random() - 0.5)
+            .slice(0, 3)
+            .map(w => w.meaning_en);
+
+        // Create options array with correct answer
+        const options: QuizOption[] = [
+            { text: currentWord.meaning_en, isCorrect: true },
+            ...wrongWords.map(text => ({ text, isCorrect: false }))
+        ];
+
+        // Shuffle options
+        const shuffled = options.sort(() => Math.random() - 0.5);
+        setQuizOptions(shuffled);
+        setSelectedOption(null);
+        setShowResult(false);
+    };
+
+    const handleOptionSelect = (index: number) => {
+        if (showResult) return; // Prevent changing after answering
+
+        setSelectedOption(index);
+        setShowResult(true);
+
+        const isCorrect = quizOptions[index].isCorrect;
+
+        // Track the answer
+        if (currentWord) {
+            trackWordPractice(currentWord.id, currentWord.level, isCorrect);
+            
+            if (isCorrect) {
+                // Auto-mark as learned if correct
+                const newMastered = new Set(mastered);
+                newMastered.add(currentIndex);
+                setMastered(newMastered);
+                markWordLearned(currentWord.id, currentWord.level, currentWord.topic);
+            } else {
+                const newNeedsReview = new Set(needsReview);
+                newNeedsReview.add(currentIndex);
+                setNeedsReview(newNeedsReview);
+            }
+        }
+    };
+
     const handleCountSelection = (count: number) => {
         const shuffled = [...allWords].sort(() => Math.random() - 0.5);
         setWords(shuffled.slice(0, count));
         setSelectedCount(count);
+        setStartTime(Date.now()); // Reset start time when starting practice
     };
 
     const handleNext = () => {
@@ -37,6 +103,11 @@ export function FlashcardPractice({ words: allWords, onComplete }: FlashcardProp
             setCurrentIndex(currentIndex + 1);
             setIsFlipped(false);
         } else {
+            // Track practice session in Supabase
+            const durationSeconds = Math.floor((Date.now() - startTime) / 1000);
+            const correctCount = mastered.size;
+            trackPracticeSession('a1', 'flashcards', words.length, correctCount, durationSeconds);
+            
             setIsComplete(true);
             if (onComplete) onComplete();
         }
@@ -67,6 +138,12 @@ export function FlashcardPractice({ words: allWords, onComplete }: FlashcardProp
         newNeedsReview.delete(currentIndex);
         setNeedsReview(newNeedsReview);
 
+        // Track in Supabase and mark as learned (global)
+        if (currentWord) {
+            trackWordPractice(currentWord.id, currentWord.level, true);
+            markWordLearned(currentWord.id, currentWord.level, currentWord.topic);
+        }
+
         handleNext();
     };
 
@@ -78,6 +155,11 @@ export function FlashcardPractice({ words: allWords, onComplete }: FlashcardProp
         const newMastered = new Set(mastered);
         newMastered.delete(currentIndex);
         setMastered(newMastered);
+
+        // Track in Supabase (incorrect - not marking as learned)
+        if (currentWord) {
+            trackWordPractice(currentWord.id, currentWord.level, false);
+        }
 
         handleNext();
     };
@@ -176,197 +258,185 @@ export function FlashcardPractice({ words: allWords, onComplete }: FlashcardProp
     }
 
     return (
-        <div className="max-w-4xl mx-auto">
-            {/* Progress Bar */}
-            <div className="mb-8">
-                <div className="flex justify-between text-sm text-muted-foreground mb-2">
-                    <span>Progress</span>
-                    <span>
-                        {currentIndex + 1} / {words.length}
-                    </span>
-                </div>
-                <div className="h-2 bg-secondary rounded-full overflow-hidden">
-                    <div
-                        className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300"
-                        style={{ width: `${progress}%` }}
-                    />
-                </div>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-2 gap-4 mb-8">
-                <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4">
-                    <div className="flex items-center gap-2">
-                        <Check size={20} className="text-green-600" />
-                        <span className="font-bold text-green-600">Mastered: {mastered.size}</span>
+        <div className="min-h-[calc(100vh-10rem)] flex flex-col items-center justify-center p-4 sm:p-6">
+            <div className="w-full max-w-4xl">
+                {/* Header Section */}
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-4 px-2">
+                    <button
+                        onClick={() => window.history.back()}
+                        className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors group"
+                    >
+                        <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+                        <span className="font-medium">Exit Practice</span>
+                    </button>
+                    
+                    <div className="flex items-center gap-4 w-full sm:w-auto">
+                        <div className="flex-1 sm:w-48 h-2 bg-secondary rounded-full overflow-hidden">
+                            <div 
+                                className="h-full bg-primary transition-all duration-300"
+                                style={{ width: `${progress}%` }}
+                            />
+                        </div>
+                        <span className="text-sm font-bold text-muted-foreground whitespace-nowrap">
+                            {currentIndex + 1} / {words.length}
+                        </span>
                     </div>
                 </div>
-                <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-xl p-4">
-                    <div className="flex items-center gap-2">
-                        <X size={20} className="text-orange-600" />
-                        <span className="font-bold text-orange-600">Review: {needsReview.size}</span>
-                    </div>
-                </div>
-            </div>
 
-            {/* Flashcard */}
-            <div
-                className={cn(
-                    "relative h-96 cursor-pointer [perspective:1000px] group",
-                )}
-                onClick={() => setIsFlipped(!isFlipped)}
-            >
-                {/* Inner Container for Flip Animation */}
-                <div
-                    className={cn(
-                        "relative w-full h-full transition-all duration-500 [transform-style:preserve-3d]",
-                        isFlipped && "[transform:rotateY(180deg)]"
-                    )}
-                >
-                    {/* Front of card */}
+                {/* Main Practice Card - Refined for Mobile */}
+                <div className="relative aspect-[4/5] sm:aspect-video w-full max-w-2xl mx-auto perspective-1000">
+                    {/* Inner Container for Flip Animation */}
                     <div
                         className={cn(
-                            "absolute inset-0 w-full h-full [backface-visibility:hidden]",
-                            "bg-card border-2 rounded-3xl shadow-2xl",
-                            "flex flex-col items-center justify-center p-8",
+                            "relative w-full h-full transition-all duration-500 transform-3d",
+                            isFlipped && "transform-[rotateY(180deg)]"
                         )}
                     >
-                        <div className="text-center space-y-4">
-                            {currentWord.article && (
-                                <span className="text-3xl text-muted-foreground font-serif italic block">
-                                    {currentWord.article}
-                                </span>
+                        {/* Front of card */}
+                        <div
+                            className={cn(
+                                "absolute inset-0 w-full h-full backface-hidden",
+                                "bg-card border-2 rounded-3xl shadow-2xl",
+                                "flex flex-col items-center justify-center p-8",
                             )}
-                            <div className="flex items-center justify-center gap-4">
-                                <h2 className="text-6xl font-black text-foreground">
-                                    {currentWord.word}
-                                </h2>
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        speak(currentWord.word);
-                                    }}
-                                    className="p-3 rounded-full hover:bg-primary/10 text-primary transition-colors"
-                                    title="Listen"
-                                >
-                                    <Volume2 size={32} />
-                                </button>
-                            </div>
-                            {currentWord.plural && (
-                                <p className="text-xl text-muted-foreground italic">
-                                    Plural: {currentWord.plural}
-                                </p>
-                            )}
-                            <div className="mt-6 pt-6 border-t border-border w-full max-w-md mx-auto">
-                                <p className="text-sm text-muted-foreground uppercase tracking-wider mb-2">
-                                    Meaning
-                                </p>
-                                <h3 className="text-3xl font-bold text-primary">
-                                    {currentWord.meaning_en}
-                                </h3>
-                            </div>
-                        </div>
-                        <div className="absolute bottom-8 text-sm text-muted-foreground">
-                            Click or press Space to reveal
-                        </div>
-                    </div>
-
-                    {/* Back of card */}
-                    <div
-                        className={cn(
-                            "absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)]",
-                            "bg-card border-2 border-primary rounded-3xl shadow-2xl",
-                            "flex flex-col items-center justify-center p-8",
-                        )}
-                    >
-                        <div className="text-center space-y-6">
-                            {currentWord.example_de ? (
-                                <div className="text-center">
-                                    <div className="text-sm text-muted-foreground uppercase tracking-wider mb-4">
-                                        Example Sentence
-                                    </div>
-                                    <div className="flex items-center justify-center gap-3 mb-4">
-                                        <p className="text-3xl font-serif italic text-foreground leading-relaxed">
-                                            &quot;{currentWord.example_de}&quot;
-                                        </p>
-                                        <button
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                speak(currentWord.example_de);
-                                            }}
-                                            className="p-2 rounded-full hover:bg-primary/10 text-primary transition-colors flex-shrink-0"
-                                            title="Listen to example"
-                                        >
-                                            <Volume2 size={24} />
-                                        </button>
-                                    </div>
-                                    <div className="h-px w-24 bg-primary/30 mx-auto mb-4" />
-                                    <div className="text-sm text-muted-foreground uppercase tracking-wider mb-2">
-                                        English Meaning
-                                    </div>
-                                    <p className="text-xl text-muted-foreground">
-                                        {currentWord.example_en}
+                        >
+                            <div className="text-center space-y-4">
+                                {currentWord.article && (
+                                    <span className="text-3xl text-muted-foreground font-serif italic block">
+                                        {currentWord.article}
+                                    </span>
+                                )}
+                                <div className="flex items-center justify-center gap-4">
+                                    <h2 className="text-6xl font-black text-foreground">
+                                        {currentWord.word}
+                                    </h2>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            speak(currentWord.word);
+                                        }}
+                                        className="p-3 rounded-full hover:bg-primary/10 text-primary transition-colors"
+                                        title="Listen"
+                                    >
+                                        <Volume2 size={32} />
+                                    </button>
+                                </div>
+                                {currentWord.plural && (
+                                    <p className="text-xl text-muted-foreground italic">
+                                        Plural: {currentWord.plural}
                                     </p>
+                                )}
+                                <div className="mt-6 pt-6 border-t border-border w-full max-w-md mx-auto">
+                                    <p className="text-sm text-muted-foreground uppercase tracking-wider mb-2">
+                                        Meaning
+                                    </p>
+                                    <h3 className="text-3xl font-bold text-primary">
+                                        {currentWord.meaning_en}
+                                    </h3>
                                 </div>
-                            ) : (
-                                <div className="text-center text-muted-foreground">
-                                    No example sentence available.
-                                </div>
+                            </div>
+                            <div className="absolute bottom-8 text-sm text-muted-foreground">
+                                Click or press Space to reveal
+                            </div>
+                        </div>
+
+                        {/* Back of card */}
+                        <div
+                            className={cn(
+                                "absolute inset-0 w-full h-full backface-hidden transform-[rotateY(180deg)]",
+                                "bg-card border-2 border-primary rounded-3xl shadow-2xl",
+                                "flex flex-col items-center justify-center p-8",
                             )}
+                        >
+                            <div className="text-center space-y-6">
+                                {currentWord.example_de ? (
+                                    <div className="text-center">
+                                        <div className="text-sm text-muted-foreground uppercase tracking-wider mb-4">
+                                            Example Sentence
+                                        </div>
+                                        <div className="flex items-center justify-center gap-3 mb-4">
+                                            <p className="text-3xl font-serif italic text-foreground leading-relaxed">
+                                                &quot;{currentWord.example_de}&quot;
+                                            </p>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    speak(currentWord.example_de);
+                                                }}
+                                                className="p-2 rounded-full hover:bg-primary/10 text-primary transition-colors shrink-0"
+                                                title="Listen to example"
+                                            >
+                                                <Volume2 size={24} />
+                                            </button>
+                                        </div>
+                                        <div className="h-px w-24 bg-primary/30 mx-auto mb-4" />
+                                        <div className="text-sm text-muted-foreground uppercase tracking-wider mb-2">
+                                            English Meaning
+                                        </div>
+                                        <p className="text-xl text-muted-foreground">
+                                            {currentWord.example_en}
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <div className="text-center text-muted-foreground">
+                                        No example sentence available.
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Controls */}
-            <div className="mt-8 flex flex-col gap-4">
-                {isFlipped && (
-                    <div className="flex gap-4">
+                {/* Controls */}
+                <div className="mt-8 flex flex-col gap-4">
+                    {isFlipped && (
+                        <div className="flex gap-4">
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleNeedsReview();
+                                }}
+                                className="flex-1 px-6 py-4 rounded-xl border-2 border-orange-500 text-orange-600 font-bold hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors flex items-center justify-center gap-2"
+                            >
+                                <X size={20} />
+                                Need More Practice
+                            </button>
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleMastered();
+                                }}
+                                className="flex-1 px-6 py-4 rounded-xl bg-green-500 text-white font-bold hover:bg-green-600 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-green-500/25"
+                            >
+                                <Check size={20} />
+                                Got It!
+                            </button>
+                        </div>
+                    )}
+
+                    <div className="flex gap-4 justify-between">
                         <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handleNeedsReview();
-                            }}
-                            className="flex-1 px-6 py-4 rounded-xl border-2 border-orange-500 text-orange-600 font-bold hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors flex items-center justify-center gap-2"
+                            onClick={handlePrevious}
+                            disabled={currentIndex === 0}
+                            className="px-6 py-3 rounded-xl border bg-background hover:bg-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium flex items-center gap-2"
                         >
-                            <X size={20} />
-                            Need More Practice
+                            <ArrowLeft size={20} />
+                            Previous
                         </button>
                         <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handleMastered();
-                            }}
-                            className="flex-1 px-6 py-4 rounded-xl bg-green-500 text-white font-bold hover:bg-green-600 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-green-500/25"
+                            onClick={handleNext}
+                            className="px-6 py-3 rounded-xl border bg-background hover:bg-secondary transition-colors font-medium flex items-center gap-2"
                         >
-                            <Check size={20} />
-                            Got It!
+                            Next
+                            <ArrowRight size={20} />
                         </button>
                     </div>
-                )}
-
-                <div className="flex gap-4 justify-between">
-                    <button
-                        onClick={handlePrevious}
-                        disabled={currentIndex === 0}
-                        className="px-6 py-3 rounded-xl border bg-background hover:bg-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium flex items-center gap-2"
-                    >
-                        <ArrowLeft size={20} />
-                        Previous
-                    </button>
-                    <button
-                        onClick={handleNext}
-                        className="px-6 py-3 rounded-xl border bg-background hover:bg-secondary transition-colors font-medium flex items-center gap-2"
-                    >
-                        Next
-                        <ArrowRight size={20} />
-                    </button>
                 </div>
-            </div>
 
-            {/* Keyboard shortcuts hint */}
-            <div className="mt-8 text-center text-sm text-muted-foreground">
-                <p>Keyboard shortcuts: Space/Enter to flip • ← → to navigate</p>
+                {/* Keyboard shortcuts hint */}
+                <div className="mt-8 text-center text-sm text-muted-foreground">
+                    <p>Keyboard shortcuts: Space/Enter to flip • ← → to navigate</p>
+                </div>
             </div>
         </div>
     );

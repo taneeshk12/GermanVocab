@@ -1,13 +1,13 @@
 import Link from "next/link";
-import { BookOpen, Github, Twitter, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
 import Image from "next/image";
 
 export function Footer() {
     return (
         <footer className="border-t bg-slate-900 text-slate-200 mt-auto">
             <div className="container mx-auto px-6 py-12">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-                    <div className="md:col-span-1 space-y-4">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-10 mb-12">
+                    <div className="col-span-2 lg:col-span-1 space-y-4">
                         <Link href="/" className="flex items-center gap-2 font-bold text-xl hover:opacity-80 transition-opacity">
                             <div className="relative w-36 h-10">
                                 <Image

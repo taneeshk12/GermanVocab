@@ -66,29 +66,29 @@ export function FlashcardModal({ isOpen, onClose, words, initialIndex }: Flashca
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} className="!max-w-3xl !p-0 !bg-transparent !shadow-none !border-none">
-            <div className="relative w-full aspect-[4/3] max-h-[600px]">
+            <div className="relative w-full aspect-4/5 sm:aspect-4/3 max-h-150 md:max-h-175">
                 <div
                     className={cn(
-                        "relative w-full h-full cursor-pointer [perspective:1000px] group",
+                        "relative w-full h-full cursor-pointer perspective-1000 group",
                     )}
                     onClick={() => setIsFlipped(!isFlipped)}
                 >
                     <div
                         className={cn(
-                            "relative w-full h-full transition-all duration-500 [transform-style:preserve-3d]",
-                            isFlipped && "[transform:rotateY(180deg)]"
+                            "relative w-full h-full transition-all duration-500 transform-3d",
+                            isFlipped && "transform-[rotateY(180deg)]"
                         )}
                     >
                         {/* Front */}
                         <div className={cn(
-                            "absolute inset-0 w-full h-full [backface-visibility:hidden]",
+                            "absolute inset-0 w-full h-full backface-hidden",
                             "bg-card border-2 rounded-3xl shadow-2xl",
-                            "flex flex-col items-center justify-center p-8 md:p-12",
+                            "flex flex-col items-center justify-center p-6 md:p-12",
                         )}>
-                            <div className="text-center space-y-6">
+                            <div className="text-center space-y-4 sm:space-y-6">
                                 {currentWord.article && (
                                     <span className={cn(
-                                        "text-2xl font-serif italic",
+                                        "text-xl sm:text-2xl font-serif italic",
                                         currentWord.article === 'der' && "text-blue-500",
                                         currentWord.article === 'die' && "text-red-500",
                                         currentWord.article === 'das' && "text-green-500",
@@ -97,7 +97,7 @@ export function FlashcardModal({ isOpen, onClose, words, initialIndex }: Flashca
                                     </span>
                                 )}
                                 <div className="flex items-center justify-center gap-4">
-                                    <h2 className="text-5xl md:text-7xl font-black text-foreground">
+                                    <h2 className="text-4xl xs:text-5xl md:text-7xl font-black text-foreground">
                                         {currentWord.word}
                                     </h2>
                                     <button

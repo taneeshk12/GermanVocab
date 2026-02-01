@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-grotesk" });
 
 export const metadata: Metadata = generateSEO({
-  title: "LangFlow - Master German Vocabulary | Free A1-B2 Learning Platform",
+  title: "Learn German Daily - Master Vocabulary | Free A1-B2 Learning Platform",
   description: "Master German vocabulary completely free. 2000+ words across A1-B2 levels, featuring spaced repetition flashcards, interactive quizzes, and sentence building exercises. The best open-source alternative to paid language apps.",
   keywords: [
     "free German learning",

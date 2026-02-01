@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = 'https://langflow.vercel.app' // Update with your actual domain
+  const baseUrl = 'https://learngermandaily.ieltsprepai.tech'
 
   return {
     rules: [

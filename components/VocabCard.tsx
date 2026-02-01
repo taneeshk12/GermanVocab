@@ -2,16 +2,18 @@
 
 import { VocabItem } from "@/lib/types";
 import { GlassCard } from "@/components/GlassCard";
-import { Volume2 } from "lucide-react";
+import { Volume2, CheckCircle2, Circle } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface VocabCardProps {
     item: VocabItem;
     onClick?: () => void;
+    isLearned?: boolean;
+    onToggleLearned?: (wordId: string, currentStatus: boolean) => void;
 }
 
-export function VocabCard({ item, onClick }: VocabCardProps) {
+export function VocabCard({ item, onClick, isLearned = false, onToggleLearned }: VocabCardProps) {
     const [isFlipped, setIsFlipped] = useState(false);
 
     const getCardStyle = (article?: string) => {
@@ -60,18 +62,41 @@ export function VocabCard({ item, onClick }: VocabCardProps) {
                     <div />
                 )}
 
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        // If we have a direct handleSpeak prop or logic, use it. 
-                        // But reusing the existing one is fine.
-                        handleSpeak(e);
-                    }}
-                    className="p-2 rounded-full hover:bg-muted/80 text-muted-foreground hover:text-primary transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
-                    title="Pronounce"
-                >
-                    <Volume2 size={18} />
-                </button>
+                <div className="flex gap-2 items-center">
+                    {isLearned && (
+                        <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-green-100 dark:bg-green-900/30 border border-green-500/50">
+                            <CheckCircle2 size={14} className="text-green-600 dark:text-green-400" />
+                            <span className="text-xs font-semibold text-green-700 dark:text-green-300">Learned</span>
+                        </div>
+                    )}
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleSpeak(e);
+                        }}
+                        className="p-2 rounded-full hover:bg-muted/80 text-muted-foreground hover:text-primary transition-colors focus:opacity-100"
+                        title="Pronounce"
+                    >
+                        <Volume2 size={18} />
+                    </button>
+                    {onToggleLearned && (
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onToggleLearned(item.id, isLearned);
+                            }}
+                            className={cn(
+                                "p-2 rounded-full transition-all focus:opacity-100",
+                                isLearned 
+                                    ? "bg-red-50 dark:bg-red-900/20 text-red-500" 
+                                    : "bg-green-50 dark:bg-green-900/20 text-green-600"
+                            )}
+                            title={isLearned ? "Unmark as Learned" : "Mark as Learned"}
+                        >
+                            <CheckCircle2 size={18} className={isLearned ? "" : "stroke-2"} />
+                        </button>
+                    )}
+                </div>
             </div>
 
             {/* Main Content - Absolute Center */}

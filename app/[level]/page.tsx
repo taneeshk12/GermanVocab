@@ -86,17 +86,19 @@ export default async function LevelPage({ params }: Props) {
                 description={`${totalWords} words available. Master them topic by topic.`}
                 imageSrc="/level-illustration.png"
             >
-                <Link
-                    href={`/${level}/practice`}
-                    className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-primary to-purple-600 text-white font-bold text-lg hover:from-primary/90 hover:to-purple-700 transition-all shadow-xl hover:shadow-2xl hover:scale-105"
-                >
-                    <Brain size={20} />
-                    Start Practice Mode
-                </Link>
+                <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+                    <Link
+                        href={`/${level}/practice`}
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-linear-to-r from-primary to-purple-600 text-white font-bold text-lg hover:from-primary/90 hover:to-purple-700 transition-all shadow-xl hover:shadow-2xl hover:scale-105"
+                    >
+                        <Brain size={20} />
+                        Start Practice Mode
+                    </Link>
+                </div>
             </PageHeader>
 
             <div className="container px-6 mx-auto max-w-6xl pb-20">
-                <div className="flex items-center justify-between mb-12">
+                <div className="flex flex-col sm:flex-row items-center justify-between mb-8 sm:mb-12 gap-4">
                     <div className="flex items-center gap-3">
                         <div className="p-3 bg-primary/10 rounded-2xl">
                             <Book className="text-primary" size={24} />

@@ -5,7 +5,7 @@ import { VocabItem } from "@/lib/types";
 import { Check, X, RotateCcw, ArrowRight, Lightbulb, Volume2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
-import { incrementPracticeStats, markWordAsMastered } from "@/lib/progress";
+import { trackWordPractice, markWordLearned as markWordMastered, trackPracticeSession } from "@/lib/supabase-integration";
 
 interface SentencePracticeProps {
     words: VocabItem[];
@@ -19,6 +19,7 @@ export function SentencePractice({ words: initialWords }: SentencePracticeProps)
     const [showResult, setShowResult] = useState(false);
     const [showHint, setShowHint] = useState(false);
     const [score, setScore] = useState({ correct: 0, total: 0 });
+    const [startTime] = useState(() => Date.now());
     const { speak } = useTextToSpeech();
 
     const currentWord = words[currentIndex];
@@ -34,7 +35,7 @@ export function SentencePractice({ words: initialWords }: SentencePracticeProps)
             .replace(/\s+/g, " ");
     };
 
-    const checkSentence = () => {
+    const checkSentence = async () => {
         const userNormalized = normalizeSentence(userSentence);
         const correctNormalized = normalizeSentence(currentWord.example_de);
 
@@ -52,20 +53,26 @@ export function SentencePractice({ words: initialWords }: SentencePracticeProps)
                 correct: score.correct + 1,
                 total: score.total + 1,
             });
-            incrementPracticeStats(15);
-            markWordAsMastered(currentWord.id);
+            // Track word practice and mark as mastered
+            await trackWordPractice(currentWord.id, "A1", true);
+            await markWordMastered(currentWord.id, "A1");
         } else {
             setScore({ ...score, total: score.total + 1 });
-            incrementPracticeStats(2);
+            // Track incorrect attempt
+            await trackWordPractice(currentWord.id, "A1", false);
         }
     };
 
-    const handleNext = () => {
+    const handleNext = async () => {
         if (currentIndex < words.length - 1) {
             setCurrentIndex(currentIndex + 1);
             setUserSentence("");
             setShowResult(false);
             setShowHint(false);
+        } else {
+            // Practice complete - track the session
+            const duration = Math.floor((Date.now() - startTime) / 1000);
+            await trackPracticeSession("A1", "sentences", words.length, score.correct, duration);
         }
     };
 

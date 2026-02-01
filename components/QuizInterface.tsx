@@ -4,7 +4,7 @@ import { useState } from "react";
 import { QuizQuestion } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { CheckCircle2, XCircle, ArrowRight, RefreshCw, HelpCircle } from "lucide-react";
-import { addQuizResult } from "@/lib/progress";
+import { trackQuizCompletion } from "@/lib/supabase-integration";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 
 interface QuizInterfaceProps {
@@ -46,9 +46,8 @@ export default function QuizInterface({ questions }: QuizInterfaceProps) {
             setSelectedOption(null);
             setIsAnswered(false);
         } else {
-            // Save result (assuming A1 for now as simpler quizzes usually don't have level prop passed down yet, but ideally should)
-            // Or better, track XP based on score.
-            addQuizResult("A1", score, questions.length);
+            // Save result to Supabase
+            trackQuizCompletion("A1", score, questions.length);
             setShowResult(true);
         }
     };
@@ -78,7 +77,7 @@ export default function QuizInterface({ questions }: QuizInterfaceProps) {
     }
 
     return (
-        <div className="w-full max-w-xl mx-auto">
+        <div className="w-full max-w-xl mx-auto px-4 sm:px-0">
             <div className="flex justify-between items-center mb-6 px-2">
                 <div className="flex flex-col">
                     <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Question</span>
@@ -90,7 +89,7 @@ export default function QuizInterface({ questions }: QuizInterfaceProps) {
                 </div>
             </div>
 
-            <div className="relative bg-card rounded-3xl border shadow-xl overflow-hidden">
+            <div className="relative bg-card rounded-2xl sm:rounded-3xl border shadow-xl overflow-hidden">
                 {/* Progress Bar */}
                 <div className="absolute top-0 left-0 w-full h-1.5 bg-secondary">
                     <div

@@ -2,7 +2,11 @@
 
 import { motion } from "framer-motion";
 import { GlassCard } from "@/components/GlassCard";
-import { ChevronRight, Book, Star, Trophy, Sparkles, Hash, Clock, MessageCircle, Users, Apple, Home as HomeIcon, Briefcase, Cat, Heart, Shirt, CloudSun, Car, CalendarDays, Palette, Globe, Map as MapIcon, Ruler, Zap, Activity, ShoppingBag, Mail } from "lucide-react";
+import { ChevronRight, Book, Sparkles, Hash, Clock, MessageCircle, Users, Apple, Home as HomeIcon, Briefcase, Cat, Heart, Shirt, CloudSun, Car, CalendarDays, Palette, Globe, Map as MapIcon, Ruler, Zap, Activity, ShoppingBag, Mail } from "lucide-react";
+import { useEffect, useState } from "react";
+import { getWordsMasteredStatus } from "@/lib/word-progress";
+import { getAllVocab } from "@/lib/vocab";
+import { Level } from "@/lib/types";
 
 type TopicData = {
     name: string;
@@ -48,22 +52,32 @@ function getTopicVisual(topic: string) {
     return { icon: <Book size={32} className="text-primary" />, color: "from-primary to-purple-600", shadow: "shadow-primary/20" };
 }
 
-const container = {
-    hidden: { opacity: 0 },
-    show: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.1
-        }
-    }
-};
-
-const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 }
-};
-
 export function TopicsGrid({ topics, level }: TopicsGridProps) {
+    const [progressMap, setProgressMap] = useState<Map<string, number>>(new Map());
+
+    useEffect(() => {
+        async function fetchAllProgress() {
+            const vocabulary = getAllVocab(level.toUpperCase() as Level);
+            const wordIds = vocabulary.map(v => v.id);
+            const statusMap = await getWordsMasteredStatus(wordIds);
+            
+            const newProgressMap = new Map<string, number>();
+            
+            topics.forEach(topic => {
+                const topicWords = vocabulary.filter(v => v.topic === topic.name);
+                const masteredCount = topicWords.filter(v => statusMap.get(v.id)).length;
+                const percentage = topicWords.length > 0 
+                  ? Math.round((masteredCount / topicWords.length) * 100) 
+                  : 0;
+                newProgressMap.set(topic.name, percentage);
+            });
+            
+            setProgressMap(newProgressMap);
+        }
+        
+        fetchAllProgress();
+    }, [topics, level]);
+
     if (topics.length === 0) {
         return (
             <div className="col-span-full py-20 text-center">
@@ -78,22 +92,25 @@ export function TopicsGrid({ topics, level }: TopicsGridProps) {
 
     return (
         <motion.div
-            variants={container}
             initial="hidden"
             animate="show"
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
         >
-            {topics.map((topic, index) => {
+            {topics.map((topic) => {
                 const visual = getTopicVisual(topic.name);
                 return (
-                    <motion.div key={topic.name} variants={item}>
+                    <motion.div 
+                        key={topic.name} 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                    >
                         <GlassCard
                             href={`/${level}/${topic.slug}`}
                             className="flex flex-col h-full p-0 overflow-hidden group hover:ring-2 hover:ring-primary/20 transition-all duration-300"
                             hoverEffect={true}
                         >
                             {/* Card Header with Gradient Background */}
-                            <div className={`relative h-24 bg-gradient-to-r ${visual.color} overflow-hidden`}>
+                            <div className={`relative h-24 bg-linear-to-r ${visual.color} overflow-hidden`}>
                                 <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 <div className="absolute -bottom-6 right-4 rotate-12 opacity-20 scale-150 grayscale group-hover:grayscale-0 transition-all duration-500">
                                     {visual.icon}
@@ -112,25 +129,33 @@ export function TopicsGrid({ topics, level }: TopicsGridProps) {
                                 </div>
                             </div>
 
-                            {/* Card Body */}
-                            <div className="pt-10 px-6 pb-6 flex-1 flex flex-col">
-                                <div className="mb-4">
-                                    <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors capitalize line-clamp-1">{topic.name}</h3>
-                                    <p className="text-sm text-muted-foreground font-medium flex items-center gap-2 mt-1">
+                            {/* Card Content */}
+                            <div className="p-5 sm:p-6 flex flex-col flex-1">
+                                <div className="flex justify-between items-start mb-2">
+                                    <h3 className="text-lg sm:text-xl font-bold text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                                        {topic.name}
+                                    </h3>
+                                    <p className="text-sm text-muted-foreground font-medium flex items-center gap-2">
                                         <Book size={14} />
                                         {topic.count} words
                                     </p>
                                 </div>
 
                                 <div className="mt-auto pt-4 border-t border-border/50 flex items-center justify-between">
-                                    <div className="flex flex-col">
-                                        <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">Progress</span>
-                                        <div className="h-1.5 w-24 bg-muted rounded-full mt-1 overflow-hidden">
-                                            <div className="h-full bg-primary w-0 group-hover:w-full transition-all duration-1000 ease-out" />
+                                    <div className="flex flex-col flex-1 mr-4">
+                                        <div className="flex justify-between items-center mb-1">
+                                            <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">Progress</span>
+                                            <span className="text-[10px] font-bold text-primary">{progressMap.get(topic.name) || 0}%</span>
+                                        </div>
+                                        <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
+                                            <div 
+                                                className="h-full bg-primary transition-all duration-1000 ease-out" 
+                                                style={{ width: `${progressMap.get(topic.name) || 0}%` }}
+                                            />
                                         </div>
                                     </div>
 
-                                    <div className="h-10 w-10 rounded-full bg-primary/10 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-sm group-hover:shadow-md group-hover:scale-110">
+                                    <div className="h-10 w-10 shrink-0 rounded-full bg-primary/10 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-sm group-hover:shadow-md group-hover:scale-110">
                                         <ChevronRight size={18} />
                                     </div>
                                 </div>

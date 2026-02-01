@@ -5,7 +5,7 @@ import { VocabItem } from "@/lib/types";
 import { ArrowRight, Check, X, RotateCcw, Volume2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
-import { incrementPracticeStats, markWordAsMastered } from "@/lib/progress";
+import { trackWordPractice, markWordLearned as markWordMastered, trackPracticeSession } from "@/lib/supabase-integration";
 
 interface TranslationPracticeProps {
     words: VocabItem[];
@@ -22,6 +22,7 @@ export function TranslationPractice({ words: initialWords }: TranslationPractice
     const [showResult, setShowResult] = useState(false);
     const [isCorrect, setIsCorrect] = useState(false);
     const [score, setScore] = useState({ correct: 0, total: 0 });
+    const [startTime] = useState(() => Date.now());
     const { speak } = useTextToSpeech();
 
     const currentWord = words[currentIndex];
@@ -36,18 +37,20 @@ export function TranslationPractice({ words: initialWords }: TranslationPractice
             .replace(/\s+/g, " ");
     };
 
-    const handleNext = () => {
+    const handleNext = async () => {
         if (currentIndex < words.length - 1) {
             setCurrentIndex(currentIndex + 1);
             setUserAnswer("");
             setShowResult(false);
             setDirection(Math.random() > 0.5 ? "german-to-english" : "english-to-german");
         } else {
-            // End of practice
+            // Practice complete - track the session
+            const duration = Math.floor((Date.now() - startTime) / 1000);
+            await trackPracticeSession("A1", "translation", words.length, score.correct, duration);
         }
     };
 
-    const checkAnswer = () => {
+    const checkAnswer = async () => {
         const correct =
             direction === "german-to-english"
                 ? normalizeAnswer(userAnswer) === normalizeAnswer(currentWord.meaning_en)
@@ -57,11 +60,13 @@ export function TranslationPractice({ words: initialWords }: TranslationPractice
         setShowResult(true);
         if (correct) {
             setScore({ ...score, correct: score.correct + 1, total: score.total + 1 });
-            incrementPracticeStats(10);
-            markWordAsMastered(currentWord.id);
+            // Track word practice and mark as mastered
+            await trackWordPractice(currentWord.id, "A1", true);
+            await markWordMastered(currentWord.id, "A1");
         } else {
             setScore({ ...score, total: score.total + 1 });
-            incrementPracticeStats(1);
+            // Track incorrect attempt
+            await trackWordPractice(currentWord.id, "A1", false);
         }
     };
 

@@ -3,7 +3,7 @@ import { getAllVocab, getTopics } from '@/lib/vocab'
 import { Level } from '@/lib/types'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://langflow.vercel.app' // Update with your actual domain
+  const baseUrl = 'https://learngermandaily.ieltsprepai.tech'
   const levels: Level[] = ['A1', 'A2', 'B1', 'B2']
 
   // Static pages
@@ -13,12 +13,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 1,
+      images: ['/hero-illustration.png'],
     },
     {
       url: `${baseUrl}/quiz/daily`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.9,
+      images: ['/quiz-illustration.png'],
     },
   ]
 
@@ -80,5 +82,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }))
   })
 
-  return [...staticPages, ...levelPages, ...practicePages, ...topicPages, ...wordPages]
+  // Blog index page
+  const blogIndexPage: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/blog`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    },
+  ]
+
+  return [
+    ...staticPages,
+    ...levelPages,
+    ...practicePages,
+    ...topicPages,
+    ...wordPages,
+    ...blogIndexPage,
+  ]
 }

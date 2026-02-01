@@ -39,7 +39,7 @@ export function PageHeader({ title, description, children, className, imageSrc }
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
-                    className="text-5xl sm:text-7xl font-black tracking-tight mb-6 text-foreground leading-tight"
+                    className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight mb-4 sm:mb-6 text-foreground leading-[1.1]"
                 >
                     {title}
                 </motion.h1>
@@ -47,7 +47,7 @@ export function PageHeader({ title, description, children, className, imageSrc }
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.1 }}
-                    className="text-xl sm:text-2xl text-muted-foreground mb-10 max-w-2xl mx-auto font-medium"
+                    className="text-lg sm:text-xl lg:text-2xl text-muted-foreground mb-8 sm:mb-10 max-w-2xl mx-auto font-medium"
                 >
                     {description}
                 </motion.p>

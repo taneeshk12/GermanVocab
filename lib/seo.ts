@@ -9,8 +9,8 @@ interface SEOProps {
   noindex?: boolean
 }
 
-const baseUrl = 'https://langflow.vercel.app' // Update with your actual domain
-const siteName = 'LangFlow'
+const baseUrl = 'https://learngermandaily.ieltsprepai.tech'
+const siteName = 'Learn German Daily'
 
 export function generateSEO({
   title,
@@ -45,11 +45,22 @@ export function generateSEO({
       'free German course',
       'German pronunciation',
       'German grammar practice',
+      'free language app',
+      'learn german free',
+      'german a1 word list',
+      'german a2 word list',
+      'german b1 word list',
+      'goethe a1 word list',
+      'goethe b1 word list',
+      'best app to learn german',
+      'german study guide',
+      'german vocabulary builder',
+      'german spaced repetition',
       ...keywords,
     ],
-    authors: [{ name: 'LangFlow Team' }],
-    creator: 'LangFlow',
-    publisher: 'LangFlow',
+    authors: [{ name: 'Learn German Daily Team', url: baseUrl }],
+    creator: 'Learn German Daily Team',
+    publisher: 'Learn German Daily',
     formatDetection: {
       email: false,
       address: false,
@@ -94,10 +105,23 @@ export function generateSEO({
       },
     },
     verification: {
-      google: 'your-google-verification-code', // Add your Google Search Console verification
+      google: 'available_on_console',
       // yandex: 'your-yandex-verification',
       // bing: 'your-bing-verification',
     },
+    icons: {
+      icon: '/app_logo.svg',
+      shortcut: '/app_logo.svg',
+      apple: '/app_logo.svg',
+    },
+    viewport: {
+      width: 'device-width',
+      initialScale: 1,
+      maximumScale: 1,
+    },
+    category: 'education',
+    classification: 'Language Learning',
+    referrer: 'origin-when-cross-origin',
   }
 }
 
@@ -177,7 +201,7 @@ export function generateOrganizationSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'LangFlow',
+    name: 'Learn German Daily',
     url: baseUrl,
     logo: `${baseUrl}/logo.png`,
     description: 'Free open-source platform for learning German vocabulary',
@@ -192,7 +216,7 @@ export function generateWebsiteSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'LangFlow',
+    name: 'Learn German Daily',
     url: baseUrl,
     description: 'Master German vocabulary with interactive practice and daily quizzes',
     potentialAction: {
@@ -214,7 +238,7 @@ export function generateEducationalSchema(level: string, wordCount: number) {
     description: `Comprehensive German ${level.toUpperCase()} vocabulary course with ${wordCount} words`,
     provider: {
       '@type': 'Organization',
-      name: 'LangFlow',
+      name: 'Learn German Daily',
       url: baseUrl,
     },
     educationalLevel: level.toUpperCase(),

@@ -1,7 +1,7 @@
 import QuizInterface from "@/components/QuizInterface";
 import { generateDailyQuiz } from "@/lib/quiz";
 import Link from "next/link";
-import { Analytics } from "@vercel/analytics/next"
+
 // We don't need 'use client' here because the page itself processes data on server (or build),
 // then passes it to the client component. BUT `generateDailyQuiz` handles randomness.
 // If we want a new quiz on every refresh for "Daily", we should use dynamic rendering or client-side generation.
@@ -34,18 +34,20 @@ export default function DailyQuizPage() {
             </div>
 
             <div className="w-full max-w-2xl relative z-10">
-                <div className="mb-8 flex justify-between items-center bg-white/40 backdrop-blur-md p-4 rounded-full border border-white/40 shadow-sm">
-                    <Link href="/" className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium flex items-center gap-1">
+                <div className="mb-4 sm:mb-8 flex justify-between items-center bg-white/40 backdrop-blur-md p-2 sm:p-4 rounded-full border border-white/40 shadow-sm mx-2">
+                    <Link href="/" className="text-muted-foreground hover:text-primary transition-colors text-xs sm:text-sm font-medium flex items-center gap-1 pl-2">
                         ← Exit
                     </Link>
                     <div className="flex items-center gap-2">
-                        <img src="/quiz-illustration.png" alt="Quiz" className="w-8 h-8 object-contain" />
-                        <h1 className="text-lg font-bold text-foreground">Daily German Quiz</h1>
+                        <div className="hidden sm:block w-8 h-8 relative">
+                             <img src="/quiz-illustration.png" alt="Quiz" className="w-full h-full object-contain" />
+                        </div>
+                        <h1 className="text-sm sm:text-lg font-bold text-foreground truncate max-w-37.5 sm:max-w-none">Daily Quiz</h1>
                     </div>
-                    <div className="w-16"></div>
+                    <div className="w-10 sm:w-16"></div>
                 </div>
 
-                <div className="glass-panel rounded-3xl p-1 sm:p-2 shadow-2xl">
+                <div className="glass-panel border border-white/40 rounded-2xl sm:rounded-3xl p-1 sm:p-2 shadow-2xl mx-2">
                     <QuizInterface questions={questions} />
                 </div>
             </div>
