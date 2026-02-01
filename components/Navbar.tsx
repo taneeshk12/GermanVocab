@@ -52,85 +52,101 @@ export function Navbar() {
     }, [user]);
 
     return (
-        <nav className="fixed top-4 left-4 right-4 z-50 rounded-2xl glass-panel border border-white/40 shadow-sm transition-all duration-300">
-            <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-                <Link href="/" className="flex items-center gap-3 group" onClick={() => setIsMenuOpen(false)}>
-                    <div className="relative w-36 h-10 transition-transform group-hover:scale-105">
+        <nav className="fixed top-2 sm:top-4 left-2 sm:left-4 right-2 sm:right-4 z-50 rounded-xl sm:rounded-2xl glass-panel border border-white/40 shadow-lg transition-all duration-300">
+            <div className="container mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-2">
+                <Link href="/" className="flex items-center group shrink-0" onClick={() => setIsMenuOpen(false)}>
+                    <div className="relative w-28 h-8 sm:w-36 sm:h-10 transition-transform group-hover:scale-105">
                         <Image
                             src="/app_logo.svg"
                             alt="LangFlow Logo"
                             fill
                             className="object-contain drop-shadow-md"
+                            priority
                         />
                     </div>
                 </Link>
 
                 <div className="flex items-center gap-1 sm:gap-2">
+                    {/* Desktop Navigation */}
                     <div className="hidden lg:flex items-center gap-1 bg-secondary/50 rounded-full p-1 border border-white/20 mr-2">
                         <NavLink href="/a1">Level A1</NavLink>
                         <NavLink href="/a2">Level A2</NavLink>
                         <NavLink href={`/${currentLevel}/practice`}>Practice</NavLink>
                         <NavLink href="/quiz/daily">Daily Quiz</NavLink>
                         <NavLink href="/learned-words">Review Learned</NavLink>
-                        <Link href="/blog" className="text-muted-foreground hover:text-primary transition-colors font-medium relative group">
-                          <span className="relative z-10">Blog</span>
-                          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full"></span>
+                        <Link 
+                            href="/blog" 
+                            className="px-4 py-2 text-sm font-medium rounded-full hover:bg-white/50 hover:text-primary transition-all"
+                        >
+                            Blog
                         </Link>
                     </div>
 
+                    {/* Stats Section - Responsive */}
                     {user && !loading && stats && (
-                        <div className="flex items-center gap-2 sm:gap-3 pl-2 sm:pl-4 sm:border-l border-border/50">
-                            <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-amber-500/10 text-amber-600 font-bold border border-amber-500/20" title="Current Streak">
+                        <div className="flex items-center gap-1.5 sm:gap-2 pl-1.5 sm:pl-4 border-l border-border/50">
+                            <div className="flex items-center gap-1 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-full bg-amber-500/10 text-amber-600 font-bold border border-amber-500/20" title="Current Streak">
                                 <Flame size={14} className="fill-amber-500 sm:w-4 sm:h-4" />
-                                <span className="text-sm sm:text-base">{stats.current_streak}</span>
+                                <span className="text-xs sm:text-sm">{stats.current_streak}</span>
                             </div>
-                            <div className="hidden xs:flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-primary/10 text-primary font-bold border border-primary/20" title="Total XP">
+                            <div className="hidden xs:flex items-center gap-1 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-full bg-primary/10 text-primary font-bold border border-primary/20" title="Total XP">
                                 <Trophy size={14} className="fill-primary/20 sm:w-4 sm:h-4" />
-                                <span className="text-sm sm:text-base">{stats.total_xp}</span>
+                                <span className="text-xs sm:text-sm">{stats.total_xp}</span>
                             </div>
                         </div>
                     )}
 
-                    {/* User Profile with Login/Logout */}
-                    <div className="pl-2 sm:pl-4 sm:border-l border-border/50">
+                    {/* User Profile */}
+                    <div className="pl-1.5 sm:pl-4 border-l border-border/50">
                         <UserProfile />
                     </div>
 
                     {/* Mobile Menu Button */}
                     <button 
-                        className="lg:hidden p-2 ml-1 rounded-xl hover:bg-secondary/80 transition-colors"
+                        className="lg:hidden p-1.5 sm:p-2 ml-1 rounded-xl hover:bg-secondary/80 active:bg-secondary transition-colors"
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        aria-label="Toggle menu"
                     >
-                        {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                        {isMenuOpen ? <X size={20} className="sm:w-6 sm:h-6" /> : <Menu size={20} className="sm:w-6 sm:h-6" />}
                     </button>
                 </div>
             </div>
 
-            {/* Mobile Menu Overlay */}
+            {/* Mobile Menu Overlay - Improved Responsive Design */}
             {isMenuOpen && (
-                <div className="lg:hidden absolute top-20 left-0 right-0 bg-white/95 backdrop-blur-xl border border-white/40 rounded-2xl p-4 shadow-2xl mx-0 flex flex-col gap-2 animate-in slide-in-from-top-5 duration-200">
-                    <MobileNavLink href="/a1" onClick={() => setIsMenuOpen(false)}>Level A1</MobileNavLink>
-                    <MobileNavLink href="/a2" onClick={() => setIsMenuOpen(false)}>Level A2</MobileNavLink>
-                    <MobileNavLink href={`/${currentLevel}/practice`} onClick={() => setIsMenuOpen(false)}>Practice</MobileNavLink>
-                    <MobileNavLink href="/quiz/daily" onClick={() => setIsMenuOpen(false)}>Daily Quiz</MobileNavLink>
-                    <MobileNavLink href="/learned-words" onClick={() => setIsMenuOpen(false)}>Review Learned</MobileNavLink>
-                    <div className="border-t border-border/50 pt-2 mt-2">
-                        <Link 
-                            href="/profile" 
-                            className="flex items-center gap-2 px-6 py-4 text-base font-semibold rounded-xl hover:bg-primary/5 hover:text-primary transition-all"
-                            onClick={() => setIsMenuOpen(false)}
-                        >
-                            Profile & Stats
-                        </Link>
-                        <Link 
-                            href="/blog" 
-                            className="text-muted-foreground hover:text-primary transition-colors font-medium relative group"
-                            onClick={() => setIsMenuOpen(false)}
-                        >
-                            Blog
-                        </Link>
+                <>
+                    {/* Backdrop */}
+                    <div 
+                        className="lg:hidden fixed inset-0 bg-black/20 backdrop-blur-sm -z-10"
+                        onClick={() => setIsMenuOpen(false)}
+                    />
+                    
+                    {/* Menu Panel */}
+                    <div className="lg:hidden absolute top-16 sm:top-20 left-0 right-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border border-white/40 dark:border-gray-700/40 rounded-2xl p-3 sm:p-4 shadow-2xl mx-0 flex flex-col gap-1 sm:gap-2 animate-in slide-in-from-top-5 duration-200">
+                        <MobileNavLink href="/a1" onClick={() => setIsMenuOpen(false)}>Level A1</MobileNavLink>
+                        <MobileNavLink href="/a2" onClick={() => setIsMenuOpen(false)}>Level A2</MobileNavLink>
+                        <MobileNavLink href={`/${currentLevel}/practice`} onClick={() => setIsMenuOpen(false)}>Practice</MobileNavLink>
+                        <MobileNavLink href="/quiz/daily" onClick={() => setIsMenuOpen(false)}>Daily Quiz</MobileNavLink>
+                        <MobileNavLink href="/learned-words" onClick={() => setIsMenuOpen(false)}>Review Learned</MobileNavLink>
+                        
+                        <div className="border-t border-border/50 pt-2 mt-2">
+                            <Link 
+                                href="/profile" 
+                                className="flex items-center gap-2 px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-semibold rounded-xl hover:bg-primary/5 active:bg-primary/10 hover:text-primary transition-all"
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                Profile & Stats
+                            </Link>
+                            <Link 
+                                href="/blog" 
+                                className="flex items-center gap-2 px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-semibold rounded-xl hover:bg-primary/5 active:bg-primary/10 hover:text-primary transition-all"
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                Blog
+                            </Link>
+                        </div>
                     </div>
-                </div>
+                </>
             )}
         </nav>
     );
@@ -151,13 +167,10 @@ function MobileNavLink({ href, children, onClick }: { href: string; children: Re
     return (
         <Link 
             href={href} 
+            className="flex items-center gap-2 px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-semibold rounded-xl hover:bg-primary/5 active:bg-primary/10 hover:text-primary transition-all"
             onClick={onClick}
-            className="px-6 py-4 text-base font-semibold rounded-xl hover:bg-primary/5 hover:text-primary transition-all flex items-center justify-between group"
         >
             {children}
-            <div className="opacity-0 group-hover:opacity-100 transition-opacity text-primary">
-                →
-            </div>
         </Link>
     );
 }

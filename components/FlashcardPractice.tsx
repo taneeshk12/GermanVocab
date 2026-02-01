@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { VocabItem } from "@/lib/types";
 import { ArrowLeft, ArrowRight, Check, X, Volume2, RotateCcw } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { trackWordPractice, trackPracticeSession, markWordLearned } from "@/lib/supabase-integration";
 
@@ -258,183 +257,201 @@ export function FlashcardPractice({ words: allWords, onComplete }: FlashcardProp
     }
 
     return (
-        <div className="min-h-[calc(100vh-10rem)] flex flex-col items-center justify-center p-4 sm:p-6">
+        <div className="min-h-[calc(100vh-8rem)] flex flex-col items-center justify-center px-3 py-6 sm:p-6">
             <div className="w-full max-w-4xl">
                 {/* Header Section */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-4 px-2">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-8 gap-3 sm:gap-4">
                     <button
                         onClick={() => window.history.back()}
-                        className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors group"
+                        className="flex items-center gap-2 text-sm sm:text-base text-muted-foreground hover:text-foreground transition-colors group"
                     >
                         <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
                         <span className="font-medium">Exit Practice</span>
                     </button>
                     
-                    <div className="flex items-center gap-4 w-full sm:w-auto">
+                    <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
                         <div className="flex-1 sm:w-48 h-2 bg-secondary rounded-full overflow-hidden">
                             <div 
                                 className="h-full bg-primary transition-all duration-300"
                                 style={{ width: `${progress}%` }}
                             />
                         </div>
-                        <span className="text-sm font-bold text-muted-foreground whitespace-nowrap">
+                        <span className="text-xs sm:text-sm font-bold text-muted-foreground whitespace-nowrap">
                             {currentIndex + 1} / {words.length}
                         </span>
                     </div>
                 </div>
 
-                {/* Main Practice Card - Refined for Mobile */}
-                <div className="relative aspect-[4/5] sm:aspect-video w-full max-w-2xl mx-auto perspective-1000">
-                    {/* Inner Container for Flip Animation */}
-                    <div
-                        className={cn(
-                            "relative w-full h-full transition-all duration-500 transform-3d",
-                            isFlipped && "transform-[rotateY(180deg)]"
-                        )}
+                {/* Main Practice Card - Mobile Optimized with Touch Support */}
+                <div className="relative w-full max-w-2xl mx-auto mb-6">
+                    {/* Card Container with Touch Flip */}
+                    <div 
+                        className="relative w-full aspect-[3/4] sm:aspect-[4/3] md:aspect-video cursor-pointer"
+                        style={{ perspective: '1000px' }}
+                        onClick={() => setIsFlipped(!isFlipped)}
+                        onTouchEnd={(e) => {
+                            e.preventDefault();
+                            setIsFlipped(!isFlipped);
+                        }}
                     >
-                        {/* Front of card */}
+                        {/* Inner Container for Flip Animation */}
                         <div
-                            className={cn(
-                                "absolute inset-0 w-full h-full backface-hidden",
-                                "bg-card border-2 rounded-3xl shadow-2xl",
-                                "flex flex-col items-center justify-center p-8",
-                            )}
+                            className="relative w-full h-full transition-transform duration-500"
+                            style={{
+                                transformStyle: 'preserve-3d',
+                                transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)'
+                            }}
                         >
-                            <div className="text-center space-y-4">
-                                {currentWord.article && (
-                                    <span className="text-3xl text-muted-foreground font-serif italic block">
-                                        {currentWord.article}
-                                    </span>
-                                )}
-                                <div className="flex items-center justify-center gap-4">
-                                    <h2 className="text-6xl font-black text-foreground">
-                                        {currentWord.word}
-                                    </h2>
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            speak(currentWord.word);
-                                        }}
-                                        className="p-3 rounded-full hover:bg-primary/10 text-primary transition-colors"
-                                        title="Listen"
-                                    >
-                                        <Volume2 size={32} />
-                                    </button>
-                                </div>
-                                {currentWord.plural && (
-                                    <p className="text-xl text-muted-foreground italic">
-                                        Plural: {currentWord.plural}
-                                    </p>
-                                )}
-                                <div className="mt-6 pt-6 border-t border-border w-full max-w-md mx-auto">
-                                    <p className="text-sm text-muted-foreground uppercase tracking-wider mb-2">
-                                        Meaning
-                                    </p>
-                                    <h3 className="text-3xl font-bold text-primary">
-                                        {currentWord.meaning_en}
-                                    </h3>
-                                </div>
-                            </div>
-                            <div className="absolute bottom-8 text-sm text-muted-foreground">
-                                Click or press Space to reveal
-                            </div>
-                        </div>
-
-                        {/* Back of card */}
-                        <div
-                            className={cn(
-                                "absolute inset-0 w-full h-full backface-hidden transform-[rotateY(180deg)]",
-                                "bg-card border-2 border-primary rounded-3xl shadow-2xl",
-                                "flex flex-col items-center justify-center p-8",
-                            )}
-                        >
-                            <div className="text-center space-y-6">
-                                {currentWord.example_de ? (
-                                    <div className="text-center">
-                                        <div className="text-sm text-muted-foreground uppercase tracking-wider mb-4">
-                                            Example Sentence
-                                        </div>
-                                        <div className="flex items-center justify-center gap-3 mb-4">
-                                            <p className="text-3xl font-serif italic text-foreground leading-relaxed">
-                                                &quot;{currentWord.example_de}&quot;
-                                            </p>
+                            {/* Front of card */}
+                            <div
+                                className="absolute inset-0 w-full h-full bg-gradient-to-br from-card via-card to-primary/5 border-2 rounded-2xl sm:rounded-3xl shadow-xl overflow-hidden"
+                                style={{
+                                    backfaceVisibility: 'hidden',
+                                    WebkitBackfaceVisibility: 'hidden'
+                                }}
+                            >
+                                <div className="flex flex-col items-center justify-center h-full p-4 sm:p-8">
+                                    <div className="text-center space-y-3 sm:space-y-4 w-full">
+                                        {currentWord.article && (
+                                            <span className="text-xl sm:text-3xl text-muted-foreground font-serif italic block">
+                                                {currentWord.article}
+                                            </span>
+                                        )}
+                                        <div className="flex items-center justify-center gap-2 sm:gap-4">
+                                            <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-foreground break-words max-w-[80%]">
+                                                {currentWord.word}
+                                            </h2>
                                             <button
                                                 onClick={(e) => {
                                                     e.stopPropagation();
-                                                    speak(currentWord.example_de);
+                                                    speak(currentWord.word);
                                                 }}
-                                                className="p-2 rounded-full hover:bg-primary/10 text-primary transition-colors shrink-0"
-                                                title="Listen to example"
+                                                className="p-2 sm:p-3 rounded-full hover:bg-primary/10 active:bg-primary/20 text-primary transition-colors"
+                                                title="Listen"
                                             >
-                                                <Volume2 size={24} />
+                                                <Volume2 size={24} className="sm:w-8 sm:h-8" />
                                             </button>
                                         </div>
-                                        <div className="h-px w-24 bg-primary/30 mx-auto mb-4" />
-                                        <div className="text-sm text-muted-foreground uppercase tracking-wider mb-2">
-                                            English Meaning
+                                        {currentWord.plural && (
+                                            <p className="text-base sm:text-xl text-muted-foreground italic">
+                                                Plural: {currentWord.plural}
+                                            </p>
+                                        )}
+                                        <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-border w-full max-w-md mx-auto">
+                                            <p className="text-xs sm:text-sm text-muted-foreground uppercase tracking-wider mb-2">
+                                                Meaning
+                                            </p>
+                                            <h3 className="text-2xl sm:text-3xl font-bold text-primary">
+                                                {currentWord.meaning_en}
+                                            </h3>
                                         </div>
-                                        <p className="text-xl text-muted-foreground">
-                                            {currentWord.example_en}
-                                        </p>
                                     </div>
-                                ) : (
-                                    <div className="text-center text-muted-foreground">
-                                        No example sentence available.
+                                    <div className="absolute bottom-4 sm:bottom-8 text-xs sm:text-sm text-muted-foreground">
+                                        Tap or press Space to flip
                                     </div>
-                                )}
+                                </div>
+                            </div>
+
+                            {/* Back of card */}
+                            <div
+                                className="absolute inset-0 w-full h-full bg-gradient-to-br from-primary/5 via-card to-card border-2 border-primary rounded-2xl sm:rounded-3xl shadow-xl overflow-hidden"
+                                style={{
+                                    backfaceVisibility: 'hidden',
+                                    WebkitBackfaceVisibility: 'hidden',
+                                    transform: 'rotateY(180deg)'
+                                }}
+                            >
+                                <div className="flex flex-col items-center justify-center h-full p-4 sm:p-8 overflow-y-auto">
+                                    <div className="text-center space-y-4 sm:space-y-6 w-full">
+                                        {currentWord.example_de ? (
+                                            <div className="text-center">
+                                                <div className="text-xs sm:text-sm text-muted-foreground uppercase tracking-wider mb-3 sm:mb-4">
+                                                    Example Sentence
+                                                </div>
+                                                <div className="flex items-start justify-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                                                    <p className="text-lg sm:text-2xl md:text-3xl font-serif italic text-foreground leading-relaxed">
+                                                        &quot;{currentWord.example_de}&quot;
+                                                    </p>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            speak(currentWord.example_de);
+                                                        }}
+                                                        className="p-2 rounded-full hover:bg-primary/10 active:bg-primary/20 text-primary transition-colors shrink-0"
+                                                        title="Listen to example"
+                                                    >
+                                                        <Volume2 size={20} className="sm:w-6 sm:h-6" />
+                                                    </button>
+                                                </div>
+                                                <div className="h-px w-16 sm:w-24 bg-primary/30 mx-auto mb-3 sm:mb-4" />
+                                                <div className="text-xs sm:text-sm text-muted-foreground uppercase tracking-wider mb-2">
+                                                    English Meaning
+                                                </div>
+                                                <p className="text-base sm:text-xl text-muted-foreground">
+                                                    {currentWord.example_en}
+                                                </p>
+                                            </div>
+                                        ) : (
+                                            <div className="text-center text-muted-foreground text-sm sm:text-base">
+                                                No example sentence available.
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Controls */}
-                <div className="mt-8 flex flex-col gap-4">
+                {/* Controls - Mobile Optimized */}
+                <div className="mt-4 sm:mt-8 flex flex-col gap-3 sm:gap-4 px-2 sm:px-0">
                     {isFlipped && (
-                        <div className="flex gap-4">
+                        <div className="flex gap-2 sm:gap-4">
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     handleNeedsReview();
                                 }}
-                                className="flex-1 px-6 py-4 rounded-xl border-2 border-orange-500 text-orange-600 font-bold hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors flex items-center justify-center gap-2"
+                                className="flex-1 px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base rounded-xl border-2 border-orange-500 text-orange-600 font-bold hover:bg-orange-50 active:bg-orange-100 dark:hover:bg-orange-900/20 dark:active:bg-orange-900/30 transition-colors flex items-center justify-center gap-2"
                             >
-                                <X size={20} />
-                                Need More Practice
+                                <X size={18} className="sm:w-5 sm:h-5" />
+                                <span className="hidden xs:inline">Need More Practice</span>
+                                <span className="xs:hidden">Review</span>
                             </button>
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     handleMastered();
                                 }}
-                                className="flex-1 px-6 py-4 rounded-xl bg-green-500 text-white font-bold hover:bg-green-600 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-green-500/25"
+                                className="flex-1 px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base rounded-xl bg-green-500 text-white font-bold hover:bg-green-600 active:bg-green-700 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-green-500/25"
                             >
-                                <Check size={20} />
+                                <Check size={18} className="sm:w-5 sm:h-5" />
                                 Got It!
                             </button>
                         </div>
                     )}
 
-                    <div className="flex gap-4 justify-between">
+                    <div className="flex gap-2 sm:gap-4 justify-between">
                         <button
                             onClick={handlePrevious}
                             disabled={currentIndex === 0}
-                            className="px-6 py-3 rounded-xl border bg-background hover:bg-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium flex items-center gap-2"
+                            className="px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base rounded-xl border bg-background hover:bg-secondary active:bg-secondary/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium flex items-center gap-2"
                         >
-                            <ArrowLeft size={20} />
-                            Previous
+                            <ArrowLeft size={18} className="sm:w-5 sm:h-5" />
+                            <span className="hidden xs:inline">Previous</span>
                         </button>
                         <button
                             onClick={handleNext}
-                            className="px-6 py-3 rounded-xl border bg-background hover:bg-secondary transition-colors font-medium flex items-center gap-2"
+                            className="px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base rounded-xl border bg-background hover:bg-secondary active:bg-secondary/80 transition-colors font-medium flex items-center gap-2"
                         >
-                            Next
-                            <ArrowRight size={20} />
+                            <span className="hidden xs:inline">Next</span>
+                            <ArrowRight size={18} className="sm:w-5 sm:h-5" />
                         </button>
                     </div>
                 </div>
 
-                {/* Keyboard shortcuts hint */}
-                <div className="mt-8 text-center text-sm text-muted-foreground">
+                {/* Keyboard shortcuts hint - Hide on very small screens */}
+                <div className="mt-6 sm:mt-8 text-center text-xs sm:text-sm text-muted-foreground hidden sm:block">
                     <p>Keyboard shortcuts: Space/Enter to flip • ← → to navigate</p>
                 </div>
             </div>
