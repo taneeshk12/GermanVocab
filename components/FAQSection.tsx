@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 
 interface FAQ {
   question: string;
@@ -44,52 +45,52 @@ const faqs: FAQ[] = [
 
 export function FAQSection() {
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white/5 backdrop-blur-sm">
+    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-muted/30 border-t border-border">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
             Frequently Asked Questions About Learning German
           </h2>
-          <p className="text-lg text-white/70">
+          <p className="text-lg text-muted-foreground">
             Everything you need to know about learning German with our free app
           </p>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-4">
           {faqs.map((faq, index) => (
             <details
               key={index}
-              className="group bg-white/10 backdrop-blur-md rounded-xl p-6 hover:bg-white/15 transition-all duration-200 border border-white/10"
+              className="group glass-panel rounded-xl p-6 hover:shadow-lg transition-all duration-200"
             >
               <summary className="flex justify-between items-center cursor-pointer list-none">
-                <h3 className="text-lg sm:text-xl font-semibold text-white pr-4">
+                <h3 className="text-lg sm:text-xl font-semibold text-foreground pr-4">
                   {faq.question}
                 </h3>
-                <span className="text-white/60 group-open:rotate-180 transition-transform duration-200 shrink-0">
+                <span className="text-muted-foreground group-open:rotate-180 transition-transform duration-200 shrink-0">
                   <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </span>
               </summary>
-              <div className="mt-4 text-white/80 leading-relaxed">
+              <div className="mt-4 text-muted-foreground leading-relaxed">
                 {faq.answer}
               </div>
             </details>
           ))}
         </div>
 
-        <div className="mt-12 p-8 bg-linear-to-r from-indigo-600/20 to-purple-600/20 rounded-2xl border border-white/20 text-center">
-          <h3 className="text-2xl font-bold text-white mb-3">
+        <div className="mt-12 p-8 glass-panel rounded-2xl text-center">
+          <h3 className="text-2xl font-bold text-foreground mb-3">
             Ready to Start Learning German Daily?
           </h3>
-          <p className="text-white/80 mb-6">
+          <p className="text-muted-foreground mb-6">
             Join 10,000+ learners who practice German every day with our free app
           </p>
           <Link
             href="/a1"
-            className="inline-block px-8 py-3 bg-white text-indigo-600 font-semibold rounded-lg hover:bg-white/90 transition-colors duration-200 shadow-lg hover:shadow-xl"
+            className="inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
           >
-            Start Learning A1 Now →
+            Start Learning A1 Now <ArrowRight size={20} />
           </Link>
         </div>
       </div>
