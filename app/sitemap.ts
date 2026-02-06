@@ -3,7 +3,7 @@ import { getAllVocab, getTopics } from '@/lib/vocab'
 import { Level } from '@/lib/types'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://learngermandaily.ieltsprepai.tech'
+  const baseUrl = 'https://learngermandaily.com'
   const levels: Level[] = ['A1', 'A2', 'B1', 'B2']
 
   // Static pages

@@ -9,7 +9,7 @@ interface SEOProps {
   noindex?: boolean
 }
 
-const baseUrl = 'https://learngermandaily.ieltsprepai.tech'
+const baseUrl = 'https://learngermandaily.com'
 const siteName = 'Learn German Daily'
 
 export function generateSEO({
