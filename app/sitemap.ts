@@ -13,14 +13,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 1,
-      images: ['/hero-illustration.png'],
+      images: [`${baseUrl}/hero-illustration.png`],
     },
     {
       url: `${baseUrl}/quiz/daily`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.9,
-      images: ['/quiz-illustration.png'],
+      images: [`${baseUrl}/quiz-illustration.png`],
     },
   ]
 
