@@ -30,6 +30,15 @@ const BLOG_POSTS = [
     category: "Learning Strategies",
     image: "/blog/learn-fast.jpg", // You'll need to add these images or use placeholders
   },
+    {
+    slug: "german-noun-genders-and-plurals-a1-guide",
+    title: "German Noun Genders & Plurals Explained: Der, Die, Das Made Easy (A1 Guide 2026)",
+    excerpt: "Confused about der, die, das and German plural forms? Learn simple gender rules, endings, and plural patterns with clear tables and examples for A1 learners.",
+    date: "2026-02-06",
+    readTime: "10 min read",
+    category: "Grammar",
+    image: "/blog/grammar.jpg",
+  },
   {
     slug: "best-free-german-learning-apps-2025",
     title: "The Best Free German Learning Apps in 2025: A Detailed Review",

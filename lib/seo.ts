@@ -127,16 +127,18 @@ export function generateSEO({
 
 export function generateLevelSEO(level: string, wordCount: number): Metadata {
   return generateSEO({
-    title: `German ${level.toUpperCase()} Vocabulary - ${wordCount} Essential Words`,
-    description: `Master ${wordCount} essential German ${level.toUpperCase()} vocabulary words with interactive flashcards, translation exercises, and sentence practice. Perfect for CEFR ${level.toUpperCase()} learners.`,
+    title: `Learn German ${level.toUpperCase()} Daily - ${wordCount} Words Free`,
+    description: `Master ${wordCount} German ${level.toUpperCase()} words with daily practice. Free flashcards, quizzes & sentence exercises. CEFR-aligned. Start learning German ${level.toUpperCase()} today!`,
     keywords: [
-      `German ${level.toUpperCase()}`,
-      `${level.toUpperCase()} vocabulary`,
-      `${level.toUpperCase()} words`,
       `learn German ${level.toUpperCase()}`,
+      `German ${level.toUpperCase()} vocabulary`,
+      `German ${level.toUpperCase()} words`,
+      `learn German ${level.toUpperCase()} daily`,
       `German ${level.toUpperCase()} practice`,
-      'CEFR',
-      'German beginner' + (level.toLowerCase() === 'a1' ? '' : ''),
+      `${level.toUpperCase()} word list`,
+      `goethe ${level.toUpperCase()}`,
+      'CEFR German',
+      'German for beginners' + (level.toLowerCase() === 'a1' ? '' : ''),
     ],
     canonical: `${baseUrl}/${level.toLowerCase()}`,
   })
@@ -146,8 +148,8 @@ export function generateTopicSEO(level: string, topic: string, wordCount: number
   const topicTitle = topic.charAt(0).toUpperCase() + topic.slice(1)
 
   return generateSEO({
-    title: `${topicTitle} - German ${level.toUpperCase()} Vocabulary`,
-    description: `Learn ${wordCount} German words related to ${topicTitle}. Master essential ${level.toUpperCase()}-level vocabulary with examples, pronunciation, and interactive exercises.`,
+    title: `${topicTitle} - Learn German ${level.toUpperCase()} Vocabulary Daily`,
+    description: `Learn ${wordCount} German words about ${topicTitle}. Daily ${level.toUpperCase()}-level vocabulary practice with examples, pronunciation & interactive exercises. Free!`,
     keywords: [
       `German ${topic}`,
       `${topic} in German`,
@@ -183,14 +185,17 @@ export function generatePracticeSEO(level: string, practiceType: string): Metada
   const typeName = types[practiceType as keyof typeof types] || practiceType
 
   return generateSEO({
-    title: `${typeName} Practice - German ${level.toUpperCase()}`,
-    description: `Practice German ${level.toUpperCase()} vocabulary with interactive ${typeName.toLowerCase()} exercises. Improve your vocabulary retention with spaced repetition and immediate feedback.`,
+    title: `German ${typeName} Practice Daily - ${level.toUpperCase()} Level Free`,
+    description: `Practice German ${level.toUpperCase()} vocabulary daily with ${typeName.toLowerCase()} exercises. Spaced repetition, instant feedback & free access. Improve every day!`,
     keywords: [
       `German ${typeName.toLowerCase()}`,
-      `${level.toUpperCase()} practice`,
+      `learn German ${level.toUpperCase()}`,
+      `German ${level.toUpperCase()} practice`,
+      `daily German practice`,
       `German practice exercises`,
-      `learn German online`,
+      `learn German online free`,
       'German vocabulary practice',
+      'spaced repetition German',
     ],
     canonical: `${baseUrl}/${level.toLowerCase()}/practice/${practiceType}`,
   })

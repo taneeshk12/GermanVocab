@@ -5,6 +5,7 @@ import { ArrowRight, Star, BookOpen, Trophy, Sparkles, BrainCircuit, GraduationC
 import { motion } from "framer-motion";
 import { BentoGrid, BentoGridItem } from "@/components/ui/BentoGrid";
 import { PracticePromo } from "@/components/PracticePromo";
+import { FAQSection } from "@/components/FAQSection";
 import Image from "next/image";
 
 const features = [
@@ -225,6 +226,9 @@ export function HomeClient() {
 					</BentoGrid>
 				</div>
 			</section>
+
+			{/* FAQ Section - SEO Optimized */}
+			<FAQSection />
 		</div>
 	);
 }

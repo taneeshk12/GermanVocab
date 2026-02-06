@@ -147,3 +147,73 @@ h5,
 h6 {
   font-family: var(--font-heading);
 }
+/* Blog Article Styling */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+}
+
+.prose table th {
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--muted));
+  padding: 0.75rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+.prose table td {
+  border: 1px solid hsl(var(--border));
+  padding: 0.75rem;
+}
+
+.prose table thead tr {
+  background-color: hsl(var(--muted) / 0.5);
+}
+
+.prose table tbody tr:hover {
+  background-color: hsl(var(--muted) / 0.3);
+}
+
+.prose hr {
+  margin: 2rem 0;
+  border-top: 1px solid hsl(var(--border));
+}
+
+.prose details {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+}
+
+.prose details summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.prose details summary:hover {
+  color: hsl(var(--primary));
+}
+
+.prose code:not(pre code) {
+  background-color: hsl(var(--muted));
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-family: ui-monospace, monospace;
+}
+
+.prose pre {
+  background-color: hsl(240 10% 10%);
+  color: hsl(0 0% 90%);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.prose pre code {
+  background-color: transparent;
+  color: inherit;
+}

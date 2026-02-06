@@ -135,6 +135,255 @@ const BLOG_POSTS = {
     category: "Resources",
     keywords: ["best german learning apps", "free language apps", "duolingo alternative", "langflow vs duolingo"],
   },
+    "german-noun-genders-and-plurals-a1-guide": {
+    title: "German Noun Genders & Plurals Explained: Der, Die, Das Made Easy (A1 Guide 2026)",
+    excerpt: "Confused about der, die, das and German plural forms? Learn simple gender rules, endings, and plural patterns with clear tables and examples for A1 learners.",
+    content: `<article class="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
+
+<div class="not-prose mb-8">
+  <span class="text-sm font-semibold text-primary">A1 Beginner Level Grammar</span>
+</div>
+
+<h1>German Noun Genders and Plurals (A1 Guide)</h1>
+
+<p>When you start learning German, one of the first challenges is understanding <strong>noun genders</strong> and <strong>plural forms</strong>. Unlike English, every German noun has a grammatical gender and a special plural structure.</p>
+
+<p>But don’t worry — once you know the patterns and rules, it becomes much easier 🎯</p>
+
+<hr/>
+
+<h2>What Are German Noun Genders?</h2>
+
+<p>Every German noun belongs to one of three genders:</p>
+
+<table>
+<thead>
+<tr>
+<th>Article</th>
+<th>Gender</th>
+<th>Example</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>der</strong></td>
+<td>Masculine</td>
+<td>der Mann</td>
+<td>the man</td>
+</tr>
+<tr>
+<td><strong>die</strong></td>
+<td>Feminine</td>
+<td>die Frau</td>
+<td>the woman</td>
+</tr>
+<tr>
+<td><strong>das</strong></td>
+<td>Neuter</td>
+<td>das Auto</td>
+<td>the car</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>Important:</strong> Always learn nouns WITH their article. Never learn only “Auto”. Learn “das Auto”.</p>
+
+<hr/>
+
+<h2>Masculine Nouns (der)</h2>
+
+<h3>Common Rules</h3>
+<ul>
+<li>Male people → der Mann, der Vater, der Bruder</li>
+<li>Days, months, seasons → der Montag, der Januar, der Sommer</li>
+<li>Endings: -er, -el, -en (often) → der Lehrer, der Apfel, der Garten</li>
+</ul>
+
+<h3>Examples</h3>
+<ul>
+<li><strong>der Lehrer</strong> – teacher</li>
+<li><strong>der Tisch</strong> – table</li>
+<li><strong>der Computer</strong> – computer</li>
+</ul>
+
+<hr/>
+
+<h2>Feminine Nouns (die)</h2>
+
+<h3>Common Rules</h3>
+<ul>
+<li>Female people → die Frau, die Mutter, die Schwester</li>
+<li>Endings: -ung, -heit, -keit, -schaft → always feminine</li>
+<li>Endings: -ion, -tät, -ik → usually feminine</li>
+</ul>
+
+<h3>Examples</h3>
+<ul>
+<li><strong>die Zeitung</strong> – newspaper</li>
+<li><strong>die Freiheit</strong> – freedom</li>
+<li><strong>die Universität</strong> – university</li>
+</ul>
+
+<hr/>
+
+<h2>Neuter Nouns (das)</h2>
+
+<h3>Common Rules</h3>
+<ul>
+<li>Young people/animals → das Kind, das Baby</li>
+<li>Metals → das Gold, das Silber</li>
+<li>Verbs used as nouns → das Essen, das Lernen</li>
+<li>-chen, -lein endings → always neuter</li>
+</ul>
+
+<h3>Examples</h3>
+<ul>
+<li><strong>das Mädchen</strong> – girl</li>
+<li><strong>das Haus</strong> – house</li>
+<li><strong>das Buch</strong> – book</li>
+</ul>
+
+<hr/>
+
+<h2>Quick Gender Cheat Sheet</h2>
+
+<table>
+<thead>
+<tr>
+<th>DER</th>
+<th>DIE</th>
+<th>DAS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Male people</td>
+<td>Female people</td>
+<td>Young beings</td>
+</tr>
+<tr>
+<td>Days/Months</td>
+<td>-ung, -heit, -keit</td>
+<td>-chen, -lein</td>
+</tr>
+<tr>
+<td>-er words</td>
+<td>-ion, -tät, -ik</td>
+<td>Metals & verbs</td>
+</tr>
+</tbody>
+</table>
+
+<hr/>
+
+<h2>German Noun Plurals Explained</h2>
+
+<p>In English, we usually add <strong>-s</strong>. But German has <strong>different plural patterns</strong>.</p>
+
+<h3>Most Common Plural Types</h3>
+
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Singular</th>
+<th>Plural</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-e</td>
+<td>der Hund</td>
+<td>die Hunde</td>
+</tr>
+<tr>
+<td>-er (+ umlaut)</td>
+<td>das Kind</td>
+<td>die Kinder</td>
+</tr>
+<tr>
+<td>-n / -en</td>
+<td>die Frau</td>
+<td>die Frauen</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>das Auto</td>
+<td>die Autos</td>
+</tr>
+<tr>
+<td>no change</td>
+<td>der Lehrer</td>
+<td>die Lehrer</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Important Rule</h3>
+<p><strong>All plural nouns use DIE</strong> — no matter the gender!</p>
+
+<ul>
+<li>der Mann → <strong>die Männer</strong></li>
+<li>die Frau → <strong>die Frauen</strong></li>
+<li>das Kind → <strong>die Kinder</strong></li>
+</ul>
+
+<hr/>
+
+<h2>Common Beginner Mistakes</h2>
+
+<ul>
+<li>❌ Learning nouns without articles</li>
+<li>❌ Guessing gender using English logic</li>
+<li>❌ Forgetting that ALL plurals use “die”</li>
+</ul>
+
+<hr/>
+
+<h2>Practice Exercise</h2>
+
+<ol>
+<li>___ Tisch</li>
+<li>___ Zeitung</li>
+<li>___ Kind</li>
+<li>Plural of Auto → ?</li>
+<li>Plural of Frau → ?</li>
+</ol>
+
+<details>
+<summary>Show Answers</summary>
+<ol>
+<li>der</li>
+<li>die</li>
+<li>das</li>
+<li>die Autos</li>
+<li>die Frauen</li>
+</ol>
+</details>
+
+<hr/>
+
+<h2>Final Tip for Fast Learning</h2>
+
+<p>Use flashcards and always write nouns like this:</p>
+
+<ul>
+<li>der Tisch</li>
+<li>die Tasche</li>
+<li>das Buch</li>
+</ul>
+
+<p>This small habit will save you HOURS later when learning cases and adjectives.</p>
+
+<p><strong>Remember:</strong> Article + noun = one word ❤️</p>
+
+</article>`,
+    date: "2026-02-06",
+    readTime: "10 min read",
+    category: "Grammar",
+    keywords: ["german noun genders","german plurals explained","der die das rules","learn german A1 grammar","german articles guide","german plural forms"],
+  },
 };
 
 type Props = {
@@ -193,7 +442,7 @@ export default async function BlogPost({ params }: Props) {
       </div>
 
       <div className="container mx-auto px-6 max-w-3xl py-12">
-        <article className="prose prose-lg dark:prose-invert prose-headings:font-bold prose-a:text-primary prose-img:rounded-2xl max-w-none">
+        <article className="prose prose-lg dark:prose-invert prose-headings:font-bold prose-a:text-primary prose-img:rounded-2xl prose-table:border-collapse prose-th:border prose-th:border-gray-300 prose-th:bg-gray-100 dark:prose-th:bg-gray-800 dark:prose-th:border-gray-700 prose-th:p-3 prose-td:border prose-td:border-gray-300 dark:prose-td:border-gray-700 prose-td:p-3 prose-table:w-full prose-table:my-6 max-w-none">
           <div dangerouslySetInnerHTML={{ __html: post.content }} />
         </article>
 
