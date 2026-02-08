@@ -5,17 +5,29 @@ import { VocabItem } from "@/lib/types";
 import { getMasteredWords } from "@/lib/word-progress";
 import { getAllVocab } from "@/lib/vocab";
 import QuizInterface from "@/components/QuizInterface";
-import { BookOpen, Trophy, Target } from "lucide-react";
+import { BookOpen, Trophy, Target, Lock, LogIn } from "lucide-react";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
 
 export function LearnedWordsQuiz() {
   const [learnedWords, setLearnedWords] = useState<VocabItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [quizStarted, setQuizStarted] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    async function loadLearnedWords() {
+    async function checkAuthAndLoadWords() {
       try {
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        setIsAuthenticated(!!user);
+        
+        if (!user) {
+          setIsLoading(false);
+          return;
+        }
+
         const learnedData = await getMasteredWords();
         
         if (learnedData.length === 0) {
@@ -38,13 +50,51 @@ export function LearnedWordsQuiz() {
       }
     }
 
-    loadLearnedWords();
+    checkAuthAndLoadWords();
   }, []);
 
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-20">
         <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  // Show login prompt if user is not authenticated
+  if (!isAuthenticated) {
+    return (
+      <div className="max-w-2xl mx-auto text-center py-12">
+        <div className="bg-card border rounded-3xl p-12 shadow-2xl">
+          <div className="relative mb-6 inline-block">
+            <Lock size={64} className="mx-auto text-muted-foreground" />
+            <div className="absolute -top-2 -right-2 p-2 bg-primary rounded-full">
+              <LogIn size={20} className="text-primary-foreground" />
+            </div>
+          </div>
+          <h2 className="text-3xl font-bold mb-4">Login Required</h2>
+          <p className="text-lg text-muted-foreground mb-8">
+            Please log in to access your learned words and track your progress.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/login"
+              className="px-8 py-4 rounded-xl bg-primary text-primary-foreground font-bold hover:bg-primary/90 transition-colors inline-flex items-center justify-center gap-2 shadow-lg shadow-primary/25"
+            >
+              <LogIn size={20} />
+              Log In
+            </Link>
+            <Link
+              href="/auth"
+              className="px-8 py-4 rounded-xl border border-primary text-primary font-bold hover:bg-primary/10 transition-colors inline-flex items-center justify-center gap-2"
+            >
+              Sign Up Free
+            </Link>
+          </div>
+          <p className="mt-6 text-sm text-muted-foreground">
+            ✨ 100% Free • Track your progress & master German vocabulary
+          </p>
+        </div>
       </div>
     );
   }
@@ -57,7 +107,7 @@ export function LearnedWordsQuiz() {
           <h2 className="text-3xl font-bold mb-4">No Learned Words Yet</h2>
           <p className="text-lg text-muted-foreground mb-8">
             Start practicing to learn some words first! Mark words as learned through practice or flashcards,
-            and they'll appear here for review.
+            and they&apos;ll appear here for review.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link

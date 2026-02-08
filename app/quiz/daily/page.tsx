@@ -17,6 +17,7 @@ export default function DailyQuizPage() {
     return (
         <div className="min-h-screen relative overflow-hidden flex flex-col items-center justify-center p-4 sm:p-8">
             {/* Aurora Background */}
+
             <div className="absolute inset-0 w-full h-full bg-background -z-20" />
             <div className="absolute inset-0 w-full h-full -z-10 opacity-30 blur-3xl saturate-150 pointer-events-none">
                 <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-pulse lg:animate-aurora" />
@@ -34,7 +35,7 @@ export default function DailyQuizPage() {
             </div>
 
             <div className="w-full max-w-2xl relative z-10">
-                <div className="mb-4 sm:mb-8 flex justify-between items-center bg-white/40 backdrop-blur-md p-2 sm:p-4 rounded-full border border-white/40 shadow-sm mx-2">
+                <div className="mt-18 mb-4 sm:mb-8 flex justify-between items-center bg-white/40 backdrop-blur-md p-2 sm:p-4 rounded-full border border-white/40 shadow-sm mx-2">
                     <Link href="/" className="text-muted-foreground hover:text-primary transition-colors text-xs sm:text-sm font-medium flex items-center gap-1 pl-2">
                         ← Exit
                     </Link>

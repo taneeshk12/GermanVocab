@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { CheckCircle2, XCircle, ArrowRight, RefreshCw, HelpCircle } from "lucide-react";
 import { trackQuizCompletion } from "@/lib/supabase-integration";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
+import { AuthGate } from "@/components/AuthGate";
 
 interface QuizInterfaceProps {
     questions: QuizQuestion[];
@@ -77,8 +78,9 @@ export default function QuizInterface({ questions }: QuizInterfaceProps) {
     }
 
     return (
-        <div className="w-full max-w-xl mx-auto px-4 sm:px-0">
-            <div className="flex justify-between items-center mb-6 px-2">
+        <AuthGate currentIndex={currentIndex} freeLimit={1} featureName="quiz question">
+            <div className="w-full max-w-xl mx-auto px-4 sm:px-0">
+                <div className="flex justify-between items-center mb-6 px-2">
                 <div className="flex flex-col">
                     <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Question</span>
                     <span className="text-xl font-bold">{currentIndex + 1} <span className="text-muted-foreground text-base font-normal">/ {questions.length}</span></span>
@@ -172,5 +174,6 @@ export default function QuizInterface({ questions }: QuizInterfaceProps) {
                 </div>
             </div>
         </div>
+        </AuthGate>
     );
 }

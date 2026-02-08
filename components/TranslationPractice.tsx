@@ -6,6 +6,7 @@ import { ArrowRight, Check, X, RotateCcw, Volume2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { trackWordPractice, markWordLearned as markWordMastered, trackPracticeSession } from "@/lib/supabase-integration";
+import { AuthGate } from "@/components/AuthGate";
 
 interface TranslationPracticeProps {
     words: VocabItem[];
@@ -131,8 +132,9 @@ export function TranslationPractice({ words: initialWords }: TranslationPractice
     const correctAnswer = direction === "german-to-english" ? currentWord.meaning_en : currentWord.word;
 
     return (
-        <div className="max-w-3xl mx-auto">
-            {/* Header with direction toggle */}
+        <AuthGate currentIndex={currentIndex} freeLimit={1} featureName="translation practice">
+            <div className="max-w-3xl mx-auto">
+                {/* Header with direction toggle */}
             <div className="mb-8 flex justify-between items-center">
                 <div>
                     <div className="text-sm text-muted-foreground mb-2">Translation Mode</div>
@@ -291,5 +293,6 @@ export function TranslationPractice({ words: initialWords }: TranslationPractice
                 <p>Press Enter to {showResult ? "continue" : "check your answer"}</p>
             </div>
         </div>
+        </AuthGate>
     );
 }

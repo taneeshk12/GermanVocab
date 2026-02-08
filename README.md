@@ -78,7 +78,7 @@ data/vocab/
 
 ## 🌟 Why This App?
 
-- **Free & Open Source** - No ads, no subscriptions
+- **Free & ** - No ads, no subscriptions
 - **Comprehensive** - Complete A1 curriculum
 - **Interactive** - Multiple learning modes
 - **Effective** - Based on spaced repetition principles

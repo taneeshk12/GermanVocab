@@ -5,6 +5,7 @@ import { VocabItem } from "@/lib/types";
 import { ArrowLeft, ArrowRight, Check, X, Volume2, RotateCcw } from "lucide-react";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { trackWordPractice, trackPracticeSession, markWordLearned } from "@/lib/supabase-integration";
+import { AuthGate } from "@/components/AuthGate";
 
 interface FlashcardProps {
     words: VocabItem[];
@@ -257,8 +258,9 @@ export function FlashcardPractice({ words: allWords, onComplete }: FlashcardProp
     }
 
     return (
-        <div className="min-h-[calc(100vh-8rem)] flex flex-col items-center justify-center px-3 py-6 sm:p-6">
-            <div className="w-full max-w-4xl">
+        <AuthGate currentIndex={currentIndex} freeLimit={1} featureName="flashcard">
+            <div className="min-h-[calc(100vh-8rem)] flex flex-col items-center justify-center px-3 py-6 sm:p-6">
+                <div className="w-full max-w-4xl">
                 {/* Header Section */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-8 gap-3 sm:gap-4">
                     <button
@@ -456,5 +458,6 @@ export function FlashcardPractice({ words: allWords, onComplete }: FlashcardProp
                 </div>
             </div>
         </div>
+        </AuthGate>
     );
 }

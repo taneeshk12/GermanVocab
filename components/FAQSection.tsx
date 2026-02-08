@@ -31,7 +31,7 @@ const faqs: FAQ[] = [
   },
   {
     question: "What is the best app to learn German?",
-    answer: "Learn German Daily combines the quality of DW Learn German with modern features: 5000+ CEFR-aligned words, spaced repetition for optimal retention, AI-powered pronunciation, and completely free access. Unlike Duolingo or Babbel, there are no ads, paywalls, or premium features - everything is free forever."
+    answer: "Learn German Daily combines the quality of DW Learn German with modern features: 5000+ CEFR-aligned words, spaced repetition for optimal retention, AI-powered pronunciation, and completely free access. Unlike Duolingo or Babbel, there are no ads, paywalls, or premium features - everything is free."
   },
   {
     question: "How long to learn German A1?",

@@ -6,6 +6,7 @@ import { Check, X, RotateCcw, ArrowRight, Lightbulb, Volume2 } from "lucide-reac
 import { cn } from "@/lib/utils";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { trackWordPractice, markWordLearned as markWordMastered, trackPracticeSession } from "@/lib/supabase-integration";
+import { AuthGate } from "@/components/AuthGate";
 
 interface SentencePracticeProps {
     words: VocabItem[];
@@ -123,8 +124,9 @@ export function SentencePractice({ words: initialWords }: SentencePracticeProps)
     }
 
     return (
-        <div className="max-w-3xl mx-auto">
-            {/* Header with score */}
+        <AuthGate currentIndex={currentIndex} freeLimit={1} featureName="sentence practice">
+            <div className="max-w-3xl mx-auto">
+                {/* Header with score */}
             <div className="mb-8 flex justify-between items-center">
                 <div>
                     <div className="text-sm text-muted-foreground mb-1">Your Score</div>
@@ -266,5 +268,6 @@ export function SentencePractice({ words: initialWords }: SentencePracticeProps)
                 </div>
             )}
         </div>
+        </AuthGate>
     );
 }

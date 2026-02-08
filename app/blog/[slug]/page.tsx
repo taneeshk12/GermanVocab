@@ -106,7 +106,7 @@ const BLOG_POSTS = {
       <h2>Finding the Right Tool for You</h2>
       <p>With dozens of apps available, choosing the right one can be overwhelming. Here's our honest breakdown of the top contenders for free German learning.</p>
 
-      <h3>1. LangFlow (Open Source)</h3>
+      <h3>1. LangFlow ()</h3>
       <p>Best for: Serious learners who want transparency and efficiency without paywalls.</p>
       <ul>
         <li><strong>Pros:</strong> Completely free, no ads, scientific spaced repetition, CEFR aligned.</li>

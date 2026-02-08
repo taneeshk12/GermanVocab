@@ -69,8 +69,7 @@ export function Navbar() {
                 <div className="flex items-center gap-1 sm:gap-2">
                     {/* Desktop Navigation */}
                     <div className="hidden lg:flex items-center gap-1 bg-secondary/50 rounded-full p-1 border border-white/20 mr-2">
-                        <NavLink href="/a1">Level A1</NavLink>
-                        <NavLink href="/a2">Level A2</NavLink>
+                        <NavLink href="/levels">Levels</NavLink>
                         <NavLink href={`/${currentLevel}/practice`}>Practice</NavLink>
                         <NavLink href="/quiz/daily">Daily Quiz</NavLink>
                         <NavLink href="/learned-words">Review Learned</NavLink>
@@ -123,8 +122,7 @@ export function Navbar() {
                     
                     {/* Menu Panel */}
                     <div className="lg:hidden absolute top-16 sm:top-20 left-0 right-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border border-white/40 dark:border-gray-700/40 rounded-2xl p-3 sm:p-4 shadow-2xl mx-0 flex flex-col gap-1 sm:gap-2 animate-in slide-in-from-top-5 duration-200">
-                        <MobileNavLink href="/a1" onClick={() => setIsMenuOpen(false)}>Level A1</MobileNavLink>
-                        <MobileNavLink href="/a2" onClick={() => setIsMenuOpen(false)}>Level A2</MobileNavLink>
+                        <MobileNavLink href="/levels" onClick={() => setIsMenuOpen(false)}>Levels</MobileNavLink>
                         <MobileNavLink href={`/${currentLevel}/practice`} onClick={() => setIsMenuOpen(false)}>Practice</MobileNavLink>
                         <MobileNavLink href="/quiz/daily" onClick={() => setIsMenuOpen(false)}>Daily Quiz</MobileNavLink>
                         <MobileNavLink href="/learned-words" onClick={() => setIsMenuOpen(false)}>Review Learned</MobileNavLink>

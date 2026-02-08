@@ -147,7 +147,7 @@ export function HomeClient() {
 						className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-white/60 backdrop-blur-md px-4 py-1.5 text-sm font-semibold text-primary mb-8 shadow-sm transition-transform hover:scale-105 cursor-default"
 					>
 						<Star size={14} className="fill-primary text-primary" />
-						<span>The #1 Open Source German Learning App</span>
+						<span>The #1  German Learning App</span>
 					</motion.div>
 
 					<motion.h1
@@ -168,10 +168,9 @@ export function HomeClient() {
 						transition={{ duration: 0.5, delay: 0.2 }}
 						className="text-base sm:text-xl lg:text-2xl text-muted-foreground mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed font-medium px-4"
 					>
-						Learn faster with our scientifically proven spaced-repetition
-						vocabulary cards.
+						Learn 5000+ German words through smart flashcards, interactive quizzes & spaced repetition.
 						<span className="block mt-2 text-foreground font-bold">
-							Free. Forever. Open Source.
+							Start from zero. Master vocabulary. Completely free.
 						</span>
 					</motion.p>
 
@@ -185,7 +184,7 @@ export function HomeClient() {
 							href="/a1"
 							className="h-14 px-8 rounded-full bg-primary text-white font-bold text-lg flex items-center gap-2 hover:bg-primary/90 transition-all hover:scale-105 active:scale-95 shadow-xl shadow-primary/25 ring-4 ring-primary/10"
 						>
-							Start Learning A1 <ArrowRight size={20} />
+							Start Learning Now <ArrowRight size={20} />
 						</Link>
 						<Link
 							href="/a1/practice"

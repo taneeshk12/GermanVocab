@@ -19,46 +19,44 @@ export function Footer() {
                             </div>
                         </Link>
                         <p className="text-sm text-slate-400 leading-relaxed">
-                            A free, open-source platform to master German vocabulary through spaced repetition and interactive practice.
+                            Master German vocabulary through spaced repetition and interactive practice.
                         </p>
                     </div>
 
                     <div>
                         <h3 className="font-bold mb-4 text-white">Learn</h3>
                         <ul className="space-y-2 text-sm text-slate-400">
-                            <li><Link href="/a1" className="hover:text-primary transition-colors">Level A1</Link></li>
-                            <li><Link href="/a2" className="hover:text-primary transition-colors">Level A2 (Beta)</Link></li>
+                            <li><Link href="/levels" className="hover:text-primary transition-colors">All Levels</Link></li>
                             <li><Link href="/quiz/daily" className="hover:text-primary transition-colors">Daily Quiz</Link></li>
+                            <li><Link href="/learned-words" className="hover:text-primary transition-colors">Review Learned</Link></li>
                         </ul>
                     </div>
 
                     <div>
-                        <h3 className="font-bold mb-4 text-white">Community</h3>
+                        <h3 className="font-bold mb-4 text-white">Company</h3>
                         <ul className="space-y-2 text-sm text-slate-400">
-                            <li><a href="#" className="hover:text-primary transition-colors">GitHub</a></li>
-                            <li><a href="#" className="hover:text-primary transition-colors">Discord</a></li>
-                            <li><a href="#" className="hover:text-primary transition-colors">Twitter</a></li>
+                            <li><Link href="/about" className="hover:text-primary transition-colors">About Us</Link></li>
+                            <li><Link href="/contact" className="hover:text-primary transition-colors">Contact</Link></li>
                         </ul>
                     </div>
 
                     <div>
                         <h3 className="font-bold mb-4 text-white">Legal</h3>
                         <ul className="space-y-2 text-sm text-slate-400">
-                            <li><a href="#" className="hover:text-primary transition-colors">Privacy Policy</a></li>
-                            <li><a href="#" className="hover:text-primary transition-colors">Terms of Service</a></li>
-                            <li><a href="#" className="hover:text-primary transition-colors">Cookie Policy</a></li>
+                            <li><Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
+                            <li><Link href="/terms" className="hover:text-primary transition-colors">Terms of Service</Link></li>
                         </ul>
                     </div>
                 </div>
 
                 <div className="pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
                     <p className="text-sm text-slate-500">
-                        © {new Date().getFullYear()} LangFlow. Open Source.
+                        © {new Date().getFullYear()} LangFlow. All rights reserved.
                     </p>
                     <div className="flex items-center gap-1 text-sm text-slate-500">
                         <span>Made with</span>
                         <Heart size={14} className="fill-red-500 text-red-500 animate-pulse" />
-                        <span>by the community</span>
+                        <span>for German learners</span>
                     </div>
                 </div>
             </div>
