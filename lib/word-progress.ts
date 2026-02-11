@@ -17,15 +17,18 @@ export interface WordProgress {
  */
 export async function getWordsMasteredStatus(wordIds: string[]): Promise<Map<string, boolean>> {
   const supabase = createClient();
-  const { data: { user }, error: authError } = await supabase.auth.getUser();
-  
-  const statusMap = new Map<string, boolean>();
-  
-  if (authError) {
-    console.error('Auth error:', authError);
-    return statusMap;
+  let user = null;
+  try {
+    const { data, error } = await supabase.auth.getUser();
+    if (error) throw error;
+    user = data.user;
+  } catch (error) {
+    console.log('Auth check failed or no session:', error);
+    // Proceed as unauthenticated
   }
-  
+
+  const statusMap = new Map<string, boolean>();
+
   if (!user) {
     console.log('No user logged in, returning empty status map');
     return statusMap;
@@ -69,7 +72,7 @@ export async function getWordsMasteredStatus(wordIds: string[]): Promise<Map<str
   const learnedWords = Array.from(statusMap.entries()).filter(([, isLearned]) => isLearned);
   console.log(`Returning status map with ${statusMap.size} entries, ${learnedWords.length} learned`);
   console.log(`Learned word IDs:`, learnedWords.map(([id]) => id));
-  
+
   return statusMap;
 }
 
@@ -85,7 +88,7 @@ export async function getMasteredWords(): Promise<Array<{
 }>> {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  
+
   if (!user) {
     return [];
   }
@@ -111,7 +114,7 @@ export async function getMasteredWords(): Promise<Array<{
 export async function getTopicProgress(wordIds: string[]): Promise<{ mastered: number; total: number }> {
   const statusMap = await getWordsMasteredStatus(wordIds);
   const mastered = Array.from(statusMap.values()).filter(Boolean).length;
-  
+
   return {
     mastered,
     total: wordIds.length

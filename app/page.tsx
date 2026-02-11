@@ -1,6 +1,8 @@
-import { Metadata } from 'next'
-import { generateSEO, generateFAQSchema } from '@/lib/seo'
+import { Metadata, Viewport } from 'next'
+import { generateSEO, generateFAQSchema, siteViewport } from '@/lib/seo'
 import { HomeClient } from '@/components/HomeClient';
+
+export const viewport: Viewport = siteViewport;
 
 export const metadata: Metadata = generateSEO({
 	title: "Learn German Daily - Free A1-B2 App | 5000+ Words",

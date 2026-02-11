@@ -4,7 +4,10 @@ import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Analytics } from "@vercel/analytics/next";
-import { generateSEO, generateOrganizationSchema, generateWebsiteSchema } from "@/lib/seo";
+import { generateSEO, generateOrganizationSchema, generateWebsiteSchema, siteViewport } from "@/lib/seo";
+import { Viewport } from "next";
+
+export const viewport: Viewport = siteViewport;
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-grotesk" });

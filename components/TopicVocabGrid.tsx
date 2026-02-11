@@ -18,10 +18,15 @@ export function TopicVocabGrid({ words }: TopicVocabGridProps) {
 
     useEffect(() => {
         async function fetchProgress() {
-            const wordIds = words.map(w => w.id);
-            const status = await getWordsMasteredStatus(wordIds);
-            setLearnedWords(status);
-            setIsLoading(false);
+            try {
+                const wordIds = words.map(w => w.id);
+                const status = await getWordsMasteredStatus(wordIds);
+                setLearnedWords(status);
+            } catch (error) {
+                console.error("Error fetching progress:", error);
+            } finally {
+                setIsLoading(false);
+            }
         }
         fetchProgress();
     }, [words]);
@@ -63,7 +68,7 @@ export function TopicVocabGrid({ words }: TopicVocabGridProps) {
                         </span>
                     </div>
                     <div className="h-3 bg-secondary rounded-full overflow-hidden mb-2">
-                        <div 
+                        <div
                             className="h-full bg-gradient-to-r from-violet-500 to-indigo-500 transition-all duration-500"
                             style={{ width: `${progressPercentage}%` }}
                         />

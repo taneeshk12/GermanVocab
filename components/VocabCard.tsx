@@ -44,7 +44,7 @@ export function VocabCard({ item, onClick, isLearned = false, onToggleLearned }:
             className={cn(
                 "flex flex-col h-48 relative overflow-hidden transition-all duration-300 group",
                 onClick && "cursor-pointer hover:scale-[1.03] hover:shadow-xl active:scale-[0.98]",
-                getCardStyle(item.article)
+                getCardStyle(item.article ?? undefined)
             )}
             hoverEffect={false} // We handle our own hover effects
             onClick={onClick}
@@ -87,8 +87,8 @@ export function VocabCard({ item, onClick, isLearned = false, onToggleLearned }:
                             }}
                             className={cn(
                                 "p-2 rounded-full transition-all focus:opacity-100",
-                                isLearned 
-                                    ? "bg-red-50 dark:bg-red-900/20 text-red-500" 
+                                isLearned
+                                    ? "bg-red-50 dark:bg-red-900/20 text-red-500"
                                     : "bg-green-50 dark:bg-green-900/20 text-green-600"
                             )}
                             title={isLearned ? "Unmark as Learned" : "Mark as Learned"}

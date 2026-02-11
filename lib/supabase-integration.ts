@@ -12,9 +12,14 @@ import { getUserStats, updateUserStats } from './api/progress'
  * Get current user ID from Supabase auth
  */
 export async function getCurrentUserId(): Promise<string | null> {
-  const supabase = getSupabaseClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  return user?.id || null
+  try {
+    const supabase = getSupabaseClient()
+    const { data, error } = await supabase.auth.getUser()
+    if (error) return null
+    return data.user?.id || null
+  } catch (error) {
+    return null
+  }
 }
 
 /**
@@ -268,7 +273,7 @@ export async function markWordLearned(wordId: string, level: string, topic: stri
     }
 
     console.log(`✅ Word learned: ${wordId}`)
-    
+
     // Trigger UI update event
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new Event('stats-updated'))
@@ -344,7 +349,7 @@ export async function unmarkWordLearned(wordId: string) {
       }
 
       console.log(`✅ Word unmarked: ${wordId}`)
-      
+
       // Trigger UI update event
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new Event('stats-updated'))

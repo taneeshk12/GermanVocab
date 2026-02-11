@@ -1,4 +1,4 @@
-import { Metadata } from 'next'
+import { Metadata, Viewport } from 'next'
 
 interface SEOProps {
   title: string
@@ -11,6 +11,7 @@ interface SEOProps {
 
 const baseUrl = 'https://learngermandaily.com'
 const siteName = 'Learn German Daily'
+// Force HMR update
 
 export function generateSEO({
   title,
@@ -114,15 +115,16 @@ export function generateSEO({
       shortcut: '/app_logo.svg',
       apple: '/app_logo.svg',
     },
-    viewport: {
-      width: 'device-width',
-      initialScale: 1,
-      maximumScale: 1,
-    },
     category: 'education',
     classification: 'Language Learning',
     referrer: 'origin-when-cross-origin',
   }
+}
+
+export const siteViewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
 }
 
 export function generateLevelSEO(level: string, wordCount: number): Metadata {

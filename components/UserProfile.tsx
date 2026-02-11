@@ -18,6 +18,9 @@ export function useAuth() {
     supabase.auth.getSession().then(({ data: { session } }: any) => {
       setUser(session?.user ?? null)
       setLoading(false)
+    }).catch((error: any) => {
+      console.error('Error checking auth session:', error)
+      setLoading(false)
     })
 
     // Listen for auth changes
@@ -62,7 +65,7 @@ export function UserProfile() {
 
   return (
     <div className="flex items-center gap-3">
-      <Link 
+      <Link
         href="/profile"
         className="hidden sm:flex items-center gap-2 px-3 py-1.5 glass-panel rounded-lg border border-white/20 hover:bg-accent transition-all"
       >

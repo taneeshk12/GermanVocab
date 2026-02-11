@@ -4,8 +4,10 @@ import { Level } from "@/lib/types";
 import { notFound } from "next/navigation";
 import { Analytics } from "@vercel/analytics/next"
 import { Brain, Book, ChevronRight, BookOpen, Sparkles, Languages, MessageSquare, Star, Apple, Home as HomeIcon, Briefcase, Footprints, Heart, Shirt, Sun, Car } from "lucide-react";
-import { generateLevelSEO, generateEducationalSchema, generateBreadcrumbSchema } from "@/lib/seo";
-import { Metadata } from "next";
+import { generateLevelSEO, generateEducationalSchema, generateBreadcrumbSchema, siteViewport } from "@/lib/seo";
+import { Metadata, Viewport } from "next";
+
+export const viewport: Viewport = siteViewport;
 import { PageHeader } from "@/components/PageHeader";
 import { TopicsGrid } from "@/components/TopicsGrid";
 import { PracticePromo } from "@/components/PracticePromo";

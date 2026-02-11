@@ -4,8 +4,11 @@ import { Level } from "@/lib/types";
 import { notFound } from "next/navigation";
 import { Analytics } from "@vercel/analytics/next"
 import { ArrowLeft, BookOpen } from "lucide-react";
-import { Metadata } from "next";
-import { generateTopicSEO, generateBreadcrumbSchema } from "@/lib/seo";
+
+import { generateTopicSEO, generateBreadcrumbSchema, siteViewport } from "@/lib/seo";
+import { Metadata, Viewport } from "next";
+
+export const viewport: Viewport = siteViewport;
 import { PageHeader } from "@/components/PageHeader";
 import { TopicVocabGrid } from "@/components/TopicVocabGrid";
 import { slugify } from "@/lib/utils";

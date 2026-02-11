@@ -1,14 +1,17 @@
 import { VocabItem, Level } from "./types";
 import a1DataAll from "../data/vocab/A1_all.json";
 
+import a2DataAll from "../data/vocab/A2_all.json";
+
 // Use only the complete A1 word list
 const a1Data = a1DataAll as VocabItem[];
+const a2Data = a2DataAll as VocabItem[];
 
 // In a real app with many files, we might load these dynamically or map them.
 // For now, importing directly is safe for SSG.
 const vocabDatabase: Record<Level, VocabItem[]> = {
     "A1": a1Data,
-    "A2": [], // todo: populate
+    "A2": a2Data,
     "B1": [], // todo: populate
     "B2": [], // todo: populate
 };
