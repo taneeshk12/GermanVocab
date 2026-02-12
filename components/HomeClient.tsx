@@ -192,6 +192,13 @@ export function HomeClient() {
 						>
 							Practice Mode
 						</Link>
+						{/* Grammar Guides quick link */}
+						<Link
+							href="/grammar"
+							className="h-14 px-6 rounded-full border border-primary/20 font-bold text-lg flex items-center gap-2 text-primary hover:bg-primary/5 transition-all"
+						>
+							Grammar Guides
+						</Link>
 					</motion.div>
 				</div>
 			</section>
