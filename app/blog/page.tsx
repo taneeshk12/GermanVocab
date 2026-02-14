@@ -21,6 +21,15 @@ export const metadata: Metadata = generateSEO({
 // Mock Data - In a real app, this would come from a CMS or MDX files
 const BLOG_POSTS = [
   {
+    slug: "how-to-learn-german-vocabulary-fast-scientific-guide",
+    title: "How to Learn German Vocabulary Fast: The Ultimate Scientific Guide (2026)",
+    excerpt: "Discover the scientifically proven methods to master German vocabulary in record time. From Spaced Repetition to the Gender-Color Method, here is your roadmap to fluency.",
+    date: "2026-02-15",
+    readTime: "15 min read",
+    category: "Learning Strategies",
+    image: "/blog/vocab-guide.jpg",
+  },
+  {
     slug: "how-to-learn-german-fast-beginners-guide",
     title: "How to Learn German Fast: The Ultimate Beginner's Guide (2025)",
     excerpt:
@@ -30,7 +39,7 @@ const BLOG_POSTS = [
     category: "Learning Strategies",
     image: "/blog/learn-fast.jpg", // You'll need to add these images or use placeholders
   },
-    {
+  {
     slug: "german-noun-genders-and-plurals-a1-guide",
     title: "German Noun Genders & Plurals Explained: Der, Die, Das Made Easy (A1 Guide 2026)",
     excerpt: "Confused about der, die, das and German plural forms? Learn simple gender rules, endings, and plural patterns with clear tables and examples for A1 learners.",
@@ -69,7 +78,7 @@ const BLOG_POSTS = [
     category: "Grammar",
     image: "/blog/der-die-das.jpg",
   },
-   {
+  {
     slug: "goethe-zertifikat-a1-exam-prep",
     title: "How to Pass the Goethe-Zertifikat A1 Exam",
     excerpt:
@@ -103,22 +112,22 @@ export default function BlogIndex() {
                   {post.category}
                 </div>
               </div>
-              
+
               <div className="p-6 flex flex-col flex-1">
                 <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
                   <span className="text-primary">{post.category}</span>
                   <span>•</span>
                   <span>{post.readTime}</span>
                 </div>
-                
+
                 <h2 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
                   {post.title}
                 </h2>
-                
+
                 <p className="text-muted-foreground mb-6 flex-1 line-clamp-3">
                   {post.excerpt}
                 </p>
-                
+
                 <div className="flex items-center justify-between mt-auto pt-4 border-t border-border/50">
                   <span className="text-sm text-muted-foreground">{post.date}</span>
                   <span className="text-sm font-bold text-primary flex items-center gap-1 group-hover:translate-x-1 transition-transform">
