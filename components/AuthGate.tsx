@@ -12,11 +12,11 @@ interface AuthGateProps {
   children: React.ReactNode;
 }
 
-export function AuthGate({ 
-  currentIndex, 
-  freeLimit = 1, 
+export function AuthGate({
+  currentIndex,
+  freeLimit = 3,
   featureName = "flashcards",
-  children 
+  children
 }: AuthGateProps) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const router = useRouter();
@@ -27,7 +27,7 @@ export function AuthGate({
       const { data: { user } } = await supabase.auth.getUser();
       setIsAuthenticated(!!user);
     };
-    
+
     checkAuth();
   }, []);
 
@@ -60,9 +60,9 @@ export function AuthGate({
           <h2 className="text-2xl sm:text-3xl font-bold text-center mb-2 sm:mb-3 bg-gradient-to-r from-primary via-purple-500 to-pink-500 bg-clip-text text-transparent">
             Unlock Full Access
           </h2>
-          
+
           <p className="text-center text-sm sm:text-base text-muted-foreground mb-6">
-            You&apos;ve tried your first {featureName}! Sign up to continue learning and unlock everything.
+            You&apos;ve reached the free limit for {featureName}! Sign up to continue learning and unlock everything.
           </p>
 
           {/* Benefits List */}
@@ -74,7 +74,7 @@ export function AuthGate({
                 <p className="text-[10px] sm:text-xs text-muted-foreground">Full A1-B2 vocabulary access</p>
               </div>
             </div>
-            
+
             <div className="flex items-start gap-2.5 sm:gap-3 p-2.5 sm:p-3 rounded-xl bg-primary/5 border border-primary/10">
               <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-primary mt-0.5 shrink-0" />
               <div>
@@ -82,7 +82,7 @@ export function AuthGate({
                 <p className="text-[10px] sm:text-xs text-muted-foreground">Save & sync across devices</p>
               </div>
             </div>
-            
+
             <div className="flex items-start gap-2.5 sm:gap-3 p-2.5 sm:p-3 rounded-xl bg-primary/5 border border-primary/10">
               <Award className="w-4 h-4 sm:w-5 sm:h-5 text-primary mt-0.5 shrink-0" />
               <div>
@@ -100,7 +100,7 @@ export function AuthGate({
             >
               Sign Up Free - It&apos;s Really Free!
             </button>
-            
+
             <button
               onClick={() => router.push('/login')}
               className="w-full bg-card border-2 border-border text-foreground font-medium py-2.5 sm:py-3 px-4 sm:px-6 rounded-xl hover:bg-accent transition-all duration-300 text-sm sm:text-base"
