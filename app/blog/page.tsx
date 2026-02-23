@@ -21,6 +21,24 @@ export const metadata: Metadata = generateSEO({
 // Mock Data - In a real app, this would come from a CMS or MDX files
 const BLOG_POSTS = [
   {
+    slug: "german-sentence-structure-word-order-explained-2026",
+    title: "German Sentence Structure and Word Order: The Ultimate Guide (2026)",
+    excerpt: "Struggling with German word order? Learn the exact rules for main clauses, subordinate clauses, and the famous 'verb at the end' rule, with simple AEO-friendly examples.",
+    date: "2026-02-23",
+    readTime: "18 min read",
+    category: "Grammar",
+    image: "/blog/sentence-structure.jpg",
+  },
+  {
+    slug: "how-to-use-chatgpt-ai-to-learn-german",
+    title: "How to Use AI & ChatGPT to Learn German Faster in 2026",
+    excerpt: "Stop wasting time searching for answers. Learn the exact prompts and strategies to turn ChatGPT, Gemini, and Claude into your personal German tutor.",
+    date: "2026-02-23",
+    readTime: "15 min read",
+    category: "Learning Strategies",
+    image: "/blog/ai-learning.jpg",
+  },
+  {
     slug: "how-to-learn-german-vocabulary-fast-scientific-guide",
     title: "How to Learn German Vocabulary Fast: The Ultimate Scientific Guide (2026)",
     excerpt: "Discover the scientifically proven methods to master German vocabulary in record time. From Spaced Repetition to the Gender-Color Method, here is your roadmap to fluency.",

@@ -92,6 +92,27 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ]
 
+  // Individual Blog Pages
+  const blogPosts = [
+    "german-sentence-structure-word-order-explained-2026",
+    "how-to-use-chatgpt-ai-to-learn-german",
+    "how-to-learn-german-vocabulary-fast-scientific-guide",
+    "how-to-learn-german-fast-beginners-guide",
+    "german-noun-genders-and-plurals-a1-guide",
+    "best-free-german-learning-apps-2025",
+    "100-most-common-german-words",
+    "german-articles-der-die-das-explained",
+    "goethe-zertifikat-a1-exam-prep",
+    "german-verbs-conjugation-present-past"
+  ];
+
+  const blogPostPages: MetadataRoute.Sitemap = blogPosts.map((slug) => ({
+    url: `${baseUrl}/blog/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }))
+
   return [
     ...staticPages,
     ...levelPages,
@@ -99,5 +120,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...topicPages,
     ...wordPages,
     ...blogIndexPage,
+    ...blogPostPages,
   ]
 }

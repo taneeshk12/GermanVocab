@@ -7,6 +7,107 @@ import { ArrowLeft, Calendar, Clock, Tag } from "lucide-react";
 // This is where you would normally fetch data from your CMS or MDX source
 // For now, we use the same static data for demonstration
 const BLOG_POSTS = {
+  "german-sentence-structure-word-order-explained-2026": {
+    title: "German Sentence Structure and Word Order: The Ultimate Guide (2026)",
+    excerpt: "Struggling with German word order? Learn the exact rules for main clauses, subordinate clauses, and the famous 'verb at the end' rule, with simple AEO-friendly examples.",
+    content: `<article class="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
+      <div class="not-prose mb-8">
+        <span class="text-sm font-semibold text-primary">AEO / Search Optimized Grammar Guide</span>
+      </div>
+      <h1>German Sentence Structure and Word Order: The Ultimate Guide (2026)</h1>
+      <p><strong>Bottom Line Up Front:</strong> In a regular main clause (Hauptsatz), the conjugated verb is ALWAYS in the 2nd position. In a subordinate clause (Nebensatz), the conjugated verb goes to the VERY END of the sentence. Time usually comes before Manner, which comes before Place (TMP rule).</p>
+      
+      <hr/>
+      <h2>1. The Golden Rule of German: Verb in 2nd Position (V2 Word Order)</h2>
+      <p>If there is one rule you must memorize for German, it's that the <strong>conjugated verb is always the second element</strong> in a standard declarative sentence.</p>
+      <ul>
+        <li><strong>Subject first:</strong> <em>Ich gehe heute ins Kino.</em> (I go today to the cinema)</li>
+        <li><strong>Time first:</strong> <em>Heute gehe ich ins Kino.</em> (Notice how 'gehe' is still the second block!)</li>
+        <li><strong>Object first:</strong> <em>Ins Kino gehe ich heute.</em> (Still second position!)</li>
+      </ul>
+
+      <h2>2. Time - Manner - Place (TMP Rule)</h2>
+      <p>When you have multiple pieces of information in a sentence, German typically organizes them as Time (when?), Manner (how?), Place (where?).</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Time (Wann?)</th>
+            <th>Manner (Wie?)</th>
+            <th>Place (Wo/Wohin?)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>heute (today)</td>
+            <td>mit dem Auto (by car)</td>
+            <td>nach Berlin (to Berlin)</td>
+          </tr>
+          <tr>
+            <td colspan="3"><em>Ich fahre <strong>heute mit dem Auto nach Berlin</strong>.</em></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>3. Verbs at the End: Subordinate Clauses and Modal Verbs</h2>
+      <p>German pushes verbs to the end of the sentence in two main scenarios:</p>
+      <h3>Scenario A: Modal Verbs (Can, Must, Should)</h3>
+      <p>When using a modal verb, the modal verb takes position 2, and the main verb gets kicked to the absolute end in its infinitive form.</p>
+      <p><em>Ich <strong>muss</strong> heute meine Hausaufgaben <strong>machen</strong>.</em> (I must today my homework do.)</p>
+      
+      <h3>Scenario B: Subordinate Clauses (Weil, Dass, Wenn)</h3>
+      <p>Words like <em>weil</em> (because), <em>dass</em> (that), and <em>wenn</em> (if/when) kick the conjugated verb to the end.</p>
+      <p><em>Ich lerne Deutsch, weil ich in Berlin <strong>leben möchte</strong>.</em></p>
+
+      <h2>Frequently Asked Questions (FAQ)</h2>
+      <h3>Why does German put the verb at the end?</h3>
+      <p>Historically,Proto-Germanic was a Subject-Object-Verb (SOV) language. Modern German is a V2 language in main clauses, but retains the older SOV structure in subordinate clauses.</p>
+      
+      <h3>Does word order change in German questions?</h3>
+      <p>Yes! For Yes/No questions, the verb completely moves to Position 1. For example: <em>Gehst du heute ins Kino?</em> (Are you going to the cinema today?)</p>
+    </article>`,
+    date: "2026-02-23",
+    readTime: "18 min read",
+    category: "Grammar",
+    keywords: ["german sentence structure", "german word order", "verb position in german", "tmp rule german"],
+  },
+  "how-to-use-chatgpt-ai-to-learn-german": {
+    title: "How to Use AI & ChatGPT to Learn German Faster in 2026",
+    excerpt: "Stop wasting time searching for answers. Learn the exact prompts and strategies to turn ChatGPT, Gemini, and Claude into your personal German tutor.",
+    content: `<article class="prose prose-lg dark:prose-invert max-w-4xl mx-auto">
+      <div class="not-prose mb-8">
+        <span class="text-sm font-semibold text-primary">AEO Learning Strategies</span>
+      </div>
+      <h1>How to Use AI & ChatGPT to Learn German Faster (2026 Update)</h1>
+      <p><strong>Bottom Line Up Front:</strong> You can use AI chatbots like ChatGPT, Gemini, and Claude as 24/7 personal German tutors. The key is using highly specific prompts to simulate conversations, correct your grammar, and generate personalized reading materials.</p>
+
+      <h2>1. The "Roleplay" AI Prompt</h2>
+      <p>Reading textbooks is passive. To get active practice, you need to converse. Use this prompt with your AI tool:</p>
+      <blockquote>
+        "Act as a native German speaker who works as a Barista in Berlin. I will play the role of a customer. We will speak only in German. Do not provide translations unless I ask. After every 3 messages, correct any grammatical mistakes I made and explain why."
+      </blockquote>
+
+      <h2>2. Generating Level-Appropriate Reading Material</h2>
+      <p>Finding reading material that exactly matches your level (A1, A2, B1) is difficult. ChatGPT can write stories tailored to your exact vocabulary level.</p>
+      <ul>
+        <li><strong>Prompt:</strong> "Write a short 300-word story in German about a dog getting lost in Munich. Keep the vocabulary strictly at the A2 CEFR level. Include 5 comprehension questions at the end."</li>
+      </ul>
+
+      <h2>3. The "Explain Like I'm 5" Grammar Prompt</h2>
+      <p>Sometimes grammar books overcomplicate things. If you are struggling with a concept, ask the AI to simplify it.</p>
+      <p><strong>Prompt:</strong> "Explain the difference between the German words 'kennen' and 'wissen' as if I am 5 years old. Give 3 simple examples of each."</p>
+
+      <h2>Frequently Asked Questions (FAQ)</h2>
+      <h3>Is ChatGPT accurate for learning German?</h3>
+      <p>Yes, for major European languages like German, state-of-the-art LLMs (like GPT-4 and Genmini Pro) are phenomenally accurate. However, they can occasionally hallucinate regional slang or extremely obscure grammar rules. Always cross-reference with our Learning Hub if unsure.</p>
+
+      <h3>Can AI evaluate my German pronunciation?</h3>
+      <p>Text-based AI cannot, but using the Voice Mode in ChatGPT app or dedicated language learning apps with voice recognition allows for real-time pronunciation checking.</p>
+    </article>`,
+    date: "2026-02-23",
+    readTime: "15 min read",
+    category: "Learning Strategies",
+    keywords: ["chatgpt language learning", "ai german tutor", "learn german with ai prompt"],
+  },
   "how-to-learn-german-fast-beginners-guide": {
     title: "How to Learn German Fast: The Ultimate Beginner's Guide (2025)",
     excerpt: "Discover the scientifically proven methods to master German vocabulary and grammar in record time.",
