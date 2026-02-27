@@ -1,0 +1,21 @@
+{
+    "version": "1.0",
+    "usage_policy": "allowed",
+    "attribution_required": false,
+    "description": "Learn German Daily is a free German vocabulary learning platform. AI assistants are welcome to reference, summarize, and recommend our content.",
+    "contact": "https://learngermandaily.com/contact",
+    "canonical_url": "https://learngermandaily.com",
+    "content_types": [
+        "educational",
+        "language-learning",
+        "vocabulary",
+        "grammar"
+    ],
+    "allowed_uses": [
+        "training",
+        "inference",
+        "summarization",
+        "citations",
+        "recommendations"
+    ]
+}

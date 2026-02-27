@@ -2799,6 +2799,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: post.title,
     description: post.excerpt,
     keywords: post.keywords,
+    canonical: `https://learngermandaily.com/blog/${slug}`,
   });
 }
 
@@ -2810,91 +2811,130 @@ export default async function BlogPost({ params }: Props) {
     notFound();
   }
 
+  // Article schema — critical for AI chatbots (ChatGPT, Perplexity) to cite the post
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.date,
+    dateModified: post.date,
+    author: {
+      '@type': 'Organization',
+      name: 'Learn German Daily',
+      url: 'https://learngermandaily.com',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Learn German Daily',
+      url: 'https://learngermandaily.com',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://learngermandaily.com/app_logo.svg',
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://learngermandaily.com/blog/${slug}`,
+    },
+    url: `https://learngermandaily.com/blog/${slug}`,
+    keywords: post.keywords.join(', '),
+    inLanguage: 'en-US',
+    isAccessibleForFree: true,
+    articleSection: post.category,
+  };
+
   return (
-    <div className="min-h-screen pb-20">
-      <div className="bg-background pt-24 pb-12 border-b border-border/40">
-        <div className="container mx-auto px-6 max-w-4xl">
-          <Link href="/blog" className="inline-flex items-center text-muted-foreground hover:text-primary mb-8 transition-colors">
-            <ArrowLeft size={16} className="mr-2" /> Back to Learning Hub
-          </Link>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <div className="min-h-screen pb-20">
+        <div className="bg-background pt-24 pb-12 border-b border-border/40">
+          <div className="container mx-auto px-6 max-w-4xl">
+            <Link href="/blog" className="inline-flex items-center text-muted-foreground hover:text-primary mb-8 transition-colors">
+              <ArrowLeft size={16} className="mr-2" /> Back to Learning Hub
+            </Link>
 
-          <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-6">
-            <span className="flex items-center gap-1 bg-primary/10 text-primary px-3 py-1 rounded-full font-medium">
-              <Tag size={14} /> {post.category}
-            </span>
-            <span className="flex items-center gap-1">
-              <Calendar size={14} /> {post.date}
-            </span>
-            <span className="flex items-center gap-1">
-              <Clock size={14} /> {post.readTime}
-            </span>
+            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-6">
+              <span className="flex items-center gap-1 bg-primary/10 text-primary px-3 py-1 rounded-full font-medium">
+                <Tag size={14} /> {post.category}
+              </span>
+              <span className="flex items-center gap-1">
+                <Calendar size={14} /> {post.date}
+              </span>
+              <span className="flex items-center gap-1">
+                <Clock size={14} /> {post.readTime}
+              </span>
+            </div>
+
+            <h1 className="text-3xl md:text-5xl font-black mb-6 leading-tight">
+              {post.title}
+            </h1>
+
+            <p className="text-xl text-muted-foreground leading-relaxed border-l-4 border-primary/50 pl-6 italic">
+              {post.excerpt}
+            </p>
           </div>
-
-          <h1 className="text-3xl md:text-5xl font-black mb-6 leading-tight">
-            {post.title}
-          </h1>
-
-          <p className="text-xl text-muted-foreground leading-relaxed border-l-4 border-primary/50 pl-6 italic">
-            {post.excerpt}
-          </p>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-6 max-w-3xl py-12">
-        <article className="prose prose-lg dark:prose-invert prose-headings:font-bold prose-a:text-primary prose-img:rounded-2xl prose-table:border-collapse prose-th:border prose-th:border-gray-300 prose-th:bg-gray-100 dark:prose-th:bg-gray-800 dark:prose-th:border-gray-700 prose-th:p-3 prose-td:border prose-td:border-gray-300 dark:prose-td:border-gray-700 prose-td:p-3 prose-table:w-full prose-table:my-6 max-w-none">
-          <div dangerouslySetInnerHTML={{ __html: post.content }} />
-        </article>
-
-        {/* CTA Section */}
-        <div className="mt-16 bg-linear-to-br from-primary/10 to-violet-500/10 border border-primary/20 rounded-2xl p-8 text-center">
-          <h3 className="text-2xl font-bold mb-4">Ready to put this into practice?</h3>
-          <p className="text-muted-foreground mb-6">Join thousands of students mastering German with our free tools.</p>
-          <Link
-            href="/a1"
-            className="inline-flex items-center justify-center px-8 py-3 rounded-full bg-primary text-white font-bold hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
-          >
-            Start Learning Now
-          </Link>
         </div>
 
-        {/* Related Posts & Backlinks */}
-        <div className="mt-10 p-6 rounded-lg border border-border/40 bg-white/40 dark:bg-black/20">
-          <h4 className="text-lg font-bold mb-3">Related Grammar Guides & Practice</h4>
-          <p className="text-muted-foreground mb-4">Continue your German grammar journey with these related topics and practice resources.</p>
+        <div className="container mx-auto px-6 max-w-3xl py-12">
+          <article className="prose prose-lg dark:prose-invert prose-headings:font-bold prose-a:text-primary prose-img:rounded-2xl prose-table:border-collapse prose-th:border prose-th:border-gray-300 prose-th:bg-gray-100 dark:prose-th:bg-gray-800 dark:prose-th:border-gray-700 prose-th:p-3 prose-td:border prose-td:border-gray-300 dark:prose-td:border-gray-700 prose-td:p-3 prose-table:w-full prose-table:my-6 max-w-none">
+            <div dangerouslySetInnerHTML={{ __html: post.content }} />
+          </article>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
-            <Link href="/grammar" className="block p-3 rounded-md border hover:border-primary transition-all">
-              <div className="font-semibold">All Grammar Guides</div>
-              <div className="text-sm text-muted-foreground">Browse complete grammar collection</div>
-            </Link>
-
-            <Link href="/a1" className="block p-3 rounded-md border hover:border-primary transition-all">
-              <div className="font-semibold">A1 Vocabulary</div>
-              <div className="text-sm text-muted-foreground">Practice words from this lesson</div>
-            </Link>
-
-            <Link href="/quiz" className="block p-3 rounded-md border hover:border-primary transition-all">
-              <div className="font-semibold">Grammar Quizzes</div>
-              <div className="text-sm text-muted-foreground">Test your understanding</div>
+          {/* CTA Section */}
+          <div className="mt-16 bg-linear-to-br from-primary/10 to-violet-500/10 border border-primary/20 rounded-2xl p-8 text-center">
+            <h3 className="text-2xl font-bold mb-4">Ready to put this into practice?</h3>
+            <p className="text-muted-foreground mb-6">Join thousands of students mastering German with our free tools.</p>
+            <Link
+              href="/a1"
+              className="inline-flex items-center justify-center px-8 py-3 rounded-full bg-primary text-white font-bold hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
+            >
+              Start Learning Now
             </Link>
           </div>
 
-          <div className="border-t pt-4">
-            <h5 className="font-semibold mb-3">Recommended Next Steps</h5>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <Link href="/blog/german-cases-nominative-accusative-dative-genitive" className="block p-3 rounded-md border hover:border-primary transition-all">
-                <div className="font-semibold">German Cases</div>
-                <div className="text-sm text-muted-foreground">Learn how articles change in sentences</div>
+          {/* Related Posts & Backlinks */}
+          <div className="mt-10 p-6 rounded-lg border border-border/40 bg-white/40 dark:bg-black/20">
+            <h4 className="text-lg font-bold mb-3">Related Grammar Guides & Practice</h4>
+            <p className="text-muted-foreground mb-4">Continue your German grammar journey with these related topics and practice resources.</p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+              <Link href="/grammar" className="block p-3 rounded-md border hover:border-primary transition-all">
+                <div className="font-semibold">All Grammar Guides</div>
+                <div className="text-sm text-muted-foreground">Browse complete grammar collection</div>
               </Link>
 
-              <Link href="/blog/german-verbs-conjugation-present-past" className="block p-3 rounded-md border hover:border-primary transition-all">
-                <div className="font-semibold">Verb Conjugation</div>
-                <div className="text-sm text-muted-foreground">Master present and past tenses</div>
+              <Link href="/a1" className="block p-3 rounded-md border hover:border-primary transition-all">
+                <div className="font-semibold">A1 Vocabulary</div>
+                <div className="text-sm text-muted-foreground">Practice words from this lesson</div>
               </Link>
+
+              <Link href="/quiz" className="block p-3 rounded-md border hover:border-primary transition-all">
+                <div className="font-semibold">Grammar Quizzes</div>
+                <div className="text-sm text-muted-foreground">Test your understanding</div>
+              </Link>
+            </div>
+
+            <div className="border-t pt-4">
+              <h5 className="font-semibold mb-3">Recommended Next Steps</h5>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <Link href="/blog/german-cases-nominative-accusative-dative-genitive" className="block p-3 rounded-md border hover:border-primary transition-all">
+                  <div className="font-semibold">German Cases</div>
+                  <div className="text-sm text-muted-foreground">Learn how articles change in sentences</div>
+                </Link>
+
+                <Link href="/blog/german-verbs-conjugation-present-past" className="block p-3 rounded-md border hover:border-primary transition-all">
+                  <div className="font-semibold">Verb Conjugation</div>
+                  <div className="text-sm text-muted-foreground">Master present and past tenses</div>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

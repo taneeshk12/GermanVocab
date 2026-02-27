@@ -73,9 +73,8 @@ const features = [
 					{[...Array(10)].map((_, i) => (
 						<div
 							key={i}
-							className={`w-full h-2 rounded-full ${
-								i % 3 === 0 ? "bg-white/80" : "bg-white/20"
-							}`}
+							className={`w-full h-2 rounded-full ${i % 3 === 0 ? "bg-white/80" : "bg-white/20"
+								}`}
 						></div>
 					))}
 				</div>
@@ -131,11 +130,12 @@ export function HomeClient() {
 					<div className="absolute inset-0 bg-background/70 z-10" />
 					<Image
 						src="/hero-illustration.png"
-						alt="German learning hero illustration"
+						alt="German vocabulary learning app showing flashcards and quiz interface"
 						width={1200}
 						height={800}
 						className="w-full max-w-5xl h-auto object-contain opacity-40 transform translate-y-20 scale-110 blur-[1px] sm:blur-0 sm:opacity-35"
 						priority
+						fetchPriority="high"
 					/>
 				</div>
 
@@ -166,7 +166,8 @@ export function HomeClient() {
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.5, delay: 0.2 }}
-						className="text-base sm:text-xl lg:text-2xl text-muted-foreground mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed font-medium px-4"
+						className="text-base sm:text-xl lg:text-2xl text-muted-foreground mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed font-medium px-4 hero-description"
+						data-speakable="true"
 					>
 						Learn 5000+ German words through smart flashcards, interactive quizzes & spaced repetition.
 						<span className="block mt-2 text-foreground font-bold">
