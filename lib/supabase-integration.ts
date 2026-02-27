@@ -502,3 +502,120 @@ export async function getUserProgress() {
     return { xp: 0, streak: 0, wordsLearned: 0 }
   }
 }
+
+/**
+ * Mark a word as needing more practice.
+ * Creates a vocabulary_progress row if one doesn't exist yet.
+ */
+export async function markWordForPractice(
+  wordId: string,
+  level: string,
+  topic: string = 'general'
+) {
+  try {
+    const userId = await getCurrentUserId()
+    if (!userId) return
+
+    const supabase = getSupabaseClient()
+
+    const { data: existing } = await supabase
+      .from('vocabulary_progress')
+      .select('id, needs_practice')
+      .eq('user_id', userId)
+      .eq('word_id', wordId)
+      .single()
+
+    if (existing) {
+      await supabase
+        .from('vocabulary_progress')
+        .update({ needs_practice: true })
+        .eq('user_id', userId)
+        .eq('word_id', wordId)
+    } else {
+      await supabase
+        .from('vocabulary_progress')
+        .insert({
+          user_id: userId,
+          word_id: wordId,
+          level: level.toLowerCase(),
+          topic,
+          proficiency_level: 'learning',
+          needs_practice: true,
+          times_practiced: 0,
+          correct_count: 0,
+          incorrect_count: 0,
+          last_practiced_at: new Date().toISOString()
+        })
+    }
+
+    console.log(`✅ Word marked for practice: ${wordId}`)
+  } catch (error) {
+    console.error('Error marking word for practice:', error)
+  }
+}
+
+/**
+ * Clear the "needs practice" flag for a word.
+ * Call this when the user removes it from the practice list
+ * OR when they promote it to "learned".
+ */
+export async function unmarkWordForPractice(wordId: string) {
+  try {
+    const userId = await getCurrentUserId()
+    if (!userId) return
+
+    const supabase = getSupabaseClient()
+
+    await supabase
+      .from('vocabulary_progress')
+      .update({ needs_practice: false })
+      .eq('user_id', userId)
+      .eq('word_id', wordId)
+
+    console.log(`✅ Practice flag cleared: ${wordId}`)
+  } catch (error) {
+    console.error('Error clearing practice flag:', error)
+  }
+}
+
+/**
+ * Fetch all words flagged as "needs practice" for the current user.
+ * Returns word_id + metadata so the UI can look them up in local vocab data.
+ */
+export async function getPracticeAgainWords(): Promise<
+  Array<{
+    word_id: string
+    level: string
+    topic: string
+    proficiency_level: string
+    times_practiced: number
+    correct_count: number
+    last_practiced_at: string | null
+  }>
+> {
+  try {
+    const userId = await getCurrentUserId()
+    if (!userId) return []
+
+    const supabase = getSupabaseClient()
+
+    const { data, error } = await supabase
+      .from('vocabulary_progress')
+      .select(
+        'word_id, level, topic, proficiency_level, times_practiced, correct_count, last_practiced_at'
+      )
+      .eq('user_id', userId)
+      .eq('needs_practice', true)
+      .order('last_practiced_at', { ascending: false })
+
+    if (error) {
+      console.error('Error fetching practice-again words:', error)
+      return []
+    }
+
+    return data || []
+  } catch (error) {
+    console.error('Error fetching practice-again words:', error)
+    return []
+  }
+}

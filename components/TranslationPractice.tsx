@@ -10,11 +10,12 @@ import { AuthGate } from "@/components/AuthGate";
 
 interface TranslationPracticeProps {
     words: VocabItem[];
+    level: string;
 }
 
 type Direction = "german-to-english" | "english-to-german";
 
-export function TranslationPractice({ words: initialWords }: TranslationPracticeProps) {
+export function TranslationPractice({ words: initialWords, level }: TranslationPracticeProps) {
     // Shuffle words once on initialization
     const [words, setWords] = useState(() => [...initialWords].sort(() => Math.random() - 0.5));
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -47,7 +48,7 @@ export function TranslationPractice({ words: initialWords }: TranslationPractice
         } else {
             // Practice complete - track the session
             const duration = Math.floor((Date.now() - startTime) / 1000);
-            await trackPracticeSession("A1", "translation", words.length, score.correct, duration);
+            await trackPracticeSession(level, "translation", words.length, score.correct, duration);
         }
     };
 
@@ -62,12 +63,12 @@ export function TranslationPractice({ words: initialWords }: TranslationPractice
         if (correct) {
             setScore({ ...score, correct: score.correct + 1, total: score.total + 1 });
             // Track word practice and mark as mastered
-            await trackWordPractice(currentWord.id, "A1", true);
-            await markWordMastered(currentWord.id, "A1");
+            await trackWordPractice(currentWord.id, level, true);
+            await markWordMastered(currentWord.id, level);
         } else {
             setScore({ ...score, total: score.total + 1 });
             // Track incorrect attempt
-            await trackWordPractice(currentWord.id, "A1", false);
+            await trackWordPractice(currentWord.id, level, false);
         }
     };
 
@@ -137,7 +138,12 @@ export function TranslationPractice({ words: initialWords }: TranslationPractice
                 {/* Header with direction toggle */}
                 <div className="mb-8 flex justify-between items-center">
                     <div>
-                        <div className="text-sm text-muted-foreground mb-2">Translation Mode</div>
+                        <div className="flex items-center gap-2 mb-2">
+                            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 uppercase tracking-widest">
+                                Level {level.toUpperCase()}
+                            </span>
+                            <span className="text-sm text-muted-foreground">Translation Mode</span>
+                        </div>
                         <button
                             onClick={toggleDirection}
                             className="px-4 py-2 rounded-xl border bg-card hover:bg-secondary transition-colors font-medium text-sm"

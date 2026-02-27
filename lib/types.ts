@@ -21,4 +21,7 @@ export interface QuizQuestion {
     correctAnswer: string;
     explanation?: string;
     audioText?: string;
+    /** Used to persist "practice again" words to the DB */
+    level?: string;
+    topic?: string;
 }

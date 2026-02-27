@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { Trophy, Flame, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
 import { UserProfile, useAuth } from "./UserProfile";
 import { getUserStats } from "@/lib/api/progress";
 
@@ -17,11 +16,9 @@ export function Navbar() {
     const [stats, setStats] = useState<UserStats | null>(null);
     const [loading, setLoading] = useState(true);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const pathname = usePathname();
     const { user } = useAuth();
 
-    // Determine current level from pathname (default to a1)
-    const currentLevel = pathname?.split('/')[1]?.match(/^(a1|a2|b1|b2)$/i) ? pathname.split('/')[1] : 'a1';
+
 
     useEffect(() => {
         async function loadStats() {
@@ -40,7 +37,7 @@ export function Navbar() {
                 setLoading(false);
             }
         }
-        
+
         loadStats();
 
         // Listen for updates
@@ -52,7 +49,7 @@ export function Navbar() {
     }, [user]);
 
     return (
-        <nav className="fixed top-2 sm:top-4 left-2 sm:left-4 right-2 sm:right-4 z-50 rounded-xl sm:rounded-2xl glass-panel border border-white/40 shadow-lg transition-all duration-300">
+        <nav className="fixed top-2 sm:top-4 left-2 sm:left-4 right-2 sm:right-4 z-50 rounded-xl sm:rounded-2xl bg-white lg:glass-panel border border-gray-200 lg:border-white/40 shadow-lg transition-all duration-300">
             <div className="container mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-2">
                 <Link href="/" className="flex items-center group shrink-0" onClick={() => setIsMenuOpen(false)}>
                     <div className="relative w-28 h-8 sm:w-36 sm:h-10 transition-transform group-hover:scale-105">
@@ -70,11 +67,11 @@ export function Navbar() {
                     {/* Desktop Navigation */}
                     <div className="hidden lg:flex items-center gap-1 bg-secondary/50 rounded-full p-1 border border-white/20 mr-2">
                         <NavLink href="/levels">Levels</NavLink>
-                        <NavLink href={`/${currentLevel}/practice`}>Practice</NavLink>
+                        <NavLink href="/practice">Practice</NavLink>
                         <NavLink href="/quiz/daily">Daily Quiz</NavLink>
-                        <NavLink href="/learned-words">Review Learned</NavLink>
-                        <Link 
-                            href="/blog" 
+                        <NavLink href="/learned-words">My Vocabulary</NavLink>
+                        <Link
+                            href="/blog"
                             className="px-4 py-2 text-sm font-medium rounded-full hover:bg-white/50 hover:text-primary transition-all"
                         >
                             Blog
@@ -101,8 +98,8 @@ export function Navbar() {
                     </div>
 
                     {/* Mobile Menu Button */}
-                    <button 
-                        className="lg:hidden p-1.5 sm:p-2 ml-1 rounded-xl hover:bg-secondary/80 active:bg-secondary transition-colors"
+                    <button
+                        className="lg:hidden p-1.5 sm:p-2 ml-1 rounded-xl hover:bg-gray-100 active:bg-gray-200 text-gray-800 transition-colors"
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                         aria-label="Toggle menu"
                     >
@@ -115,29 +112,29 @@ export function Navbar() {
             {isMenuOpen && (
                 <>
                     {/* Backdrop */}
-                    <div 
-                        className="lg:hidden fixed inset-0 bg-white backdrop-blur-sm -z-10"
+                    <div
+                        className="lg:hidden fixed inset-0 bg-black/20 backdrop-blur-sm -z-10"
                         onClick={() => setIsMenuOpen(false)}
                     />
-                    
-                    {/* Menu Panel */}
-                    <div className="lg:hidden absolute top-16 sm:top-20 left-0 right-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border border-white/40 dark:border-gray-700/40 rounded-2xl p-3 sm:p-4 shadow-2xl mx-0 flex flex-col gap-1 sm:gap-2 animate-in slide-in-from-top-5 duration-200">
+
+                    {/* Menu Panel — white bg, black text on mobile */}
+                    <div className="lg:hidden absolute top-16 sm:top-20 left-0 right-0 bg-white border border-gray-100 rounded-2xl p-3 sm:p-4 shadow-2xl mx-0 flex flex-col gap-1 sm:gap-2 animate-in slide-in-from-top-5 duration-200">
                         <MobileNavLink href="/levels" onClick={() => setIsMenuOpen(false)}>Levels</MobileNavLink>
-                        <MobileNavLink href={`/${currentLevel}/practice`} onClick={() => setIsMenuOpen(false)}>Practice</MobileNavLink>
+                        <MobileNavLink href="/practice" onClick={() => setIsMenuOpen(false)}>Practice</MobileNavLink>
                         <MobileNavLink href="/quiz/daily" onClick={() => setIsMenuOpen(false)}>Daily Quiz</MobileNavLink>
-                        <MobileNavLink href="/learned-words" onClick={() => setIsMenuOpen(false)}>Review Learned</MobileNavLink>
-                        
-                        <div className="border-t border-border/50 pt-2 mt-2">
-                            <Link 
-                                href="/profile" 
-                                className="flex items-center gap-2 px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-semibold rounded-xl hover:bg-primary/5 active:bg-primary/10 hover:text-primary transition-all"
+                        <MobileNavLink href="/learned-words" onClick={() => setIsMenuOpen(false)}>My Vocabulary</MobileNavLink>
+
+                        <div className="border-t border-gray-100 pt-2 mt-2">
+                            <Link
+                                href="/profile"
+                                className="flex items-center gap-2 px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-semibold text-gray-800 rounded-xl hover:bg-gray-50 active:bg-gray-100 hover:text-primary transition-all"
                                 onClick={() => setIsMenuOpen(false)}
                             >
                                 Profile & Stats
                             </Link>
-                            <Link 
-                                href="/blog" 
-                                className="flex items-center gap-2 px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-semibold rounded-xl hover:bg-primary/5 active:bg-primary/10 hover:text-primary transition-all"
+                            <Link
+                                href="/blog"
+                                className="flex items-center gap-2 px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-semibold text-gray-800 rounded-xl hover:bg-gray-50 active:bg-gray-100 hover:text-primary transition-all"
                                 onClick={() => setIsMenuOpen(false)}
                             >
                                 Blog
@@ -152,8 +149,8 @@ export function Navbar() {
 
 function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
     return (
-        <Link 
-            href={href} 
+        <Link
+            href={href}
             className="px-4 py-2 text-sm font-medium rounded-full hover:bg-white/50 hover:text-primary transition-all"
         >
             {children}
@@ -163,9 +160,9 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
 
 function MobileNavLink({ href, children, onClick }: { href: string; children: React.ReactNode; onClick: () => void }) {
     return (
-        <Link 
-            href={href} 
-            className="flex items-center gap-2 px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-semibold rounded-xl hover:bg-primary/5 active:bg-primary/10 hover:text-primary transition-all"
+        <Link
+            href={href}
+            className="flex items-center gap-2 px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-semibold text-gray-800 rounded-xl hover:bg-gray-50 active:bg-gray-100 hover:text-primary transition-all"
             onClick={onClick}
         >
             {children}

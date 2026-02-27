@@ -26,24 +26,43 @@ export default async function FlashcardsPage({ params }: Props) {
     }
 
     const words = getAllVocab(uppercaseLevel);
+    const AVAILABLE_LEVELS = ["a1", "a2"];
 
     return (
         <div className="min-h-screen">
             <PageHeader
-                title="Flashcard Practice"
+                title={`Flashcard Practice — Level ${uppercaseLevel}`}
                 description={`Review ${words.length} words from Level ${uppercaseLevel}. Click the card or press Space to flip!`}
                 imageSrc="/practice-illustration.png"
             >
-                <Link
-                    href={`/${level}/practice`}
-                    className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors px-4 py-2 rounded-full border border-border bg-background/50 hover:bg-background"
-                >
-                    <ArrowLeft size={16} className="mr-1" /> Back to Practice
-                </Link>
+                <div className="flex flex-wrap items-center gap-3">
+                    <Link
+                        href={`/${level}/practice`}
+                        className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors px-4 py-2 rounded-full border border-border bg-background/50 hover:bg-background"
+                    >
+                        <ArrowLeft size={16} className="mr-1" /> Back to Practice
+                    </Link>
+
+                    {/* Level switcher */}
+                    <div className="flex items-center gap-1 bg-black/10 rounded-full p-1">
+                        {AVAILABLE_LEVELS.map((lvl) => (
+                            <Link
+                                key={lvl}
+                                href={`/${lvl}/practice/flashcards`}
+                                className={`px-4 py-1.5 rounded-full text-sm font-bold transition-all ${lvl === level
+                                        ? "bg-white text-black shadow-sm"
+                                        : "text-white/80 hover:text-white"
+                                    }`}
+                            >
+                                {lvl.toUpperCase()}
+                            </Link>
+                        ))}
+                    </div>
+                </div>
             </PageHeader>
 
             <div className="container mx-auto px-6 py-12 -mt-10 relative z-20">
-                <FlashcardPractice words={words} />
+                <FlashcardPractice words={words} level={level} />
             </div>
         </div>
     );

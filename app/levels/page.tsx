@@ -28,28 +28,28 @@ const levels = [
     icon: Zap,
     cefr: "Can understand frequently used expressions. Can describe matters of immediate need."
   },
-  {
-    level: "B1",
-    title: "Intermediate",
-    description: "Express yourself with confidence on familiar topics and situations",
-    words: 1357,
-    topics: "Work, Hobbies, Technology, Health, Environment",
-    color: "from-orange-500 to-amber-600",
-    shadowColor: "shadow-orange-500/25",
-    icon: TrendingUp,
-    cefr: "Can describe experiences, dreams, hopes and ambitions with some confidence."
-  },
-  {
-    level: "B2",
-    title: "Upper Intermediate",
-    description: "Master complex topics and express yourself fluently in German",
-    words: 886,
-    topics: "Business, Politics, Culture, Abstract Concepts",
-    color: "from-purple-500 to-pink-600",
-    shadowColor: "shadow-purple-500/25",
-    icon: Award,
-    cefr: "Can interact with native speakers with fluency and understand complex texts."
-  }
+  // {
+  //   level: "B1",
+  //   title: "Intermediate",
+  //   description: "Express yourself with confidence on familiar topics and situations",
+  //   words: 1357,
+  //   topics: "Work, Hobbies, Technology, Health, Environment",
+  //   color: "from-orange-500 to-amber-600",
+  //   shadowColor: "shadow-orange-500/25",
+  //   icon: TrendingUp,
+  //   cefr: "Can describe experiences, dreams, hopes and ambitions with some confidence."
+  // },
+  // {
+  //   level: "B2",
+  //   title: "Upper Intermediate",
+  //   description: "Master complex topics and express yourself fluently in German",
+  //   words: 886,
+  //   topics: "Business, Politics, Culture, Abstract Concepts",
+  //   color: "from-purple-500 to-pink-600",
+  //   shadowColor: "shadow-purple-500/25",
+  //   icon: Award,
+  //   cefr: "Can interact with native speakers with fluency and understand complex texts."
+  // }
 ];
 
 const containerVariants = {

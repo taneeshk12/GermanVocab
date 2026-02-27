@@ -28,7 +28,7 @@ export function Footer() {
                         <ul className="space-y-2 text-sm text-slate-400">
                             <li><Link href="/levels" className="hover:text-primary transition-colors">All Levels</Link></li>
                             <li><Link href="/quiz/daily" className="hover:text-primary transition-colors">Daily Quiz</Link></li>
-                            <li><Link href="/learned-words" className="hover:text-primary transition-colors">Review Learned</Link></li>
+                            <li><Link href="/learned-words" className="hover:text-primary transition-colors">My Vocabulary</Link></li>
                         </ul>
                     </div>
 

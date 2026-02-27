@@ -10,9 +10,10 @@ import { AuthGate } from "@/components/AuthGate";
 
 interface SentencePracticeProps {
     words: VocabItem[];
+    level: string;
 }
 
-export function SentencePractice({ words: initialWords }: SentencePracticeProps) {
+export function SentencePractice({ words: initialWords, level }: SentencePracticeProps) {
     // Shuffle words once on initialization
     const [words] = useState(() => [...initialWords].sort(() => Math.random() - 0.5));
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -55,12 +56,12 @@ export function SentencePractice({ words: initialWords }: SentencePracticeProps)
                 total: score.total + 1,
             });
             // Track word practice and mark as mastered
-            await trackWordPractice(currentWord.id, "A1", true);
-            await markWordMastered(currentWord.id, "A1");
+            await trackWordPractice(currentWord.id, level, true);
+            await markWordMastered(currentWord.id, level);
         } else {
             setScore({ ...score, total: score.total + 1 });
             // Track incorrect attempt
-            await trackWordPractice(currentWord.id, "A1", false);
+            await trackWordPractice(currentWord.id, level, false);
         }
     };
 
@@ -73,7 +74,7 @@ export function SentencePractice({ words: initialWords }: SentencePracticeProps)
         } else {
             // Practice complete - track the session
             const duration = Math.floor((Date.now() - startTime) / 1000);
-            await trackPracticeSession("A1", "sentences", words.length, score.correct, duration);
+            await trackPracticeSession(level, "sentences", words.length, score.correct, duration);
         }
     };
 
@@ -129,7 +130,12 @@ export function SentencePractice({ words: initialWords }: SentencePracticeProps)
                 {/* Header with score */}
                 <div className="mb-8 flex justify-between items-center">
                     <div>
-                        <div className="text-sm text-muted-foreground mb-1">Your Score</div>
+                        <div className="flex items-center gap-2 mb-1">
+                            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 uppercase tracking-widest">
+                                Level {level.toUpperCase()}
+                            </span>
+                            <span className="text-sm text-muted-foreground">Your Score</span>
+                        </div>
                         <div className="text-2xl font-bold">
                             {score.correct} / {score.total}
                         </div>

@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { VocabItem } from "@/lib/types";
-import { ArrowLeft, ArrowRight, Check, X, Volume2, RotateCcw } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Volume2, RotateCcw } from "lucide-react";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { trackWordPractice, trackPracticeSession, markWordLearned } from "@/lib/supabase-integration";
 import { AuthGate } from "@/components/AuthGate";
 
 interface FlashcardProps {
     words: VocabItem[];
+    level: string;
     onComplete?: () => void;
 }
 
@@ -17,7 +18,7 @@ interface QuizOption {
     isCorrect: boolean;
 }
 
-export function FlashcardPractice({ words: allWords, onComplete }: FlashcardProps) {
+export function FlashcardPractice({ words: allWords, level, onComplete }: FlashcardProps) {
     const [selectedCount, setSelectedCount] = useState<number | null>(null);
     const [words, setWords] = useState<VocabItem[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -106,7 +107,7 @@ export function FlashcardPractice({ words: allWords, onComplete }: FlashcardProp
             // Track practice session in Supabase
             const durationSeconds = Math.floor((Date.now() - startTime) / 1000);
             const correctCount = mastered.size;
-            trackPracticeSession('a1', 'flashcards', words.length, correctCount, durationSeconds);
+            trackPracticeSession(level, 'flashcards', words.length, correctCount, durationSeconds);
 
             setIsComplete(true);
             if (onComplete) onComplete();
@@ -183,12 +184,25 @@ export function FlashcardPractice({ words: allWords, onComplete }: FlashcardProp
                     setCurrentIndex(prev => prev - 1);
                     setIsFlipped(false);
                 }
+            } else if (e.key === "l" || e.key === "L") {
+                e.preventDefault();
+                // Mark current word as learned via functional updaters
+                setMastered(prev => new Set(prev).add(currentIndex));
+                setNeedsReview(prev => { const n = new Set(prev); n.delete(currentIndex); return n; });
+                const word = words[currentIndex];
+                if (word) {
+                    trackWordPractice(word.id, word.level, true);
+                    markWordLearned(word.id, word.level, word.topic);
+                }
+                // Auto-advance
+                setCurrentIndex(prev => Math.min(prev + 1, words.length - 1));
+                setIsFlipped(false);
             }
         };
 
         window.addEventListener("keydown", handleKeyPress);
         return () => window.removeEventListener("keydown", handleKeyPress);
-    }, [currentIndex, words.length]);
+    }, [currentIndex, words]);
 
     // Show selection screen if no count selected
     if (selectedCount === null) {
@@ -197,10 +211,11 @@ export function FlashcardPractice({ words: allWords, onComplete }: FlashcardProp
         return (
             <div className="max-w-2xl mx-auto">
                 <div className="bg-card border rounded-3xl p-12 shadow-2xl text-center">
-                    <h2 className="text-3xl font-bold mb-4">How many flashcards?</h2>
-                    <p className="text-muted-foreground mb-8">
-                        Select the number of words you want to practice with
+                    <h2 className="text-3xl font-bold mb-2">How many flashcards?</h2>
+                    <p className="text-muted-foreground mb-1">
+                        Practising <span className="font-bold text-primary uppercase">Level {level.toUpperCase()}</span> vocabulary
                     </p>
+                    <p className="text-sm text-muted-foreground mb-8">Select the number of words</p>
 
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                         {countOptions.map(count => (
@@ -263,15 +278,27 @@ export function FlashcardPractice({ words: allWords, onComplete }: FlashcardProp
                 <div className="w-full max-w-4xl">
                     {/* Header Section */}
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-8 gap-3 sm:gap-4">
-                        <button
-                            onClick={() => window.history.back()}
-                            className="flex items-center gap-2 text-sm sm:text-base text-muted-foreground hover:text-foreground transition-colors group"
-                        >
-                            <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-                            <span className="font-medium">Exit Practice</span>
-                        </button>
+                        <div className="flex items-center gap-3">
+                            <button
+                                onClick={() => window.history.back()}
+                                className="flex items-center gap-2 text-sm sm:text-base text-muted-foreground hover:text-foreground transition-colors group"
+                            >
+                                <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+                                <span className="font-medium">Exit Practice</span>
+                            </button>
+                            {/* Level badge */}
+                            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 uppercase tracking-widest">
+                                Level {level.toUpperCase()}
+                            </span>
+                        </div>
 
                         <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
+                            {/* Learned indicator */}
+                            {mastered.has(currentIndex) && (
+                                <span className="flex items-center gap-1 text-xs font-bold text-green-600 bg-green-50 dark:bg-green-900/20 px-2.5 py-1 rounded-full border border-green-200 dark:border-green-800">
+                                    <Check size={12} /> Learned
+                                </span>
+                            )}
                             <div className="flex-1 sm:w-48 h-2 bg-secondary rounded-full overflow-hidden">
                                 <div
                                     className="h-full bg-primary transition-all duration-300"
@@ -405,56 +432,67 @@ export function FlashcardPractice({ words: allWords, onComplete }: FlashcardProp
                         </div>
                     </div>
 
-                    {/* Controls - Mobile Optimized */}
-                    <div className="mt-4 sm:mt-8 flex flex-col gap-3 sm:gap-4 px-2 sm:px-0">
-                        {isFlipped && (
-                            <div className="flex gap-2 sm:gap-4">
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleNeedsReview();
-                                    }}
-                                    className="flex-1 px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base rounded-xl border-2 border-orange-500 text-orange-600 font-bold hover:bg-orange-50 active:bg-orange-100 dark:hover:bg-orange-900/20 dark:active:bg-orange-900/30 transition-colors flex items-center justify-center gap-2"
-                                >
-                                    <X size={18} className="sm:w-5 sm:h-5" />
-                                    <span className="hidden xs:inline">Need More Practice</span>
-                                    <span className="xs:hidden">Review</span>
-                                </button>
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleMastered();
-                                    }}
-                                    className="flex-1 px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base rounded-xl bg-green-500 text-white font-bold hover:bg-green-600 active:bg-green-700 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-green-500/25"
-                                >
-                                    <Check size={18} className="sm:w-5 sm:h-5" />
-                                    Got It!
-                                </button>
-                            </div>
-                        )}
+                    {/* Controls - Always visible, no flip required */}
+                    <div className="mt-4 sm:mt-6 flex flex-col gap-3 px-2 sm:px-0">
 
-                        <div className="flex gap-2 sm:gap-4 justify-between">
+                        {/* Primary action row: Mark as Learned / Need Practice */}
+                        <div className="flex gap-3">
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleNeedsReview();
+                                }}
+                                className={`flex-1 py-3 sm:py-4 rounded-2xl border-2 font-bold text-sm sm:text-base flex items-center justify-center gap-2 transition-all active:scale-95 ${needsReview.has(currentIndex)
+                                    ? "border-orange-500 bg-orange-50 dark:bg-orange-900/20 text-orange-600"
+                                    : "border-orange-400 text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/20"
+                                    }`}
+                            >
+                                <RotateCcw size={16} />
+                                Need Practice
+                            </button>
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleMastered();
+                                }}
+                                className={`flex-1 py-3 sm:py-4 rounded-2xl font-bold text-sm sm:text-base flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg ${mastered.has(currentIndex)
+                                    ? "bg-green-600 text-white shadow-green-500/30"
+                                    : "bg-green-500 hover:bg-green-600 text-white shadow-green-500/25"
+                                    }`}
+                            >
+                                <Check size={16} />
+                                {mastered.has(currentIndex) ? "Learned ✓" : "Mark as Learned"}
+                            </button>
+                        </div>
+
+                        {/* Secondary: Prev / Flip hint / Next */}
+                        <div className="flex gap-2 justify-between items-center">
                             <button
                                 onClick={handlePrevious}
                                 disabled={currentIndex === 0}
-                                className="px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base rounded-xl border bg-background hover:bg-secondary active:bg-secondary/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium flex items-center gap-2"
+                                className="px-4 sm:px-6 py-2.5 rounded-xl border bg-background hover:bg-secondary active:bg-secondary/80 transition-colors disabled:opacity-40 disabled:cursor-not-allowed font-medium text-sm flex items-center gap-2"
                             >
-                                <ArrowLeft size={18} className="sm:w-5 sm:h-5" />
-                                <span className="hidden xs:inline">Previous</span>
+                                <ArrowLeft size={16} />
+                                <span className="hidden xs:inline">Prev</span>
                             </button>
+
+                            <span className="text-xs text-muted-foreground">
+                                Tap card to see example
+                            </span>
+
                             <button
                                 onClick={handleNext}
-                                className="px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base rounded-xl border bg-background hover:bg-secondary active:bg-secondary/80 transition-colors font-medium flex items-center gap-2"
+                                className="px-4 sm:px-6 py-2.5 rounded-xl border bg-background hover:bg-secondary active:bg-secondary/80 transition-colors font-medium text-sm flex items-center gap-2"
                             >
                                 <span className="hidden xs:inline">Next</span>
-                                <ArrowRight size={18} className="sm:w-5 sm:h-5" />
+                                <ArrowRight size={16} />
                             </button>
                         </div>
                     </div>
 
-                    {/* Keyboard shortcuts hint - Hide on very small screens */}
-                    <div className="mt-6 sm:mt-8 text-center text-xs sm:text-sm text-muted-foreground hidden sm:block">
-                        <p>Keyboard shortcuts: Space/Enter to flip • ← → to navigate</p>
+                    {/* Keyboard shortcuts hint */}
+                    <div className="mt-4 text-center text-xs text-muted-foreground hidden sm:block">
+                        <p>Space/Enter to flip &nbsp;•&nbsp; ← → to navigate &nbsp;•&nbsp; L to mark learned</p>
                     </div>
                 </div>
             </div>
