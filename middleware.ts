@@ -4,19 +4,6 @@ import type { NextRequest } from 'next/server'
 import { Database } from './lib/supabase/types'
 
 export async function middleware(req: NextRequest) {
-  // ── 1. www → non-www permanent redirect (301) ─────────────────────────
-  // This fixes "Alternate page with proper canonical tag" in Google Search Console.
-  // ALL www traffic is permanently redirected to the canonical non-www domain.
-  const host = req.headers.get('host') || ''
-  if (host.startsWith('www.')) {
-    const nonWwwHost = host.slice(4) // strip "www."
-    const url = req.nextUrl.clone()
-    url.host = nonWwwHost
-    // 308 preserves the HTTP method (POST stays POST); use 301 for GET-only sites
-    return NextResponse.redirect(url, { status: 301 })
-  }
-
-  // ── 2. Supabase auth session refresh ──────────────────────────────────
   const res = NextResponse.next()
 
   const supabase = createServerClient<Database>(
@@ -45,18 +32,19 @@ export async function middleware(req: NextRequest) {
     }
   )
 
-  // Refresh session if expired - important for auth
+  // Refresh session if expired - this is important for auth
   const {
     data: { session },
   } = await supabase.auth.getSession()
 
-  // ── 3. Protect authenticated routes ───────────────────────────────────
+  // Optionally protect routes that require authentication
   const protectedPaths = ['/profile', '/dashboard']
   const isProtectedPath = protectedPaths.some(path =>
     req.nextUrl.pathname.startsWith(path)
   )
 
   if (isProtectedPath && !session) {
+    // Redirect to login if accessing protected route without session
     const redirectUrl = req.nextUrl.clone()
     redirectUrl.pathname = '/login'
     redirectUrl.searchParams.set('redirectedFrom', req.nextUrl.pathname)

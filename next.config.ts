@@ -28,20 +28,6 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  // ── www → non-www redirect (fixes Google Search Console canonical issue) ──
-  // This permanently (301) redirects www.learngermandaily.com → learngermandaily.com
-  // so Google consolidates all SEO signals to one canonical domain.
-  async redirects() {
-    return [
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'www.learngermandaily.com' }],
-        destination: 'https://learngermandaily.com/:path*',
-        permanent: true, // HTTP 308 → treated as 301 by Google
-      },
-    ]
-  },
-
   // ── HTTP Headers: Security + SEO + Performance ───────────────
   async headers() {
     return [
